@@ -1,0 +1,40 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+skinparam arrowColor STORAGE_COLOR
+skinparam classBackgroundColor STORAGE_COLOR
+skinparam nodesep 60
+skinparam ranksep 60
+
+package Storage as StoragePackage {
+
+    Class "<<interface>>\nStorage" as Storage
+    Class StorageManager
+
+    package "ExpenseTracker Storage" #F4F6F6 {
+        Class "<<interface>>\nExpenseTrackerStorage" as ExpenseTrackerStorage
+        Class TxtExpenseTrackerStorage
+        Class TxtSerializableExpenseTracker
+        Class TxtAdaptedExpense
+        Class TxtAdaptedPerson
+        Class TxtAdaptedTag
+    }
+}
+
+Class HiddenOutside #FFFFFF
+HiddenOutside -down..> Storage
+
+StorageManager .up.|> Storage
+Storage -right-|> ExpenseTrackerStorage
+
+StorageManager -down-> "1" ExpenseTrackerStorage
+
+TxtExpenseTrackerStorage .up.|> ExpenseTrackerStorage
+
+TxtExpenseTrackerStorage ..> TxtSerializableExpenseTracker
+TxtSerializableExpenseTracker *-down-> "*" TxtAdaptedExpense
+TxtAdaptedExpense *-down-> "1" TxtAdaptedPerson : payer >
+TxtAdaptedExpense *-down-> "*" TxtAdaptedPerson : shares >
+TxtAdaptedExpense *-down-> "*" TxtAdaptedTag : tags >
+
+@enduml
