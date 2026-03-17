@@ -1,0 +1,35 @@
+@startuml
+!include style.puml
+allowmixing
+skinparam linetype ortho
+skinparam componentStyle rectangle
+skinparam nodesep 80
+skinparam ranksep 80
+
+Package "Shared Expense Tracker" <<Rectangle>> {
+    Component UI UI_COLOR
+    Component Logic LOGIC_COLOR
+    Component Storage STORAGE_COLOR
+    Component Model MODEL_COLOR
+    Component Main #grey
+}
+
+Rectangle User
+File "Text File" as textFile
+
+User .right.> UI
+
+UI -[UI_COLOR]> Logic
+UI .down[UI_COLOR].> Model
+
+Logic -down[LOGIC_COLOR]-> Storage
+Logic -down[LOGIC_COLOR]-> Model
+
+Main -up[#grey]-> UI
+Main -up[#grey]-> Logic
+Main -right[#grey]-> Model
+Main -down[#grey]-> Storage
+
+Storage -up[STORAGE_COLOR].> Model
+Storage .right[STORAGE_COLOR].> textFile
+@enduml
