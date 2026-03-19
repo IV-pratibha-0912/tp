@@ -14,11 +14,11 @@ import java.util.Map;
 public class BalanceCalculator {
 
     public static List<Balance> calculate(List<Expense> expenses) {
-        Map<Person, Double> balances = calculateBalances(expenses);
-        return simplifyBalances(balances);
+        Map<Person, Double> netAmts = calculateNetAmounts(expenses);
+        return generateBalances(netAmts);
     }
 
-    private static Map<Person, Double> calculateBalances(List<Expense> expenses) {
+    private static Map<Person, Double> calculateNetAmounts(List<Expense> expenses) {
         Map<Person, Double> balances = new HashMap<>();
 
         for (Expense expense : expenses) {
@@ -39,7 +39,7 @@ public class BalanceCalculator {
         return balances;
     }
 
-    private static List<Balance> simplifyBalances(Map<Person, Double> balances) {
+    private static List<Balance> generateBalances(Map<Person, Double> balances) {
         List<Person> debtors = new ArrayList<>();
         List<Person> creditors = new ArrayList<>();
 
@@ -51,10 +51,10 @@ public class BalanceCalculator {
             }
         }
 
-        return generateSettlements(debtors, creditors, balances);
+        return calculateSettlements(debtors, creditors, balances);
     }
 
-    private static List<Balance> generateSettlements(List<Person> debtors, List<Person> creditors,
+    private static List<Balance> calculateSettlements(List<Person> debtors, List<Person> creditors,
                                        Map<Person, Double> balances) {
         List<Balance> finalBalances = new ArrayList<>();
 
