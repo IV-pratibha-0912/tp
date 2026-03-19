@@ -1,1 +1,2 @@
-# shared expense tracker
+# FairShare
+shared expense tracker
