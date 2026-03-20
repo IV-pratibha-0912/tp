@@ -3,6 +3,16 @@ plugins {
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.1.0'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
+    id 'checkstyle'
+}
+
+javafx {
+    version = '21.0.1'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics']
+}
+
+checkstyle {
+    toolVersion = '11.0.0'
 }
 
 repositories {
@@ -10,10 +20,9 @@ repositories {
 }
 
 dependencies {
-    String javaFxVersion = '21.0.1'
-
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.10.0'
     testRuntimeOnly group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.10.0'
+    testImplementation("org.mockito:mockito-core:5.8.0")
 }
 
 test {
@@ -36,7 +45,7 @@ javafx {
 }
 
 application {
-    mainClass.set("fairshare.Main")
+    mainClass.set("fairshare.Launcher")
 }
 
 shadowJar {
