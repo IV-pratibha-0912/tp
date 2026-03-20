@@ -1,9 +1,9 @@
 plugins {
     id 'java'
     id 'application'
+    id 'org.openjfx.javafxplugin' version '0.1.0'
     id 'com.github.johnrengelman.shadow' version '7.1.2'
     id 'checkstyle'
-    id 'org.openjfx.javafxplugin' version '0.1.0'
 }
 
 javafx {
@@ -37,6 +37,11 @@ test {
         showStackTraces true
         showStandardStreams = false
     }
+}
+
+javafx {
+    version = '21.0.1'
+    modules = ['javafx.controls', 'javafx.fxml', 'javafx.graphics']
 }
 
 application {
