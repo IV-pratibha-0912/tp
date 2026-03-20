@@ -34,13 +34,14 @@ public class FilterCommandParserTest {
 
         String expense2Name = "dinner";
         double expense2Amt = 54.0d;
-        Person expense2Payer = new Person("john");
+        Person expense2Payer = new Person("alice");
         List<Person> expense2Participants = new ArrayList<>(
-                List.of(new Person("alice"), new Person("jamie"), new Person("carrie")));
-        List<Tag> expense2Tags = new ArrayList<>(List.of(new Tag("food"), new Tag("jb")));
+                List.of(expense2Payer, new Person("jamie"), new Person("carrie")));
+        List<Tag> expense2Tags = new ArrayList<>(List.of(new Tag("food"), new Tag("school")));
         expense2 = new Expense(expense2Name, expense2Amt, expense2Payer, expense2Participants, expense2Tags);
     }
 
+    // Test filtering by name
     @Test
     public void parseNameFieldPresent() throws ParseException {
         // Single field
@@ -51,6 +52,54 @@ public class FilterCommandParserTest {
 
         // Multiple field
         FilterCommand cmd2 = parser.parse("n/lunch n/dinner");
+        Predicate<Expense> predicate2 = cmd2.getPredicate();
+        assertTrue(predicate2.test(expense1));
+        assertTrue(predicate2.test(expense2));
+    }
+
+    // Test filtering by tag
+    @Test
+    public void parseTagFieldPresent() throws ParseException {
+        // Single field
+        FilterCommand cmd = parser.parse("t/jb");
+        Predicate<Expense> predicate1 = cmd.getPredicate();
+        assertTrue(predicate1.test(expense1));
+        assertFalse(predicate1.test(expense2));
+
+        // Multiple field
+        FilterCommand cmd2 = parser.parse("t/jb t/food");
+        Predicate<Expense> predicate2 = cmd2.getPredicate();
+        assertTrue(predicate2.test(expense1));
+        assertFalse(predicate2.test(expense2));
+    }
+
+    // Test filtering by payer
+    @Test
+    public void parsePayerFieldPresent() throws ParseException {
+        // Single field
+        FilterCommand cmd = parser.parse("p/john");
+        Predicate<Expense> predicate1 = cmd.getPredicate();
+        assertTrue(predicate1.test(expense1));
+        assertFalse(predicate1.test(expense2));
+
+        // Multiple field
+        FilterCommand cmd2 = parser.parse("p/alice p/john");
+        Predicate<Expense> predicate2 = cmd2.getPredicate();
+        assertTrue(predicate2.test(expense1));
+        assertTrue(predicate2.test(expense2));
+    }
+
+    // Test filtering by participants (prefix is s/)
+    @Test
+    public void parseParticipantsFieldPresent() throws ParseException {
+        // Single field
+        FilterCommand cmd = parser.parse("s/carrie");
+        Predicate<Expense> predicate1 = cmd.getPredicate();
+        assertFalse(predicate1.test(expense1));
+        assertTrue(predicate1.test(expense2));
+
+        // Multiple field
+        FilterCommand cmd2 = parser.parse("s/jamie s/carrie");
         Predicate<Expense> predicate2 = cmd2.getPredicate();
         assertTrue(predicate2.test(expense1));
         assertTrue(predicate2.test(expense2));
