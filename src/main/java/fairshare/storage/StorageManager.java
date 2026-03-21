@@ -6,7 +6,13 @@ import java.util.List;
 import fairshare.model.expense.Expense;
 import fairshare.storage.exceptions.StorageException;
 
+/**
+ * Manages all storage operations for the Shared Expense Tracker.
+ * Acts as the single entry point for storage interactions,
+ * delegating to the underlying {@code ExpenseTrackerStorage} implementation.
+ */
 public class StorageManager implements Storage {
+
     private final ExpenseTrackerStorage expenseTrackerStorage;
 
     /**
@@ -20,9 +26,7 @@ public class StorageManager implements Storage {
     }
 
     /**
-     * Returns the file path of the expense tracker data file.
-     *
-     * @return the {@code Path} to the data file.
+     * {@inheritDoc}
      */
     @Override
     public Path getExpenseTrackerFilePath() {
@@ -30,10 +34,7 @@ public class StorageManager implements Storage {
     }
 
     /**
-     * Reads expense tracker data from storage.
-     *
-     * @return a list of {@code Expense} with the loaded data.
-     * @throws Exception if the file cannot be read or is corrupted.
+     * {@inheritDoc}
      */
     @Override
     public List<Expense> readExpenseTracker() throws StorageException {
@@ -41,14 +42,11 @@ public class StorageManager implements Storage {
     }
 
     /**
-     * Saves the given list of expenses to storage.
-     *
-     * @param expenses the list of {@code TxtAdaptedExpense} to save;
-     *                 cannot be null.
-     * @throws Exception if the file cannot be written to.
+     * {@inheritDoc}
      */
     @Override
-    public void saveExpenseTracker(List<Expense> expenses) throws StorageException {
+    public void saveExpenseTracker(List<Expense> expenses)
+            throws StorageException {
         expenseTrackerStorage.saveExpenseTracker(expenses);
     }
 }

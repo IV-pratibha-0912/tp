@@ -2,20 +2,15 @@ package fairshare.ui;
 
 import java.io.IOException;
 
-import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-
 import fairshare.logic.Logic;
 import fairshare.logic.commands.CommandResult;
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.logic.parser.exceptions.ParseException;
-import fairshare.model.expense.Expense;
 import fairshare.ui.exceptions.UiException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.StackPane;
+import javafx.stage.Stage;
 
 /**
  * The main application window. Holds all UI sub-components and

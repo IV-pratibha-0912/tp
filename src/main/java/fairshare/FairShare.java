@@ -4,9 +4,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
-
 import fairshare.logic.Logic;
 import fairshare.logic.LogicManager;
 import fairshare.model.Model;
@@ -17,6 +14,8 @@ import fairshare.storage.StorageManager;
 import fairshare.storage.TxtExpenseTrackerStorage;
 import fairshare.storage.exceptions.StorageException;
 import fairshare.ui.MainWindow;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * The main application class. Initialises all components and starts the UI.
@@ -57,13 +56,13 @@ public class FairShare extends Application {
                     "Could not load saved data: " + e.getMessage());
         }
 
-        logic = new LogicManager(model);
+        logic = new LogicManager(model, storage);
     }
 
     /**
      * Creates and shows the main window.
      *
-     * @param primaryStage the primary stage provided by JavaFX; cannot be null.
+     * @param primaryStage the primary stage; cannot be null.
      */
     @Override
     public void start(Stage primaryStage) {

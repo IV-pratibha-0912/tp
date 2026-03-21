@@ -1,15 +1,15 @@
 package fairshare.storage;
 
-import fairshare.model.expense.Expense;
-
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import fairshare.model.expense.Expense;
+
 /**
- * Serializes and deserializes the full expense list to and from
+ * Serialises and deserialises the full expense list to and from
  * a plain-text file, where each line represents one expense.
  */
 public class TxtSerializableExpenseTracker {
@@ -20,7 +20,7 @@ public class TxtSerializableExpenseTracker {
      * Constructs a {@code TxtSerializableExpenseTracker} from a list of
      * {@code Expense} model objects.
      *
-     * @param expenses the list of expenses to serialize; cannot be null.
+     * @param expenses the list of expenses to serialise; cannot be null.
      */
     public TxtSerializableExpenseTracker(List<Expense> expenses) {
         this.expenses = expenses.stream()
@@ -70,7 +70,7 @@ public class TxtSerializableExpenseTracker {
      * {@code TxtSerializableExpenseTracker} containing the parsed data.
      *
      * @param filePath the path to read from; cannot be null.
-     * @return a {@code TxtSerializableExpenseTracker} with the loaded expenses.
+     * @return a {@code TxtSerializableExpenseTracker} with loaded expenses.
      * @throws IOException if the file cannot be read.
      */
     public static TxtSerializableExpenseTracker loadFromFile(Path filePath)

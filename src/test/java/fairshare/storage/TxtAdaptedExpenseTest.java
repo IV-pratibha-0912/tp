@@ -1,12 +1,13 @@
 package fairshare.storage;
 
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import fairshare.model.expense.Expense;
 import fairshare.model.person.Person;
@@ -31,8 +32,9 @@ public class TxtAdaptedExpenseTest {
 
     @Test
     public void serialise_validExpense_correctFormat() {
-        String serialized = adaptedExpense.serialize();
-        assertEquals("lunch|30.0|alice|alice,bob,carol|food,trip", serialized);
+        String serialised = adaptedExpense.serialize();
+        assertEquals("lunch|30.0|alice|alice,bob,carol|food,trip",
+                serialised);
     }
 
     @Test
@@ -68,8 +70,9 @@ public class TxtAdaptedExpenseTest {
     @Test
     public void serialiseAndDeserialize_roundTrip_sameData() {
         String serialised = adaptedExpense.serialize();
-        TxtAdaptedExpense deserialized = TxtAdaptedExpense.deserialize(serialised);
-        Expense result = deserialized.toModelType();
+        TxtAdaptedExpense deserialised =
+                TxtAdaptedExpense.deserialize(serialised);
+        Expense result = deserialised.toModelType();
 
         assertEquals(expense.getExpenseName(), result.getExpenseName());
         assertEquals(expense.getAmount(), result.getAmount());

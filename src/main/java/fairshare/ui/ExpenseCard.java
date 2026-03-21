@@ -3,13 +3,12 @@ package fairshare.ui;
 import java.io.IOException;
 import java.util.stream.Collectors;
 
+import fairshare.model.expense.Expense;
+import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
-
-import fairshare.model.expense.Expense;
-import fairshare.ui.exceptions.UiException;
 
 /**
  * A UI component that displays the details of a single {@code Expense}.

@@ -2,12 +2,11 @@ package fairshare.ui;
 
 import java.io.IOException;
 
+import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.Region;
-
-import fairshare.ui.exceptions.UiException;
 
 /**
  * A UI component that displays feedback messages to the user

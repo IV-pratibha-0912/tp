@@ -3,15 +3,14 @@ package fairshare.ui;
 import java.io.IOException;
 import java.util.List;
 
+import fairshare.model.balance.Balance;
+import fairshare.ui.exceptions.UiException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
-
-import fairshare.model.balance.Balance;
-import fairshare.ui.exceptions.UiException;
 
 /**
  * A UI panel that displays the net balance summary,

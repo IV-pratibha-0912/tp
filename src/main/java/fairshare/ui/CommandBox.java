@@ -2,15 +2,14 @@ package fairshare.ui;
 
 import java.io.IOException;
 
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TextField;
-import javafx.scene.layout.Region;
-
 import fairshare.logic.commands.CommandResult;
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.ui.exceptions.UiException;
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.Region;
 
 /**
  * A UI component that accepts text input from the user and executes commands.

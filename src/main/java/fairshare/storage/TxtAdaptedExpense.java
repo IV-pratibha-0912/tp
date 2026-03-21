@@ -105,6 +105,11 @@ public class TxtAdaptedExpense {
         return tags;
     }
 
+    /**
+     * Converts this adapted expense back into an {@code Expense} model object.
+     *
+     * @return the corresponding {@code Expense}.
+     */
     public Expense toModelType() {
         List<Person> participants = shares.stream()
                 .map(TxtAdaptedPerson::toModelType)
