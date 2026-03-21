@@ -1,11 +1,13 @@
 package fairshare.storage;
 
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
 import fairshare.model.expense.Expense;
+import fairshare.storage.exceptions.StorageException;
 
 /**
  * An implementation of {@code ExpenseTrackerStorage} that reads and writes
@@ -39,14 +41,22 @@ public class TxtExpenseTrackerStorage implements ExpenseTrackerStorage {
      * Returns an empty list if the file does not exist.
      *
      * @return a list of {@code TxtAdaptedExpense} with the loaded data.
-     * @throws Exception if the file exists but cannot be read or parsed.
+     * @throws StorageException if the file exists but cannot be read or parsed.
      */
     @Override
-    public List<Expense> readExpenseTracker() throws Exception {
+    public List<Expense> readExpenseTracker() throws StorageException {
         if (!Files.exists(filePath)) {
             return new ArrayList<>();
         }
-        return TxtSerializableExpenseTracker.loadFromFile(filePath).toModelType();
+
+        try {
+            return TxtSerializableExpenseTracker
+                    .loadFromFile(filePath)
+                    .toModelType();
+        } catch (IOException e) {
+            throw new StorageException(
+                    "Failed to read data from file: " + filePath, e);
+        }
     }
 
     /**
@@ -54,10 +64,15 @@ public class TxtExpenseTrackerStorage implements ExpenseTrackerStorage {
      *
      * @param expenses the list of {@code Expense} to save;
      *                 cannot be null.
-     * @throws Exception if the file cannot be written to.
+     * @throws StorageException if the file cannot be written to.
      */
     @Override
-    public void saveExpenseTracker(List<Expense> expenses) throws Exception {
-        new TxtSerializableExpenseTracker(expenses).saveToFile(filePath);
+    public void saveExpenseTracker(List<Expense> expenses) throws StorageException {
+        try {
+            new TxtSerializableExpenseTracker(expenses).saveToFile(filePath);
+        } catch (IOException e) {
+            throw new StorageException(
+                    "Failed to save data to file: " + filePath, e);
+        }
     }
 }

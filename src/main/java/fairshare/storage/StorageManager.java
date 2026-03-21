@@ -4,6 +4,7 @@ import java.nio.file.Path;
 import java.util.List;
 
 import fairshare.model.expense.Expense;
+import fairshare.storage.exceptions.StorageException;
 
 public class StorageManager implements Storage {
     private final ExpenseTrackerStorage expenseTrackerStorage;
@@ -35,7 +36,7 @@ public class StorageManager implements Storage {
      * @throws Exception if the file cannot be read or is corrupted.
      */
     @Override
-    public List<Expense> readExpenseTracker() throws Exception {
+    public List<Expense> readExpenseTracker() throws StorageException {
         return expenseTrackerStorage.readExpenseTracker();
     }
 
@@ -47,7 +48,7 @@ public class StorageManager implements Storage {
      * @throws Exception if the file cannot be written to.
      */
     @Override
-    public void saveExpenseTracker(List<Expense> expenses) throws Exception {
+    public void saveExpenseTracker(List<Expense> expenses) throws StorageException {
         expenseTrackerStorage.saveExpenseTracker(expenses);
     }
 }

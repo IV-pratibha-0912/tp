@@ -3,6 +3,7 @@ package fairshare.storage;
 import java.nio.file.Path;
 import java.util.List;
 import fairshare.model.expense.Expense;
+import fairshare.storage.exceptions.StorageException;
 
 /**
  * Represents a storage handler for the ExpenseTracker data.
@@ -22,16 +23,16 @@ public interface ExpenseTrackerStorage {
      * Returns an empty list if the file does not exist
      *
      * @return a list of {@code Expense} populated with stored data.
-     * @throws Exception if the file cannot be read or is corrupted.
+     * @throws StorageException if the file cannot be read or is corrupted.
      */
-    List<Expense> readExpenseTracker() throws Exception;
+    List<Expense> readExpenseTracker() throws StorageException;
 
     /**
      * Saves the given list of expenses to the storage file.
      *
      * @param expenses the list of {@code TxtAdaptedExpense} to save;
      *                 cannot be null.
-     * @throws Exception if the file cannot be written to.
+     * @throws StorageException if the file cannot be written to.
      */
-    void saveExpenseTracker(List<Expense> expenses) throws Exception;
+    void saveExpenseTracker(List<Expense> expenses) throws StorageException;
 }
