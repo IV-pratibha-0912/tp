@@ -18,7 +18,7 @@ import javafx.stage.Stage;
  * The main application window. Holds all UI sub-components and
  * connects the UI to the Logic layer.
  */
-public class MainWindow {
+public class MainWindow implements Ui {
 
     private static final String FXML = "/view/MainWindow.fxml";
 
@@ -93,14 +93,13 @@ public class MainWindow {
         commandBox = new CommandBox(this::executeCommand);
         commandBoxPlaceholder.getChildren().add(
                 commandBox.getRoot());
-
-        System.out.println("commandBoxPlaceholder: " + commandBoxPlaceholder);
     }
 
     /**
-     * Shows the primary stage.
+     * {@inheritDoc}
      */
-    public void show() {
+    @Override
+    public void start(Stage primaryStage) {
         primaryStage.show();
     }
 
