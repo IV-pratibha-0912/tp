@@ -68,7 +68,7 @@ public class FairShare extends Application {
     public void start(Stage primaryStage) {
         MainWindow mainWindow = new MainWindow(primaryStage, logic);
         mainWindow.fillInnerParts();
-        mainWindow.show();
+        mainWindow.start(primaryStage);
     }
 
     /**
