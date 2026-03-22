@@ -1,5 +1,7 @@
 package fairshare;
 
+import javafx.application.Application;
+
 /**
  * A launcher class to workaround classpath issues with JavaFX.
  * This is the actual entry point set in build.gradle.
@@ -12,6 +14,6 @@ public class Launcher {
      * @param args command line arguments.
      */
     public static void main(String[] args) {
-        FairShare.main(args);
+        Application.launch(FairShare.class, args);
     }
 }
