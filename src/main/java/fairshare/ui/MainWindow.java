@@ -116,17 +116,17 @@ public class MainWindow implements Ui {
      */
     private CommandResult executeCommand(String commandText)
             throws CommandException, ParseException {
+        try {
+            CommandResult result = logic.execute(commandText);
 
-        if (commandText.trim().equals("help")) {
-            helpWindow.show();
-            return new CommandResult("Opened help window.");
+            resultDisplay.setFeedbackToUser(result.getResponse());
+            expenseListPanel.refresh(logic.getFilteredExpenseList());
+            balancePanel.refresh(logic.calculateBalances());
+
+            return result;
+        } catch (CommandException | ParseException e) {
+            resultDisplay.setFeedbackToUser(e.getMessage());
+            throw e;
         }
-
-        CommandResult result = logic.execute(commandText);
-        resultDisplay.setFeedbackToUser(result.getResponse());
-        expenseListPanel.refresh(logic.getFilteredExpenseList());
-        balancePanel.refresh(logic.calculateBalances());
-
-        return result;
     }
 }
