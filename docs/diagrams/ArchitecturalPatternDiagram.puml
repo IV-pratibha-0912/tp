@@ -2,33 +2,42 @@
 
 skinparam backgroundColor white
 skinparam defaultFontName Arial
-skinparam rectangleFontSize 12
+skinparam nodesep 50
+skinparam ranksep 50
+allowmixing
+skinparam componentStyle rectangle
+skinparam linetype ortho
 
-package "UI Layer" #DBEAFE {
-    rectangle "MainWindow" #5B9BD5
-    rectangle "GroupPanel" #5B9BD5
-    rectangle "ExpensePanel" #5B9BD5
-    rectangle "DebtPanel" #5B9BD5
+skinparam Component {
+    BackgroundColor #FFFFFF
+    BorderColor #888888
+    FontColor #000000
 }
 
-package "Logic Layer" #EDE9FE {
-    rectangle "ExpenseManager" #7C3AED
-    rectangle "DebtCalculator" #7C3AED
+Package "Shared Expense Tracker" <<Rectangle>> {
+    Component UI #83E769
+    Component Logic #C8C8FA
+    Component Storage #FFE374
+    Component Model #F97181
+    Component Main #CCCCCC
 }
 
-package "Model Layer" #DCFCE7 {
-    rectangle "Group" #15803D
-    rectangle "Person" #15803D
-    rectangle "Expense" #15803D
-    rectangle "Debt" #15803D
-}
+Rectangle User
+File "data/expenses.txt" as textFile
 
-package "Storage Layer" #FEF3C7 {
-    rectangle "Storage" #B45309
-}
+User .right.> UI
 
-"UI Layer" -down-> "Logic Layer" : calls
-"Logic Layer" -down-> "Model Layer" : reads/updates
-"Logic Layer" -down-> "Storage Layer" : saves/loads
+UI -[#1D8900]-> Logic
+UI .[#1D8900].> Model
+
+Logic -down[#3333C4]-> Storage
+Logic -down[#3333C4]-> Model
+
+Main -up[#888888]-> UI
+Main -up[#888888]-> Logic
+Main -right[#888888]-> Model
+Main -down[#888888]-> Storage
+
+Storage .[#A38300].> textFile
 
 @enduml
