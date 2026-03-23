@@ -34,7 +34,7 @@ It targets friend groups, housemates and small teams who need to split costs wit
 
 ## 2. Architecture Design
 ### 2.1 Architectural Pattern
-![Architectural Pattern Diagram](diagrams/ArchitecturalPatternDiagram.png)
+![Architectural Pattern Diagram](architecture/ArchitecturalPatternDiagram.png)
 
 Each layer communicates only with adjacent layers. The UI layer never directly addresses storage and the storage layer has no knowledge of the UI. 
 This separation makes the system easier to test and maintain. 
@@ -144,7 +144,7 @@ The sequence diagram above illustrates the flow when a user types
    "expense deleted"
 
 ### 4.3 Use Case Diagram
-![Use Case Diagram](diagrams/UseCaseDiagram.png)
+![Use Case Diagram](architecture/UseCaseDiagram.png)
 
 The use case diagram above shows all interactions between actors and
 the system in the current implementation.
