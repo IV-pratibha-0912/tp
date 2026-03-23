@@ -117,6 +117,12 @@ public class MainWindow implements Ui {
     private CommandResult executeCommand(String commandText)
             throws CommandException, ParseException {
         try {
+            if (commandText.trim().equals("help")) {
+                helpWindow.show();
+                resultDisplay.setFeedbackToUser("Opened help window.");
+                return new CommandResult("Opened help window.");
+            }
+
             CommandResult result = logic.execute(commandText);
 
             resultDisplay.setFeedbackToUser(result.getResponse());
@@ -128,8 +134,7 @@ public class MainWindow implements Ui {
             resultDisplay.setFeedbackToUser(e.getMessage());
             throw e;
         } catch (Exception e) {
-            resultDisplay.setFeedbackToUser(
-                    "Error: " + e.getMessage());
+            resultDisplay.setFeedbackToUser("Error: " + e.getMessage());
             throw new CommandException(e.getMessage());
         }
     }
