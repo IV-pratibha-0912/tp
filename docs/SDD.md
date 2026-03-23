@@ -47,6 +47,7 @@ dependencies. Key classes:
 - `Person` — stores a person's name
 - `Tag` — stores a tag name
 - `Balance` — represents a directional debt between two persons
+- `BalanceCalculator` - calculates net balance of each user
 - `ExpenseList` — wraps an `ObservableList<Expense>` for JavaFX binding
 - `ModelManager` — implements `Model`, manages `ExpenseList` and
   `FilteredList`
