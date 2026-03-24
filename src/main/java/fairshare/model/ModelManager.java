@@ -47,6 +47,6 @@ public class ModelManager implements Model {
     }
 
     public List<Balance> calculateBalances() {
-        return BalanceCalculator.calculate(expenseList.getExpenseList());
+        return BalanceCalculator.calculate(filteredExpenses);
     }
 }
