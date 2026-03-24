@@ -96,11 +96,10 @@ public class CommandBox {
          * Executes the given command text.
          *
          * @param commandText the raw command string.
-         * @return the {@code CommandResult} from the execution.
          * @throws CommandException if the command execution fails.
          * @throws ParseException   if the command cannot be parsed.
          */
-        CommandResult execute(String commandText)
+        void execute(String commandText)
                 throws CommandException, ParseException;
     }
 

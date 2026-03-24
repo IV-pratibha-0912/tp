@@ -40,8 +40,7 @@ public class LogicManager implements Logic {
      * {@inheritDoc}
      */
     @Override
-    public CommandResult execute(String userInput)
-            throws ParseException, CommandException {
+    public CommandResult execute(String userInput) throws ParseException, CommandException {
         Command cmd = fairShareParser.parseCommand(userInput);
         CommandResult result = cmd.execute(model);
 

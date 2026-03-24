@@ -29,15 +29,6 @@ public class FairShare extends Application {
     private Storage storage;
 
     /**
-     * Entry point called by {@code Launcher}.
-     *
-     * @param args command line arguments.
-     */
-    public static void main(String[] args) {
-        launch(args);
-    }
-
-    /**
      * Initialises Storage, Model and Logic, and loads saved expenses.
      *
      * @throws Exception if initialisation fails.
@@ -74,10 +65,9 @@ public class FairShare extends Application {
     /**
      * Saves all expenses to disk when the application closes.
      *
-     * @throws Exception if saving fails.
      */
     @Override
-    public void stop() throws Exception {
+    public void stop()  {
         try {
             storage.saveExpenseTracker(
                     logic.getFilteredExpenseList());
