@@ -10,13 +10,17 @@ import fairshare.logic.parser.exceptions.ParseException;
 
 public class ParserUtil {
 
-    public static Map<String, List<String>> tokenize(String args) {
+    public static Map<String, List<String>> tokenize(String args) throws ParseException {
         Map<String, List<String>> map = new HashMap<>();
 
         String[] tokens = args.split(" (?=[a-z]/)");
 
         for (String token : tokens) {
             String[] parts = token.split("/", 2);
+            if (parts.length < 2) {
+                throw new ParseException("Invalid filter: " + args + ", Expected: prefix/data");
+            }
+
             String argType = parts[0];
             String argData = parts[1];
             List<String> data;
