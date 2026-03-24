@@ -45,8 +45,7 @@ public class StorageManager implements Storage {
      * {@inheritDoc}
      */
     @Override
-    public void saveExpenseTracker(List<Expense> expenses)
-            throws StorageException {
+    public void saveExpenseTracker(List<Expense> expenses) throws StorageException {
         expenseTrackerStorage.saveExpenseTracker(expenses);
     }
 }

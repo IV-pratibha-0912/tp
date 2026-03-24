@@ -45,11 +45,9 @@ public class LogicManager implements Logic {
         CommandResult result = cmd.execute(model);
 
         try {
-            storage.saveExpenseTracker(
-                    model.getFilteredExpenseList());
+            storage.saveExpenseTracker(model.getExpenseList());
         } catch (StorageException e) {
-            System.out.println(
-                    "Could not save data: " + e.getMessage());
+            System.out.println("Could not save data: " + e.getMessage());
         }
 
         return result;

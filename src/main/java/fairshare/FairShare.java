@@ -43,8 +43,7 @@ public class FairShare extends Application {
             List<Expense> savedExpenses = storage.readExpenseTracker();
             savedExpenses.forEach(model::addExpense);
         } catch (StorageException e) {
-            System.out.println(
-                    "Could not load saved data: " + e.getMessage());
+            System.out.println("Could not load saved data: " + e.getMessage());
         }
 
         logic = new LogicManager(model, storage);
@@ -60,20 +59,5 @@ public class FairShare extends Application {
         MainWindow mainWindow = new MainWindow(primaryStage, logic);
         mainWindow.fillInnerParts();
         mainWindow.start(primaryStage);
-    }
-
-    /**
-     * Saves all expenses to disk when the application closes.
-     *
-     */
-    @Override
-    public void stop()  {
-        try {
-            storage.saveExpenseTracker(
-                    logic.getFilteredExpenseList());
-        } catch (StorageException e) {
-            System.out.println(
-                    "Could not save data: " + e.getMessage());
-        }
     }
 }
