@@ -15,6 +15,7 @@ import fairshare.storage.TxtFairShareStorage;
 import fairshare.storage.exceptions.StorageException;
 import fairshare.ui.MainWindow;
 import javafx.application.Application;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 
 /**
@@ -27,6 +28,8 @@ public class FairShare extends Application {
 
     private Logic logic;
     private Storage storage;
+
+    private Image fairshareIcon = new Image(getClass().getResourceAsStream("/images/fairshare.png"));
 
     /**
      * Initialises Storage, Model and Logic, and loads saved expenses.
@@ -55,6 +58,7 @@ public class FairShare extends Application {
      */
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.getIcons().add(fairshareIcon);
         MainWindow mainWindow = new MainWindow(primaryStage, logic);
         mainWindow.fillInnerParts();
         mainWindow.start(primaryStage);

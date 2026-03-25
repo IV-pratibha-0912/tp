@@ -8,6 +8,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -20,6 +21,9 @@ public class HelpWindow {
     private static final String TITLE = "Help";
     private static final int WIDTH = 600;
     private static final int HEIGHT = 400;
+
+    private Image helpIcon = new Image(getClass().getResourceAsStream("/images/help.png"));
+
     private static final String MESSAGE_HELP =
             """
             Add Expense
@@ -63,6 +67,7 @@ public class HelpWindow {
 
             helpMessage.setText(MESSAGE_HELP);
             helpStage = new Stage();
+            helpStage.getIcons().add(helpIcon);
             helpStage.setTitle(TITLE);
             helpStage.setScene(new Scene(root, WIDTH, HEIGHT));
             helpStage.initModality(Modality.NONE);
