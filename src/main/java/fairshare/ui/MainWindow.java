@@ -109,6 +109,10 @@ public class MainWindow implements Ui {
         try {
             CommandResult result = logic.execute(commandText);
             resultDisplay.setFeedbackToUser(result.getResponse());
+            if (result.getIsHelp()) {
+                helpWindow.show();
+                return;
+            }
             balancePanel.refresh(logic.calculateBalances());
         } catch (CommandException | ParseException e) {
             resultDisplay.setFeedbackToUser(e.getMessage());
