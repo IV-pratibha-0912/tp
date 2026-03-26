@@ -30,7 +30,9 @@ public class ParserUtil {
                 data = new ArrayList<>(List.of(argData));
             } else {
                 data = map.get(argType);
-                data.add(argData);
+                if (!data.contains(argData)) {
+                    data.add(argData);
+                }
             }
             map.put(argType, data);
         }
