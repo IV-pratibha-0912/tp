@@ -10,10 +10,16 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Utility class for calculating debts from an expense list.
+ * Utility class for calculating simplified debts from a list of expenses.
  */
 public class BalanceCalculator {
 
+    /**
+     * Calculates the simplified list of balances (debts) for a given list of expenses.
+     *
+     * @param expenses The list of expenses.
+     * @return A list of {@code Balance} objects representing the final simplified debts.
+     */
     public static List<Balance> calculate(List<Expense> expenses) {
         Map<Person, Double> netAmts = calculateNetAmounts(expenses);
         return generateBalances(netAmts);
