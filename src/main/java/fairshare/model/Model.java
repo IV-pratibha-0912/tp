@@ -8,9 +8,10 @@ import java.util.List;
 import java.util.function.Predicate;
 
 /**
- * The API of the model component in FairShare
+ * Represents the API of the model component in FairShare
  */
 public interface Model {
+
     /**
      * Adds the given expense to the tracker.
      *

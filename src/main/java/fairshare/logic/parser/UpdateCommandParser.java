@@ -11,7 +11,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * Parses input arguments and creates a new UpdateCommand object.
+ */
 public class UpdateCommandParser implements Parser {
+
+    /**
+     * Parses the given {@code String} of arguments in the context of UpdateCommand.
+     *
+     * @param args The raw string of user-input arguments.
+     * @return An {@code UpdateCommand} object.
+     * @throws ParseException If the user input does not match the required format.
+     */
     public UpdateCommand parse(String args) throws ParseException {
         String[] updateParts = args.split("\\s+", 2);
         if (updateParts.length == 1) {

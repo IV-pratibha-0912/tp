@@ -10,18 +10,33 @@ import fairshare.model.tag.Tag;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * Represents a command to update a specific expense in the list.
+ */
 public class UpdateCommand extends Command {
     private int expenseIndex;
     private UpdateFields updateFields;
     private static final String MESSAGE_SUCCESS = "Update success";
     private static final String MESSAGE_INVALID_INDEX = "Cannot update an expense that is not in the list.";
 
-
+    /**
+     * Creates an instance of {@code UpdateCommand}.
+     *
+     * @param expenseIndex The zero-based index of the expense to update in the filtered expense list.
+     * @param updateFields The new data to update the expense with.
+     */
     public UpdateCommand(int expenseIndex, UpdateFields updateFields) {
         this.expenseIndex = expenseIndex;
         this.updateFields = updateFields;
     }
 
+    /**
+     * Executes the update command by replacing the target expense with an updated expense.
+     *
+     * @param model The model the command should operate on.
+     * @return A {@code CommandResult} containing the success message.
+     * @throws CommandException If the provided index is out of bounds of the filtered expense list.
+     */
     public CommandResult execute(Model model) throws CommandException {
         try {
             List<Expense> displayedExpenseList = model.getFilteredExpenseList();
