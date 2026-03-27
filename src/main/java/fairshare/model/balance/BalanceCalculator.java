@@ -1,13 +1,13 @@
 package fairshare.model.balance;
 
-import fairshare.model.expense.Expense;
-import fairshare.model.expense.Participant;
-import fairshare.model.person.Person;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import fairshare.model.expense.Expense;
+import fairshare.model.expense.Participant;
+import fairshare.model.person.Person;
 
 /**
  * Utility class for calculating simplified debts from a list of expenses.

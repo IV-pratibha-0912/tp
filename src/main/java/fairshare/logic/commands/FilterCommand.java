@@ -9,8 +9,8 @@ import fairshare.model.expense.Expense;
  * Represents a command to filter expenses based on the given conditions.
  */
 public class FilterCommand extends Command {
-    private Predicate<Expense> predicate;
     private static final String MESSAGE_SUCCESS = "Filter success.";
+    private Predicate<Expense> predicate;
 
     /**
      * Creates an instance of {@code FilterCommand} and initializes it with a filter condition.

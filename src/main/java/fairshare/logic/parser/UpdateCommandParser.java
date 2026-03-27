@@ -1,15 +1,15 @@
 package fairshare.logic.parser;
 
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import fairshare.logic.commands.UpdateCommand;
 import fairshare.logic.commands.UpdateCommand.UpdateFields;
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.expense.Participant;
 import fairshare.model.person.Person;
 import fairshare.model.tag.Tag;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 /**
  * Parses input arguments and creates a new UpdateCommand object.
@@ -42,7 +42,7 @@ public class UpdateCommandParser implements Parser {
         return new UpdateCommand(expenseIndex, updateFields);
     }
 
-    private UpdateFields createUpdateFields(Map<String, List<String>> map) throws ParseException{
+    private UpdateFields createUpdateFields(Map<String, List<String>> map) throws ParseException {
         Optional<String> expenseName = ParserUtil.getOptionalSingleFieldData(map, "n");
         Optional<String> strAmount = ParserUtil.getOptionalSingleFieldData(map, "a");
         Optional<String> strPayer = ParserUtil.getOptionalSingleFieldData(map, "p");

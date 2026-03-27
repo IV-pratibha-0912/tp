@@ -1,9 +1,9 @@
 package fairshare.model.expense;
 
+import java.util.List;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-
-import java.util.List;
 
 /**
  * Represents a list of expense in the shared expense tracker (FairShare)

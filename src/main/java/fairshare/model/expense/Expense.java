@@ -1,10 +1,10 @@
 package fairshare.model.expense;
 
-import fairshare.model.person.Person;
-import fairshare.model.tag.Tag;
-
 import java.util.List;
 import java.util.Objects;
+
+import fairshare.model.person.Person;
+import fairshare.model.tag.Tag;
 
 /**
  * Represents an expense in the shared expense tracker (FairShare)

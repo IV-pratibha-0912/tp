@@ -7,8 +7,8 @@ import fairshare.model.expense.Expense;
  * Represents a command to add a new expense to the list.
  */
 public class AddCommand extends Command {
-    private Expense expense;
     private static final String MESSAGE_SUCCESS = "New expense added: %s";
+    private Expense expense;
 
     /**
      * Creates an instance of {@code AddCommand} and initializes it with the given expense.

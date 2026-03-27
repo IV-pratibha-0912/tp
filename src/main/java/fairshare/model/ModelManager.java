@@ -1,23 +1,22 @@
 package fairshare.model;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import fairshare.model.balance.Balance;
 import fairshare.model.balance.BalanceCalculator;
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.ExpenseList;
-
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Represents the in-memory model of the FairShare data.
  */
 public class ModelManager implements Model {
+    public static final Predicate<Expense> LIST_ALL_EXPENSES = expense -> true;
     private final ExpenseList expenseList;
     private final FilteredList<Expense> filteredExpenses;
-    public static final Predicate<Expense> LIST_ALL_EXPENSES = expense -> true;
 
     /**
      * Creates an instance of {@code ModelManager} with an empty underlying expense list.

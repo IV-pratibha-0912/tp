@@ -1,11 +1,11 @@
 package fairshare.model;
 
+import java.util.List;
+import java.util.function.Predicate;
+
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
 import javafx.collections.ObservableList;
-
-import java.util.List;
-import java.util.function.Predicate;
 
 /**
  * Represents the API of the model component in FairShare
