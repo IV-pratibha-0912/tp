@@ -3,8 +3,8 @@ package fairshare.storage;
 import fairshare.model.expense.Participant;
 
 /**
- * A plain-text-friendly representation of a {@code Participant}.
- * Serialised as {@code name:shares} e.g. {@code bob:2}.
+ * A plain text-friendly version of {@code Participant}.
+ * Used for serializing and deserializing participant data to and from the local storage file.
  */
 public class TxtAdaptedParticipant {
 
@@ -12,10 +12,9 @@ public class TxtAdaptedParticipant {
     private final int shares;
 
     /**
-     * Constructs a {@code TxtAdaptedParticipant} from a
-     * {@code Participant} model object.
+     * Constructs a {@code TxtAdaptedParticipant} from a {@code Participant} object.
      *
-     * @param source the {@code Participant} to adapt; cannot be null.
+     * @param source The {@code Participant} to adapt.
      */
     public TxtAdaptedParticipant(Participant source) {
         this.person = new TxtAdaptedPerson(source.getPerson());
@@ -23,11 +22,10 @@ public class TxtAdaptedParticipant {
     }
 
     /**
-     * Constructs a {@code TxtAdaptedParticipant} with the given person
-     * and shares.
+     * Constructs a {@code TxtAdaptedParticipant} with the specified adapted person and share weight.
      *
-     * @param person the adapted person; cannot be null.
-     * @param shares the number of shares; must be greater than 0.
+     * @param person The {@code TxtAdaptedPerson} representing the participant's identity.
+     * @param shares The integer share weight of the participant.
      */
     public TxtAdaptedParticipant(TxtAdaptedPerson person, int shares) {
         this.person = person;
@@ -35,8 +33,7 @@ public class TxtAdaptedParticipant {
     }
 
     /**
-     * Converts this adapted participant back into a {@code Participant}
-     * model object.
+     * Converts this adapted participant back into a {@code Participant} object.
      *
      * @return the corresponding {@code Participant}.
      */
@@ -45,8 +42,7 @@ public class TxtAdaptedParticipant {
     }
 
     /**
-     * Serialises this participant into a plain-text string
-     * in the format {@code name:shares}.
+     * Serializes this participant into a plain-text string.
      *
      * @return a string representation of this participant.
      */
@@ -55,15 +51,12 @@ public class TxtAdaptedParticipant {
     }
 
     /**
-     * Deserialises a plain-text string into a
-     * {@code TxtAdaptedParticipant}.
-     * Expected format: {@code name:shares} e.g. {@code bob:2}.
+     * Deserializes a plain-text string into a {@code TxtAdaptedParticipant}.
      *
-     * @param data the string to parse; cannot be null.
+     * @param data the string to parse.
      * @return the corresponding {@code TxtAdaptedParticipant}.
-     * @throws IllegalArgumentException if the format is invalid.
      */
-    public static TxtAdaptedParticipant deserialise(String data) {
+    public static TxtAdaptedParticipant deserialize(String data) {
         String[] parts = data.split(":", 2);
 
         if (parts.length < 2) {
