@@ -59,7 +59,7 @@ public class UpdateCommand extends Command {
         List<Participant> participants = updateFields.getParticipants().orElse(targetExpense.getParticipants());
         List<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
 
-        return new Expense(group, expenseName, amount, payer, participants, tags);
+        return new Expense(group, expenseName, amount, payer, participants, tags, targetExpense.getExpenseType());
     }
 
     /**
