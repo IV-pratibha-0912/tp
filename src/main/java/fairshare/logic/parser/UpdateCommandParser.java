@@ -103,7 +103,7 @@ public class UpdateCommandParser implements Parser {
     }
 
     private void setReceiver(Map<String, List<String>> map, UpdateFields updateFields) throws ParseException {
-        Optional<String> strReceiver= ParserUtil.getOptionalSingleFieldData(map, "r");
+        Optional<String> strReceiver = ParserUtil.getOptionalSingleFieldData(map, "r");
         if (strReceiver.isPresent()) {
             updateFields.setReceiver(new Participant(new Person(strReceiver.get()), 1));
         }

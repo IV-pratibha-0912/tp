@@ -12,7 +12,7 @@ import fairshare.model.person.Person;
 /**
  * Parses input arguments and creates a new SettleCommand object.
  */
-public class SettleCommandParser implements Parser{
+public class SettleCommandParser implements Parser {
 
     /**
      * Parses the given {@code String} of arguments in the context of SettleCommand.
