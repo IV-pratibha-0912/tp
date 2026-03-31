@@ -70,9 +70,17 @@ public class ExpenseCard {
         }
 
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
-            root.setStyle("-fx-background-color: #4caf50; ");
+            root.setStyle("-fx-background-color: #e8f5e9; "
+                    + "-fx-border-color: #4caf50; "
+                    + "-fx-border-width: 0 0 0 4;");
+        } else if (expense.getAmount() >= 100) {
+            root.setStyle("-fx-background-color: #fff3e0; "
+                    + "-fx-border-color: #ff9800; "
+                    + "-fx-border-width: 0 0 0 4;");
         } else {
-            root.setStyle("-fx-background-color: transparent; -fx-border-color: transparent;");
+            root.setStyle("-fx-background-color: #f9f9f9; "
+                    + "-fx-border-color: #dddddd; "
+                    + "-fx-border-width: 0 0 0 4;");
         }
     }
 
