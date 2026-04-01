@@ -10,7 +10,11 @@ import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * A UI component that displays the details of a single {@code Expense}.
@@ -37,7 +41,7 @@ public class ExpenseCard {
     private Label payerLabel;
 
     @FXML
-    private Label participantsLabel;
+    private VBox participantsContainer;
 
     @FXML
     private Label tagsLabel;
@@ -59,9 +63,11 @@ public class ExpenseCard {
         }
 
         indexLabel.setText(displayIndex + ". ");
-        groupLabel.setText(expense.getGroup().getGroupName().toUpperCase());
+        groupLabel.setText(
+                expense.getGroup().getGroupName().toUpperCase());
         expenseNameLabel.setText(expense.getExpenseName());
-        amountLabel.setText(String.format("$%.2f", expense.getAmount()));
+        amountLabel.setText(
+                String.format("$%.2f", expense.getAmount()));
 
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
             formatSettlement(expense);
@@ -69,6 +75,19 @@ public class ExpenseCard {
             formatExpense(expense);
         }
 
+        applyCardStyle(expense);
+    }
+
+    /**
+     * Returns the root node of this card.
+     *
+     * @return the root {@code HBox}.
+     */
+    public HBox getRoot() {
+        return root;
+    }
+
+    private void applyCardStyle(Expense expense) {
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
             root.setStyle("-fx-background-color: #e8f5e9; "
                     + "-fx-background-radius: 10; "
@@ -111,41 +130,12 @@ public class ExpenseCard {
         }
     }
 
-    /**
-     * Returns the root node of this card.
-     *
-     * @return the root {@code HBox}.
-     */
-    public HBox getRoot() {
-        return root;
-    }
-
-    /**
-     * Formats a participant's name with their percentage and
-     * dollar amount.
-     * For example, bob with 2 shares out of 3 total on a $40
-     * expense displays as "bob (67% · $26.67)".
-     *
-     * @param participant the participant to format; cannot be null.
-     * @param totalShares the total number of shares in the expense.
-     * @param totalAmount the total amount of the expense.
-     * @return a formatted string showing name, percentage and amount.
-     */
-    private String formatParticipant(Participant participant,
-                                     int totalShares, double totalAmount) {
-        int percentage = (int) Math.round(
-                (participant.getShares() * 100.0) / totalShares);
-        double share = (totalAmount / totalShares)
-                * participant.getShares();
-        return participant.getPerson().getName()
-                + " (" + percentage + "% · $"
-                + String.format("%.2f", share) + ")";
-    }
-
     private void formatSettlement(Expense expense) {
-        payerLabel.setText(expense.getPayer().getName() + " -> "
-                + expense.getParticipants().getFirst().getPerson().getName());
-
+        payerLabel.setText(expense.getPayer().getName()
+                + " → "
+                + expense.getParticipants()
+                .getFirst().getPerson().getName());
+        tagsLabel.setText("");
     }
 
     private void formatExpense(Expense expense) {
@@ -155,11 +145,34 @@ public class ExpenseCard {
         int totalShares = expense.getTotalShares();
         double totalAmount = expense.getAmount();
 
-        String participants = expense.getParticipants().stream()
-                .map(p -> formatParticipant(
-                        p, totalShares, totalAmount))
-                .collect(Collectors.joining(", "));
-        participantsLabel.setText("Participants: " + participants);
+        javafx.scene.layout.FlowPane chipsPane =
+                new javafx.scene.layout.FlowPane();
+        chipsPane.setHgap(6);
+        chipsPane.setVgap(4);
+
+        for (Participant p : expense.getParticipants()) {
+            double share = (totalAmount / totalShares)
+                    * p.getShares();
+            int percentage = (int) Math.round(
+                    (p.getShares() * 100.0) / totalShares);
+
+            Label chip = new Label(
+                    p.getPerson().getName()
+                            + " · " + percentage + "%"
+                            + " · $" + String.format("%.2f", share));
+            chip.setStyle(
+                    "-fx-background-color: #e8eef7;"
+                            + "-fx-text-fill: #1a2a4a;"
+                            + "-fx-font-size: 11;"
+                            + "-fx-background-radius: 20;"
+                            + "-fx-border-color: #c5d0e8;"
+                            + "-fx-border-radius: 20;"
+                            + "-fx-padding: 3 10 3 10;");
+
+            chipsPane.getChildren().add(chip);
+        }
+
+        participantsContainer.getChildren().add(chipsPane);
 
         String tags = expense.getTags().stream()
                 .map(t -> t.getTagName())

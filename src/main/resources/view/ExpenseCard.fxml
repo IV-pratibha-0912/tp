@@ -17,7 +17,6 @@
            style="-fx-text-fill: #9aaac8;
                   -fx-font-size: 12;"/>
     <VBox spacing="5">
-
         <HBox spacing="6" alignment="CENTER_LEFT">
             <Label fx:id="groupLabel"
                    style="-fx-text-fill: #ffffff;
@@ -31,7 +30,6 @@
                           -fx-font-size: 14;
                           -fx-font-weight: bold;"/>
         </HBox>
-
         <Label fx:id="amountLabel"
                style="-fx-text-fill: #2e7d32;
                       -fx-font-size: 13;
@@ -39,9 +37,7 @@
         <Label fx:id="payerLabel"
                style="-fx-text-fill: #4a5568;
                       -fx-font-size: 12;"/>
-        <Label fx:id="participantsLabel"
-               style="-fx-text-fill: #4a5568;
-                      -fx-font-size: 12;"/>
+        <VBox fx:id="participantsContainer" spacing="4"/>
         <Label fx:id="tagsLabel"
                style="-fx-text-fill: #6b7fa8;
                       -fx-font-size: 11;
