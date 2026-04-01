@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.chart.PieChart;
+import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 
 /**
@@ -28,6 +29,9 @@ public class TagPieChart {
 
     @FXML
     private PieChart tagPieChart;
+
+    @FXML
+    private Label noDataLabel;
 
     /**
      * Constructs a {@code TagPieChart} with the given list of expenses.
@@ -72,7 +76,8 @@ public class TagPieChart {
             double amount = expense.getAmount();
 
             if (expense.getTags().isEmpty()) {
-                tagAmounts.merge(UNTAGGED_LABEL, amount, Double::sum);
+                tagAmounts.merge(UNTAGGED_LABEL, amount,
+                        Double::sum);
             } else {
                 for (var tag : expense.getTags()) {
                     tagAmounts.merge(tag.getTagName(), amount,
@@ -86,10 +91,15 @@ public class TagPieChart {
 
         tagAmounts.forEach((tag, amount) ->
                 pieData.add(new PieChart.Data(
-                        tag + String.format(" ($%.2f)", amount),
+                        tag + String.format(" $%.0f", amount),
                         amount)));
 
         tagPieChart.setData(pieData);
-        tagPieChart.setVisible(!pieData.isEmpty());
+
+        boolean hasData = !pieData.isEmpty();
+        tagPieChart.setVisible(hasData);
+        tagPieChart.setManaged(hasData);
+        noDataLabel.setVisible(!hasData);
+        noDataLabel.setManaged(!hasData);
     }
 }

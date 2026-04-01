@@ -109,6 +109,13 @@ public class ExpenseListPanel {
                         expense, getIndex() + 1).getRoot());
                 setStyle("-fx-background-color: transparent;"
                         + "-fx-padding: 4 10 4 10;");
+                setOnMouseEntered(e -> setStyle(
+                        "-fx-background-color: rgba(74,127,232,0.05);"
+                                + "-fx-background-radius: 10;"
+                                + "-fx-padding: 4 10 4 10;"));
+                setOnMouseExited(e -> setStyle(
+                        "-fx-background-color: transparent;"
+                                + "-fx-padding: 4 10 4 10;"));
             }
         }
     }

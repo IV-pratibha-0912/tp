@@ -18,8 +18,19 @@
     <PieChart fx:id="tagPieChart"
               labelsVisible="true"
               legendVisible="false"
-              prefHeight="220"
+              prefHeight="200"
               animated="true"
-              style="-fx-background-color: #f0f4fc;"/>
+              style="-fx-background-color: transparent;
+                     -fx-border-color: transparent;"/>
+
+    <Label fx:id="noDataLabel"
+           text="No expenses yet"
+           style="-fx-text-fill: #6b7fa8;
+                  -fx-font-size: 12;
+                  -fx-font-style: italic;">
+        <padding>
+            <Insets top="0" right="0" bottom="8" left="15"/>
+        </padding>
+    </Label>
 
 </VBox>
