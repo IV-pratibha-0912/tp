@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       style="-fx-background-color: #f0f4fc;">
+    <padding>
+        <Insets top="8" right="12" bottom="8" left="12"/>
+    </padding>
     <TextArea fx:id="resultDisplay"
               editable="false"
-              prefHeight="80"
+              prefHeight="64"
               wrapText="true"
-              style="-fx-background-color: #f0f4fc;
+              style="-fx-background-color: #ffffff;
                      -fx-text-fill: #1a2a4a;
-                     -fx-border-color: transparent;
+                     -fx-border-color: #4a7fe8;
+                     -fx-border-width: 0 0 0 4;
+                     -fx-border-radius: 0 6 6 0;
+                     -fx-background-radius: 0 6 6 0;
                      -fx-focus-color: transparent;
                      -fx-faint-focus-color: transparent;
-                     -fx-font-size: 13;"/>
+                     -fx-font-family: monospace;
+                     -fx-font-size: 12;
+                     -fx-padding: 8 10 8 12;"/>
 </VBox>
