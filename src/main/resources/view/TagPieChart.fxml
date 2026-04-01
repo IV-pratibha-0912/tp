@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.layout.VBox?>
+<VBox xmlns:fx="http://javafx.com/fxml"
+      spacing="5">
+    <PieChart fx:id="tagPieChart"
+              title="Spending by Tag"
+              labelsVisible="true"
+              legendVisible="true"
+              prefHeight="250"
+              animated="true"/>
+</VBox>
