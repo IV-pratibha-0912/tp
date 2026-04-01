@@ -30,7 +30,7 @@ public class FairShare extends Application {
     private Logic logic;
     private Storage storage;
     private String startupMessage = "";
-    private Image fairshareIcon = new Image(getClass().getResourceAsStream("/images/fairshare.png"));
+    private Image fairshareIcon = new Image(getClass().getResourceAsStream("/images/fairshare_logo.png"));
 
 
     /**

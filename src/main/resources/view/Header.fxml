@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
@@ -13,6 +15,14 @@
     <padding>
         <Insets top="14" right="20" bottom="14" left="20"/>
     </padding>
+
+    <ImageView fitWidth="100"
+               fitHeight="100"
+               preserveRatio="true">
+        <image>
+            <Image url="@/images/fairshare_logo.png"/>
+        </image>
+    </ImageView>
 
     <VBox spacing="2">
         <Label text="FairShare"

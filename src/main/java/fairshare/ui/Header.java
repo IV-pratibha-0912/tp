@@ -5,6 +5,7 @@ import java.io.IOException;
 import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 
 /**
@@ -15,6 +16,9 @@ public class Header {
     private static final String FXML = "/view/Header.fxml";
 
     private HBox root;
+
+    @FXML
+    private ImageView logoImageView;
 
     /**
      * Constructs a {@code Header}.
