@@ -35,6 +35,7 @@ public class MainWindow implements Ui {
     private ResultDisplay resultDisplay;
     private CommandBox commandBox;
     private HelpWindow helpWindow;
+    private Header header;
 
     @FXML
     private StackPane expenseListPanelPlaceholder;
@@ -53,6 +54,9 @@ public class MainWindow implements Ui {
 
     @FXML
     private StackPane commandBoxPlaceholder;
+
+    @FXML
+    private StackPane headerPlaceholder;
 
     /**
      * Constructs a {@code MainWindow} with the given stage and logic.
@@ -80,6 +84,9 @@ public class MainWindow implements Ui {
      * Injects all subcomponents into their placeholders.
      */
     public void fillInnerParts() {
+        header = new Header();
+        headerPlaceholder.getChildren().add(header.getRoot());
+
         expenseListPanel = new ExpenseListPanel(
                 logic.getFilteredExpenseList());
         expenseListPanelPlaceholder.getChildren().add(
