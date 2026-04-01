@@ -59,7 +59,7 @@ public class ExpenseCard {
         }
 
         indexLabel.setText(displayIndex + ". ");
-        groupLabel.setText("Group: " + expense.getGroup().getGroupName());
+        groupLabel.setText(expense.getGroup().getGroupName().toUpperCase());
         expenseNameLabel.setText(expense.getExpenseName());
         amountLabel.setText(String.format("$%.2f", expense.getAmount()));
 
@@ -71,22 +71,43 @@ public class ExpenseCard {
 
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
             root.setStyle("-fx-background-color: #e8f5e9; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #4caf50; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(76,175,80,0.15), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #4caf50; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
         } else if (expense.getAmount() >= 100) {
             root.setStyle("-fx-background-color: #fff8e1; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #ff9800; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(255,152,0,0.15), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #ff9800; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
         } else {
             root.setStyle("-fx-background-color: #ffffff; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #4a7fe8; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(74,127,232,0.12), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #4a7fe8; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
         }
     }
 
