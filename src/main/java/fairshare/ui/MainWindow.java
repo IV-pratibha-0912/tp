@@ -35,6 +35,8 @@ public class MainWindow implements Ui {
     private ResultDisplay resultDisplay;
     private CommandBox commandBox;
     private HelpWindow helpWindow;
+    private Header header;
+    private GroupWindow groupWindow;
 
     @FXML
     private StackPane expenseListPanelPlaceholder;
@@ -53,6 +55,9 @@ public class MainWindow implements Ui {
 
     @FXML
     private StackPane commandBoxPlaceholder;
+
+    @FXML
+    private StackPane headerPlaceholder;
 
     /**
      * Constructs a {@code MainWindow} with the given stage and logic.
@@ -80,6 +85,9 @@ public class MainWindow implements Ui {
      * Injects all subcomponents into their placeholders.
      */
     public void fillInnerParts() {
+        header = new Header();
+        headerPlaceholder.getChildren().add(header.getRoot());
+
         expenseListPanel = new ExpenseListPanel(
                 logic.getFilteredExpenseList());
         expenseListPanelPlaceholder.getChildren().add(
@@ -106,6 +114,12 @@ public class MainWindow implements Ui {
                 commandBox.getRoot());
 
         helpWindow = new HelpWindow();
+
+        groupWindow = new GroupWindow(primaryStage);
+        header.setOnGroupsClicked(() ->
+                groupWindow.show(
+                        logic.getExpenseList(),
+                        logic.calculateBalances()));
     }
 
     /**
@@ -150,8 +164,12 @@ public class MainWindow implements Ui {
             balancePanel.refresh(logic.calculateBalances());
             tagPieChart.refresh(logic.getExpenseList());
             statusBar.refresh(logic.getExpenseList());
+            groupWindow.refreshIfShowing(
+                    logic.getExpenseList(),
+                    logic.calculateBalances());
             primaryStage.setTitle("FairShare ("
-                    + logic.getExpenseList().size() + " expenses)");
+                    + logic.getExpenseList().size()
+                    + " expenses)");
 
         } catch (CommandException | ParseException e) {
             resultDisplay.setFeedbackToUser(e.getMessage());

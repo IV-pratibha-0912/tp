@@ -10,7 +10,11 @@ import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * A UI component that displays the details of a single {@code Expense}.
@@ -37,7 +41,7 @@ public class ExpenseCard {
     private Label payerLabel;
 
     @FXML
-    private Label participantsLabel;
+    private VBox participantsContainer;
 
     @FXML
     private Label tagsLabel;
@@ -59,9 +63,11 @@ public class ExpenseCard {
         }
 
         indexLabel.setText(displayIndex + ". ");
-        groupLabel.setText("Group: " + expense.getGroup().getGroupName());
+        groupLabel.setText(
+                expense.getGroup().getGroupName().toUpperCase());
         expenseNameLabel.setText(expense.getExpenseName());
-        amountLabel.setText(String.format("$%.2f", expense.getAmount()));
+        amountLabel.setText(
+                String.format("$%.2f", expense.getAmount()));
 
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
             formatSettlement(expense);
@@ -69,25 +75,7 @@ public class ExpenseCard {
             formatExpense(expense);
         }
 
-        if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
-            root.setStyle("-fx-background-color: #e8f5e9; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #4caf50; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
-        } else if (expense.getAmount() >= 100) {
-            root.setStyle("-fx-background-color: #fff8e1; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #ff9800; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
-        } else {
-            root.setStyle("-fx-background-color: #ffffff; "
-                    + "-fx-background-radius: 8; "
-                    + "-fx-border-color: #4a7fe8; "
-                    + "-fx-border-width: 0 0 0 4; "
-                    + "-fx-border-radius: 8;");
-        }
+        applyCardStyle(expense);
     }
 
     /**
@@ -99,42 +87,97 @@ public class ExpenseCard {
         return root;
     }
 
-    /**
-     * Format a participant's name with their proportion as a fraction.
-     * For example, bob with 2 shares out of 3 total displays as "bob (2/3)".
-     *
-     * @param participant the participant to format; cannot be null.
-     * @param totalShares the total number of shares in the expense.
-     * @return a formatted string showing the participant's name and fraction.
-     */
-    private String formatParticipant(Participant participant, int totalShares) {
-        return participant.getPerson().getName()
-                + "("
-                + participant.getShares()
-                + "/"
-                + totalShares
-                + ")";
+    private void applyCardStyle(Expense expense) {
+        if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
+            root.setStyle("-fx-background-color: #e8f5e9; "
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(76,175,80,0.15), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #4caf50; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
+        } else if (expense.getAmount() >= 100) {
+            root.setStyle("-fx-background-color: #fff8e1; "
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(255,152,0,0.15), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #ff9800; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
+        } else {
+            root.setStyle("-fx-background-color: #ffffff; "
+                    + "-fx-background-radius: 10; "
+                    + "-fx-border-radius: 10; "
+                    + "-fx-effect: dropshadow(gaussian, "
+                    + "rgba(74,127,232,0.12), 8, 0, 0, 2);");
+            groupLabel.setStyle(
+                    "-fx-text-fill: #ffffff; "
+                            + "-fx-font-size: 10; "
+                            + "-fx-font-weight: bold; "
+                            + "-fx-background-color: #4a7fe8; "
+                            + "-fx-background-radius: 20; "
+                            + "-fx-padding: 2 10 2 10;");
+        }
     }
 
     private void formatSettlement(Expense expense) {
-        payerLabel.setText(expense.getPayer().getName() + " -> "
-                + expense.getParticipants().getFirst().getPerson().getName());
-
+        payerLabel.setText(expense.getPayer().getName()
+                + " → "
+                + expense.getParticipants()
+                .getFirst().getPerson().getName());
+        tagsLabel.setText("");
     }
 
     private void formatExpense(Expense expense) {
-        payerLabel.setText("Paid by: " + expense.getPayer().getName());
+        payerLabel.setText("Paid by: "
+                + expense.getPayer().getName());
 
         int totalShares = expense.getTotalShares();
+        double totalAmount = expense.getAmount();
 
-        String participants = expense.getParticipants().stream()
-                .map(p -> formatParticipant(p, totalShares))
-                .collect(Collectors.joining(", "));
-        participantsLabel.setText("Participants: " + participants);
+        javafx.scene.layout.FlowPane chipsPane =
+                new javafx.scene.layout.FlowPane();
+        chipsPane.setHgap(6);
+        chipsPane.setVgap(4);
+
+        for (Participant p : expense.getParticipants()) {
+            double share = (totalAmount / totalShares)
+                    * p.getShares();
+            int percentage = (int) Math.round(
+                    (p.getShares() * 100.0) / totalShares);
+
+            Label chip = new Label(
+                    p.getPerson().getName()
+                            + " · " + percentage + "%"
+                            + " · $" + String.format("%.2f", share));
+            chip.setStyle(
+                    "-fx-background-color: #e8eef7;"
+                            + "-fx-text-fill: #1a2a4a;"
+                            + "-fx-font-size: 11;"
+                            + "-fx-background-radius: 20;"
+                            + "-fx-border-color: #c5d0e8;"
+                            + "-fx-border-radius: 20;"
+                            + "-fx-padding: 3 10 3 10;");
+
+            chipsPane.getChildren().add(chip);
+        }
+
+        participantsContainer.getChildren().add(chipsPane);
 
         String tags = expense.getTags().stream()
                 .map(t -> t.getTagName())
                 .collect(Collectors.joining(", "));
-        tagsLabel.setText("Tags: " + (tags.isEmpty() ? "-" : tags));
+        tagsLabel.setText("Tags: "
+                + (tags.isEmpty() ? "-" : tags));
     }
 }

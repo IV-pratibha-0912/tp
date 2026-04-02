@@ -7,9 +7,12 @@ import fairshare.ui.exceptions.UiException;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
  * A UI panel that displays the list of expenses.
@@ -19,10 +22,13 @@ public class ExpenseListPanel {
 
     private static final String FXML = "/view/ExpenseListPanel.fxml";
 
-    private Region root;
+    private VBox root;
 
     @FXML
     private ListView<Expense> expenseListView;
+
+    @FXML
+    private Label emptyStateLabel;
 
     /**
      * Constructs an {@code ExpenseListPanel} with the given expense list.
@@ -41,15 +47,42 @@ public class ExpenseListPanel {
 
         expenseListView.setItems(expenses);
         expenseListView.setCellFactory(lv -> new ExpenseListViewCell());
+
+        updateEmptyState(expenses);
+        expenses.addListener(
+                (javafx.collections.ListChangeListener<Expense>) change ->
+                        updateEmptyState(expenses));
     }
 
     /**
      * Returns the root region of this component.
      *
-     * @return the root {@code Region}.
+     * @return the root {@code VBox}.
      */
-    public Region getRoot() {
+    public VBox getRoot() {
         return root;
+    }
+
+    /**
+     * Refreshes the panel with an updated expense list.
+     *
+     * @param expenses the updated list of expenses; cannot be null.
+     */
+    public void refresh(ObservableList<Expense> expenses) {
+        expenseListView.setItems(expenses);
+        updateEmptyState(expenses);
+    }
+
+    /**
+     * Shows or hides the empty state label based on whether
+     * the expense list is empty.
+     *
+     * @param expenses the current list of expenses.
+     */
+    private void updateEmptyState(ObservableList<Expense> expenses) {
+        boolean isEmpty = expenses.isEmpty();
+        emptyStateLabel.setVisible(isEmpty);
+        emptyStateLabel.setManaged(isEmpty);
     }
 
     /**
@@ -71,9 +104,28 @@ public class ExpenseListPanel {
             if (isEmpty || expense == null) {
                 setGraphic(null);
                 setText(null);
+                setStyle("-fx-background-color: transparent;");
+                setOnMouseEntered(null);
+                setOnMouseExited(null);
             } else {
-                setGraphic(new ExpenseCard(
-                        expense, getIndex() + 1).getRoot());
+                HBox card = new ExpenseCard(
+                        expense, getIndex() + 1).getRoot();
+
+                card.setOnMouseEntered(e ->
+                        card.setStyle(card.getStyle()
+                                + "-fx-effect: dropshadow(gaussian,"
+                                + "rgba(74,127,232,0.25), 12, 0, 0, 3);"));
+
+                card.setOnMouseExited(e ->
+                        card.setStyle(card.getStyle()
+                                + "-fx-effect: dropshadow(gaussian,"
+                                + "rgba(74,127,232,0.12), 8, 0, 0, 2);"));
+
+                setGraphic(card);
+                setStyle("-fx-background-color: transparent;"
+                        + "-fx-padding: 4 10 4 10;");
+                setOnMouseEntered(null);
+                setOnMouseExited(null);
             }
         }
     }
