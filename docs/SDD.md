@@ -191,39 +191,46 @@ the system in the current implementation.
 
 ### 5.1 Layered Architecture
 **Decision:** Adopt a strict layered architecture (UI → Logic → Model → Storage) with no cross-layer dependencies.
+
 **Rationale:** Separating concerns allows team members to work on different layers in parallel without conflicts and makes each layer independently testable.
 
 ### 5.2 Command Pattern for Logic
 **Decision:** Each user action is encapsulated as a `Command` object parsed by a dedicated parser class.
+
 **Rationale:** Adding new commands only requires creating a new`Command` and `Parser` class without modifying existing code, following the Open-Closed principle.
 
 ### 5.3 Plain-Text Storage
 **Decision:** Persist data as a pipe-delimited `.txt` file using custom serialization.
+
 **Rationale:** Simple to implement and debug without external dependencies. Each expense is stored as one line in the format
 `group|name|amount|payer|participants|tags|expenseType`.
 
 ### 5.4 JavaFX ObservableList for UI Binding
 **Decision:** Use `ObservableList` and `FilteredList` from JavaFX for the expense list.
+
 **Rationale:** JavaFX `ListView` automatically reflects changes to an
 `ObservableList`, reducing the need for manual UI refresh calls.
 
 ### 5.5 Proportional Split Using Participant Shares
 **Decision:** Model split proportions as integer shares per participant rather than percentages or fixed amounts.
-**Rationale:** Integer shares are simpler to input and reason about.
-`s/bob:2 s/mary:1` is more intuitive than `s/bob:66.67 s/mary:33.33`.
+
+**Rationale:** Integer shares are simpler to input. `s/bob:2 s/mary:1` is more intuitive than `s/bob:66.67 s/mary:33.33`.
 The fraction is computed at display time from the participant's shares divided by the total shares, shown as both a percentage and a dollar amount on the expense card.
 
 ### 5.6 Graceful Handling of Corrupted Storage Files
 **Decision:** When the storage file cannot be parsed, delete it and start with an empty expense list rather than crashing.
+
 **Rationale:** A corrupted file should not prevent the app from launching. The user is shown a warning message on startup so they are aware their previous data was lost.
 
 ### 5.7 FXML Controller Set in Java
 **Decision:** All FXML files omit `fx:controller` and instead call`fxmlLoader.setController(this)` in the Java constructor.
+
 **Rationale:** Setting the controller in Java avoids the "Controller value already specified" error that occurs when both the FXML attribute and Java call are used together. It also keeps the
 controller wiring explicit and consistent across all UI components.
 
 ### 5.8 UI Refresh After Every Command
 **Decision:** After every successful command, `MainWindow` explicitly refreshes `BalancePanel`, `TagPieChart`, `StatusBar` and
 `GroupWindow` (if open), and updates the window title.
+
 **Rationale:** While `ExpenseListPanel` updates automatically via`ObservableList` binding, the other panels derive computed data
 (balances, tag totals, group status) that must be recalculated and re-rendered explicitly after each change.
