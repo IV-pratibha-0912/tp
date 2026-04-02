@@ -15,6 +15,8 @@ public class ClearCommand extends Command {
      * @return A {@code CommandResult} containing the success message.
      */
     public CommandResult execute(Model model) {
+        assert model != null : "model should not be null";
+
         model.clearExpenseList();
         return new CommandResult(MESSAGE_SUCCESS, false, false);
     }

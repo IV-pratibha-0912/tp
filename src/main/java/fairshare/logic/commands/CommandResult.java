@@ -16,6 +16,8 @@ public class CommandResult {
      * @param isExit True if the command requires the program to shut down (exit command)
      */
     public CommandResult(String response, boolean isHelp, boolean isExit) {
+        assert response != null : "response should not be null";
+
         this.response = response;
         this.isHelp = isHelp;
         this.isExit = isExit;

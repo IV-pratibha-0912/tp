@@ -17,6 +17,8 @@ public class SettleCommand extends Command {
      * @param settlement The settlement (expense) to be added.
      */
     public SettleCommand(Expense settlement) {
+        assert settlement != null : "settlement should not be null";
+
         this.settlement = settlement;
     }
 
@@ -27,6 +29,8 @@ public class SettleCommand extends Command {
      * @return A {@code CommandResult} containing the success message.
      */
     public CommandResult execute(Model model) {
+        assert model != null : "model should not be null";
+
         model.addExpense(settlement);
         return new CommandResult(MESSAGE_SUCCESS, false, false);
     }

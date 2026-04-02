@@ -34,6 +34,8 @@ public class UpdateCommand extends Command {
      * @param updateFields The new data to update the expense with.
      */
     public UpdateCommand(int expenseIndex, UpdateFields updateFields) {
+        assert updateFields != null : "updateFields should not be null";
+
         this.expenseIndex = expenseIndex;
         this.updateFields = updateFields;
     }
@@ -46,6 +48,8 @@ public class UpdateCommand extends Command {
      * @throws CommandException If the provided index is out of bounds of the filtered expense list.
      */
     public CommandResult execute(Model model) throws CommandException {
+        assert model != null : "model should not be null";
+
         try {
             List<Expense> displayedExpenseList = model.getFilteredExpenseList();
             Expense targetExpense = displayedExpenseList.get(expenseIndex);

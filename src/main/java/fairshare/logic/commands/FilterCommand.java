@@ -18,6 +18,8 @@ public class FilterCommand extends Command {
      * @param predicate The condition that each expense must satisfy to be displayed.
      */
     public FilterCommand(Predicate<Expense> predicate) {
+        assert predicate != null : "predicate should not be null";
+
         this.predicate = predicate;
     }
 
@@ -28,6 +30,8 @@ public class FilterCommand extends Command {
      * @return A {@code CommandResult} containing the success message.
      */
     public CommandResult execute(Model model) {
+        assert model != null : "model should not be null";
+
         model.filterExpenses(predicate);
         return new CommandResult(MESSAGE_SUCCESS, false, false);
     }
