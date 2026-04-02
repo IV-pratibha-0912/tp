@@ -5,11 +5,29 @@ skinparam arrowColor LOGIC_COLOR_4
 skinparam classBackgroundColor LOGIC_COLOR
 
 package Logic as LogicPackage {
-    Class Parser
-    Class Commands
-    Class CommandResult
-    Class "{abstract}\nCommand" as Command
 
+    package Parser <<Rectangle>> {
+        Class FairShareParser
+        Class AddCommandParser
+        Class DeleteCommandParser
+        Class UpdateCommandParser
+        Class FilterCommandParser
+        Class SettleCommandParser
+    }
+
+    package Commands <<Rectangle>> {
+        Class "{abstract}\nCommand" as Command
+        Class AddCommand
+        Class DeleteCommand
+        Class UpdateCommand
+        Class FilterCommand
+        Class ListCommand
+        Class SettleCommand
+        Class HelpCommand
+        Class ExitCommand
+    }
+
+    Class CommandResult
     Class "<<interface>>\nLogic" as Logic
     Class LogicManager
 }
@@ -27,11 +45,28 @@ HiddenOutside ..> Logic
 
 LogicManager .up.|> Logic
 
-LogicManager -right->"1" Parser
+LogicManager -right-> "1" FairShareParser
 
-Parser ..> Commands : <<create>>
+FairShareParser ..> AddCommandParser : <<create>>
+FairShareParser ..> DeleteCommandParser : <<create>>
+FairShareParser ..> UpdateCommandParser : <<create>>
+FairShareParser ..> FilterCommandParser : <<create>>
+FairShareParser ..> SettleCommandParser : <<create>>
 
-Commands -up-|> Command
+AddCommandParser ..> AddCommand : <<create>>
+DeleteCommandParser ..> DeleteCommand : <<create>>
+UpdateCommandParser ..> UpdateCommand : <<create>>
+FilterCommandParser ..> FilterCommand : <<create>>
+SettleCommandParser ..> SettleCommand : <<create>>
+
+AddCommand -up-|> Command
+DeleteCommand -up-|> Command
+UpdateCommand -up-|> Command
+FilterCommand -up-|> Command
+ListCommand -up-|> Command
+SettleCommand -up-|> Command
+HelpCommand -up-|> Command
+ExitCommand -up-|> Command
 
 LogicManager .left.> Command : <<executes>>
 
@@ -46,4 +81,5 @@ Command .up.> CommandResult : <<create>>
 ' Hidden lines to force clean layout routing
 Storage --[hidden] Model
 Command .[hidden]up.> Storage
+
 @enduml

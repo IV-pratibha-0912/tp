@@ -29,13 +29,17 @@ rectangle "Shared Expense Tracker" {
     usecase "Add Expense" as UC1
     usecase "Delete Expense" as UC2
     usecase "List All Expenses" as UC3
-    usecase "Filter Expenses\n(by name, payer,\nparticipant or tag)" as UC4
+    usecase "Filter Expenses\n(by group, name, payer,\nparticipant or tag)" as UC4
     usecase "View Balance Summary" as UC5
     usecase "View Help" as UC6
-    usecase "Auto-calculate Balances" as UC7
-    usecase "Auto-save Data" as UC8
-    usecase "Auto-load Data" as UC9
-    usecase "Update Expense" as UC_UPDATE
+    usecase "Update Expense" as UC7
+    usecase "Settle Debt" as UC8
+    usecase "View Spending\nBreakdown by Tag" as UC9
+    usecase "View Groups\n(Active or Settled)" as UC10
+    usecase "Auto-calculate Balances" as UC_CALC
+    usecase "Auto-save Data" as UC_SAVE
+    usecase "Auto-load Data" as UC_LOAD
+    usecase "Show Startup Warning\nif Data Corrupted" as UC_WARN
 }
 
 U --> UC1
@@ -44,17 +48,24 @@ U --> UC3
 U --> UC4
 U --> UC5
 U --> UC6
-U --> UC_UPDATE
+U --> UC7
+U --> UC8
+U --> UC9
+U --> UC10
 
-S --> UC7
-S --> UC8
-S --> UC9
+S --> UC_CALC
+S --> UC_SAVE
+S --> UC_LOAD
+S --> UC_WARN
 
-UC1 .down.> UC7 : <<triggers>>
-UC1 .down.> UC8 : <<triggers>>
-UC2 .down.> UC7 : <<triggers>>
-UC2 .down.> UC8 : <<triggers>>
-UC_UPDATE .down.> UC7 : <<triggers>>
-UC_UPDATE .down.> UC8 : <<triggers>>
+UC1 .down.> UC_CALC : <<triggers>>
+UC1 .down.> UC_SAVE : <<triggers>>
+UC2 .down.> UC_CALC : <<triggers>>
+UC2 .down.> UC_SAVE : <<triggers>>
+UC7 .down.> UC_CALC : <<triggers>>
+UC7 .down.> UC_SAVE : <<triggers>>
+UC8 .down.> UC_CALC : <<triggers>>
+UC8 .down.> UC_SAVE : <<triggers>>
+UC_LOAD .down.> UC_WARN : <<may trigger>>
 
 @enduml
