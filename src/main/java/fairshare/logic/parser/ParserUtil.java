@@ -171,8 +171,17 @@ public class ParserUtil {
      * @throws ParseException If any of the participant strings are formatted incorrectly.
      */
     public static List<Participant> parseParticipants(List<String> strParticipants) throws ParseException {
-        List<Participant> participants = new ArrayList<>();
+        boolean isEqualSplit = strParticipants.stream()
+                .anyMatch(str -> !str.contains(":"));
+        boolean isUnequalSplit = strParticipants.stream()
+                .anyMatch(str -> str.contains(":"));
 
+        if (isEqualSplit && isUnequalSplit) {
+            throw new ParseException(
+                    "Invalid format: If splitting by proportion, every participant must have a specified share.");
+        }
+
+        List<Participant> participants = new ArrayList<>();
         for (String p : strParticipants) {
             participants.add(parseParticipant(p));
         }
@@ -194,10 +203,10 @@ public class ParserUtil {
 
     private static Participant parseParticipant(String strParticipant) throws ParseException {
         String[] parts = strParticipant.split(":");
-        String name = parts[0];
+        String participantName = parts[0];
 
         if (parts.length == 1) {
-            return new Participant(new Person(name), 1);
+            throw new ParseException("Missing shares: Please specify shares for every participant.");
         }
 
         String strShares = parts[1];
@@ -206,7 +215,7 @@ public class ParserUtil {
             if (shares <= 0) {
                 throw new ParseException("Expense participant's share must be greater than 0.");
             }
-            return new Participant(new Person(name), shares);
+            return new Participant(new Person(participantName), shares);
         } catch (NumberFormatException e) {
             throw new ParseException("Expense participant's share must be an integer (e.g., s/john:3)");
         }
