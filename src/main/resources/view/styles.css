@@ -1,0 +1,36 @@
+.list-view .scroll-bar:vertical {
+    -fx-background-color: #e8eef7;
+    -fx-pref-width: 8;
+}
+
+.list-view .scroll-bar:horizontal {
+    -fx-background-color: #e8eef7;
+    -fx-pref-height: 8;
+}
+
+.list-view .scroll-bar .thumb {
+    -fx-background-color: #c5d0e8;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar .thumb:hover {
+    -fx-background-color: #4a7fe8;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar .track {
+    -fx-background-color: #e8eef7;
+    -fx-background-radius: 10;
+}
+
+.list-view .scroll-bar .increment-button,
+.list-view .scroll-bar .decrement-button {
+    -fx-background-color: transparent;
+    -fx-padding: 0;
+}
+
+.list-view .scroll-bar .increment-arrow,
+.list-view .scroll-bar .decrement-arrow {
+    -fx-shape: "";
+    -fx-padding: 0;
+}

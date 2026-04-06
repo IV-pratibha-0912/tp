@@ -123,6 +123,10 @@ public class MainWindow implements Ui {
 
         showStartupMessage("Welcome to FairShare! \n" +
                 "Add an expense or type 'help' to show all available commands.");
+
+        primaryStage.getScene().getStylesheets().add(
+                getClass().getResource("/view/styles.css")
+                        .toExternalForm());
     }
 
     /**
