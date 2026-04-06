@@ -11,6 +11,7 @@ import fairshare.ui.exceptions.UiException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
@@ -27,6 +28,9 @@ public class BalancePanel {
 
     @FXML
     private ListView<Map.Entry<String, List<Balance>>> balanceListView;
+
+    @FXML
+    private Label emptyStateLabel;
 
     /**
      * Constructs a {@code BalancePanel} with the given list of balances.
@@ -84,6 +88,19 @@ public class BalancePanel {
         balanceListView.setItems(
                 FXCollections.observableArrayList(
                         grouped.entrySet()));
+
+        updateEmptyState(grouped.isEmpty());
+    }
+
+    /**
+     * Shows or hides the empty state label based on whether
+     * the balance list is empty.
+     *
+     * @param isEmpty whether the balance list is empty.
+     */
+    private void updateEmptyState(boolean isEmpty) {
+        emptyStateLabel.setVisible(isEmpty);
+        emptyStateLabel.setManaged(isEmpty);
     }
 
     /**
