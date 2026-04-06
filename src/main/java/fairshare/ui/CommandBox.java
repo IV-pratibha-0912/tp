@@ -100,5 +100,13 @@ public class CommandBox {
     private void initialize() {
         commandTextField.setOnAction(event -> handleCommandEntered());
         sendButton.setOnAction(event -> handleCommandEntered());
+
+        commandTextField.setOnKeyPressed(event -> {
+            if (event.getCode()
+                    == javafx.scene.input.KeyCode.ESCAPE) {
+                commandTextField.clear();
+                commandTextField.setStyle("");
+            }
+        });
     }
 }
