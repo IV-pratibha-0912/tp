@@ -22,4 +22,15 @@
                      -fx-focus-color: transparent;
                      -fx-faint-focus-color: transparent;"/>
 
+    <Label fx:id="emptyStateLabel"
+           text="All settled up! 🎉"
+           style="-fx-text-fill: #6b7fa8;
+                  -fx-font-size: 13;
+                  -fx-font-style: italic;"
+           wrapText="true">
+        <padding>
+            <Insets top="10" left="15"/>
+        </padding>
+    </Label>
+
 </VBox>

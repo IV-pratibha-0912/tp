@@ -178,17 +178,24 @@ public class GroupWindow {
                         + "-fx-font-weight: bold;"
                         + "-fx-text-fill: #1a2a4a;");
 
+        long numOfExpenses = expenses.stream()
+                .filter(expense -> expense.getExpenseType() == ExpenseType.EXPENSE)
+                .count();
+
+        long numOfMembers = expenses.stream()
+                .flatMap(expense -> expense.getParticipants().stream())
+                .map(p -> p.getPerson().getName())
+                .distinct()
+                .count();
+
         double totalAmount = expenses.stream()
                 .filter(expense -> expense.getExpenseType() == ExpenseType.EXPENSE)
                 .mapToDouble(Expense::getAmount)
                 .sum();
 
-        long numOfExpenses = expenses.stream()
-                .filter(expense -> expense.getExpenseType() == ExpenseType.EXPENSE)
-                .count();
-
         Label totalLabel = new Label(
                 numOfExpenses + " expenses  ·  "
+                        + numOfMembers + " members  ·  "
                         + String.format("$%.2f total", totalAmount));
         totalLabel.setStyle(
                 "-fx-font-size: 11;"
