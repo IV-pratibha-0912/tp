@@ -76,7 +76,7 @@ public class UpdateCommand extends Command {
         String expenseName = updateFields.getExpenseName().orElse(targetExpense.getExpenseName());
         double amount = updateFields.getAmount().orElse(targetExpense.getAmount());
         Person payer = updateFields.getPayer().orElse(targetExpense.getPayer());
-        List<Participant> participants = updateFields.getParticipants().orElse(targetExpense.getParticipants());
+        Set<Participant> participants = updateFields.getParticipants().orElse(targetExpense.getParticipants());
         Set<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
 
         return new Expense(group, expenseName, amount, payer, participants, tags, targetExpense.getExpenseType());
@@ -88,11 +88,11 @@ public class UpdateCommand extends Command {
         double amount = updateFields.getAmount().orElse(targetExpense.getAmount());
         Person payer = updateFields.getPayer().orElse(targetExpense.getPayer());
 
-        // Convert single participant (receiver) into a list of participants.
+        // Convert single participant (receiver) into a set of participants.
         Optional<Participant> receiver = updateFields.getReceiver();
-        List<Participant> participants;
+        Set<Participant> participants;
         if (receiver.isPresent()) {
-            participants = List.of(receiver.get());
+            participants = Set.of(receiver.get());
         } else {
             participants = targetExpense.getParticipants();
         }
@@ -130,7 +130,7 @@ public class UpdateCommand extends Command {
         private String expenseName;
         private Double amount;
         private Person payer;
-        private List<Participant> participants;
+        private Set<Participant> participants;
         private Set<Tag> tags;
         private Participant receiver; // Used for updating a settlement
 
@@ -207,20 +207,20 @@ public class UpdateCommand extends Command {
         }
 
         /**
-         * Sets the new list of participants for the expense.
+         * Sets the new set of participants for the expense.
          *
-         * @param participants The updated list of {@code Participant} objects.
+         * @param participants The updated set of {@code Participant} objects.
          */
-        public void setParticipants(List<Participant> participants) {
+        public void setParticipants(Set<Participant> participants) {
             this.participants = participants;
         }
 
         /**
-         * Returns the updated participant list, if any.
+         * Returns the updated set of participants, if any.
          *
-         * @return An {@code Optional} containing the new participant list, or empty if none.
+         * @return An {@code Optional} containing the new participant set, or empty if none.
          */
-        public Optional<List<Participant>> getParticipants() {
+        public Optional<Set<Participant>> getParticipants() {
             return Optional.ofNullable(this.participants);
         }
 

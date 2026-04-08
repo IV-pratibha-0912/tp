@@ -90,7 +90,7 @@ public class UpdateCommandParser implements Parser {
     private void setParticipants(Map<String, List<String>> map, UpdateFields updateFields) throws ParseException {
         Optional<List<String>> strParticipants = ParserUtil.getOptionalMultiFieldData(map, "s");
         if (strParticipants.isPresent()) {
-            List<Participant> participants = ParserUtil.parseParticipants(strParticipants.get());
+            Set<Participant> participants = ParserUtil.parseParticipants(strParticipants.get());
             updateFields.setParticipants(participants);
         }
     }

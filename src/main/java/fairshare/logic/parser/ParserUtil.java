@@ -2,6 +2,7 @@ package fairshare.logic.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -167,10 +168,10 @@ public class ParserUtil {
      * Parses a list of raw participant strings into a list of {@code Participant} objects.
      *
      * @param strParticipants A list of unparsed participant strings
-     * @return A list of {@code Participant} objets.
+     * @return A set of {@code Participant} objets.
      * @throws ParseException If any of the participant strings are formatted incorrectly.
      */
-    public static List<Participant> parseParticipants(List<String> strParticipants) throws ParseException {
+    public static Set<Participant> parseParticipants(List<String> strParticipants) throws ParseException {
         boolean isEqualSplit = strParticipants.stream()
                 .anyMatch(str -> !str.contains(":"));
         boolean isUnequalSplit = strParticipants.stream()
@@ -181,18 +182,13 @@ public class ParserUtil {
                     "Invalid format: If splitting by proportion, every participant must have a specified share.");
         }
 
-        List<Participant> participants = new ArrayList<>();
+        Set<Participant> participants = new HashSet<>();
         for (String p : strParticipants) {
             Participant newParticipant = parseParticipant(p);
 
-            boolean isDuplicate = participants.stream()
-                            .anyMatch(participant -> participant.isSamePerson(newParticipant));
-
-            if (isDuplicate) {
+            if (!participants.add(newParticipant)) {
                 throw new ParseException("An expense cannot have duplicate participants.");
             }
-
-            participants.add(parseParticipant(p));
         }
 
         return participants;

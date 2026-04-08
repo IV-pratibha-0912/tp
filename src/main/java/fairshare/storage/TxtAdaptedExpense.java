@@ -25,7 +25,7 @@ public class TxtAdaptedExpense {
     private final String expenseName;
     private final double amount;
     private final TxtAdaptedPerson payer;
-    private final List<TxtAdaptedParticipant> participants;
+    private final Set<TxtAdaptedParticipant> participants;
     private final Set<TxtAdaptedTag> tags;
     private final ExpenseType expenseType;
 
@@ -41,7 +41,7 @@ public class TxtAdaptedExpense {
         this.payer = new TxtAdaptedPerson(source.getPayer());
         this.participants = source.getParticipants().stream()
                 .map(TxtAdaptedParticipant::new)
-                .toList();
+                .collect(Collectors.toSet());
         this.tags = source.getTags().stream()
                 .map(TxtAdaptedTag::new)
                 .collect(Collectors.toSet());
@@ -59,7 +59,7 @@ public class TxtAdaptedExpense {
      * @param tags        the list of adapted tags; cannot be null.
      */
     public TxtAdaptedExpense(TxtAdaptedGroup group, String expenseName, double amount, TxtAdaptedPerson payer,
-                             List<TxtAdaptedParticipant> participants, Set<TxtAdaptedTag> tags,
+                             Set<TxtAdaptedParticipant> participants, Set<TxtAdaptedTag> tags,
                              ExpenseType expenseType) {
         this.group = group;
         this.expenseName = expenseName;
@@ -98,11 +98,11 @@ public class TxtAdaptedExpense {
     }
 
     /**
-     * Returns the list of participants sharing this expense.
+     * Returns the set of participants sharing this expense.
      *
-     * @return a list of {@code TxtAdaptedPerson}.
+     * @return a set of {@code TxtAdaptedPerson}.
      */
-    public List<TxtAdaptedParticipant> getParticipants() {
+    public Set<TxtAdaptedParticipant> getParticipants() {
         return participants;
     }
 
@@ -124,9 +124,9 @@ public class TxtAdaptedExpense {
         Group group = this.group.toModelType();
         Person payer = this.payer.toModelType();
 
-        List<Participant> participants = this.participants.stream()
+        Set<Participant> participants = this.participants.stream()
                 .map(TxtAdaptedParticipant::toModelType)
-                .toList();
+                .collect(Collectors.toSet());
 
         Set<Tag> tagSet = tags.stream()
                 .map(TxtAdaptedTag::toModelType)
@@ -187,10 +187,10 @@ public class TxtAdaptedExpense {
         double amount = Double.parseDouble(parts[2].trim());
         TxtAdaptedPerson payer = TxtAdaptedPerson.deserialize(parts[3]);
 
-        List<TxtAdaptedParticipant> participants = Arrays.stream(parts[4].split(LIST_SEPARATOR))
+        Set<TxtAdaptedParticipant> participants = Arrays.stream(parts[4].split(LIST_SEPARATOR))
                 .filter(s -> !s.isBlank())
                 .map(TxtAdaptedParticipant::deserialize)
-                .toList();
+                .collect(Collectors.toSet());
 
        Set<TxtAdaptedTag> tags = Arrays.stream(parts[5].split(LIST_SEPARATOR))
                 .filter(s -> !s.isBlank())

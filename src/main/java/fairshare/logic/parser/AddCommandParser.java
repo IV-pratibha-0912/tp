@@ -35,7 +35,7 @@ public class AddCommandParser implements Parser {
         Person payer = new Person(ParserUtil.getSingleFieldData(map, "p"));
 
         List<String> strParticipants = ParserUtil.getMultiFieldData(map, "s");
-        List<Participant> participants = ParserUtil.parseParticipants(strParticipants);
+        Set<Participant> participants = ParserUtil.parseParticipants(strParticipants);
 
         Optional<List<String>> strTags = ParserUtil.getOptionalMultiFieldData(map, "t");
         Set<Tag> tags;

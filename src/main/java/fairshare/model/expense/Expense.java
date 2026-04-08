@@ -16,7 +16,7 @@ public class Expense {
     private String expenseName;
     private double amount;
     private Person payer;
-    private List<Participant> participants;
+    private Set<Participant> participants;
     private Set<Tag> tags;
     private ExpenseType expenseType;
 
@@ -27,11 +27,11 @@ public class Expense {
      * @param expenseName The name of the expense.
      * @param amount The amount (cost) of the expense.
      * @param payer The person who paid for the expense.
-     * @param participants The list of participants sharing the cost of this expense.
+     * @param participants The set of participants sharing the cost of this expense.
      * @param tags The set of categorical tags associated with this expense.
      */
     public Expense(Group group, String expenseName, double amount, Person payer,
-                   List<Participant> participants, Set<Tag> tags, ExpenseType expenseType) {
+                   Set<Participant> participants, Set<Tag> tags, ExpenseType expenseType) {
         this.group = group;
         this.expenseName = expenseName;
         this.amount = amount;
@@ -51,11 +51,11 @@ public class Expense {
     }
 
     /**
-     * Returns the list of participants involved in this expense.
+     * Returns the set of participants involved in this expense.
      *
-     * @return A list of {@code Participant} objects.
+     * @return A set of {@code Participant} objects.
      */
-    public List<Participant> getParticipants() {
+    public Set<Participant> getParticipants() {
         return this.participants;
     }
 
@@ -131,7 +131,7 @@ public class Expense {
         String settlementName = "Settlement";
         Participant receive = new Participant(receiver, 1);
 
-        return new Expense(group, settlementName, amount, payer, List.of(receive),
+        return new Expense(group, settlementName, amount, payer, Set.of(receive),
                 Set.of(), ExpenseType.SETTLEMENT);
     }
 

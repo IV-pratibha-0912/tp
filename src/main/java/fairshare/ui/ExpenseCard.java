@@ -6,6 +6,7 @@ import java.util.stream.Collectors;
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.ExpenseType;
 import fairshare.model.expense.Participant;
+import fairshare.model.person.Person;
 import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -115,10 +116,11 @@ public class ExpenseCard {
     }
 
     private void formatSettlement(Expense expense) {
+        Person payer = expense.getParticipants().iterator().next().getPerson();
+
         payerLabel.setText(expense.getPayer().getName()
                 + " → "
-                + expense.getParticipants()
-                .getFirst().getPerson().getName());
+                + payer.getName());
         tagsLabel.setText("");
     }
 
