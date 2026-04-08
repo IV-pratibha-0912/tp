@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.expense.Participant;
@@ -190,15 +192,15 @@ public class ParserUtil {
     }
 
     /**
-     * Parses a list of raw tags into a list of {@code Tag} objects.
+     * Parses a list of raw tags into a set of {@code Tag} objects.
      *
      * @param tags A list of unparsed tag strings.
-     * @return A list of {@code Tag} objects.
+     * @return A set of {@code Tag} objects.
      */
-    public static List<Tag> parseTags(List<String> tags) {
+    public static Set<Tag> parseTags(List<String> tags) {
         return tags.stream()
                 .map(tagName -> new Tag(tagName))
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     private static Participant parseParticipant(String strParticipant) throws ParseException {

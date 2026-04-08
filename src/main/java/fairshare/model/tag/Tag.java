@@ -1,7 +1,5 @@
 package fairshare.model.tag;
 
-import fairshare.model.person.Person;
-
 /**
  * Represents a categorical tag for an expense.
  */

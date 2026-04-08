@@ -2,6 +2,7 @@ package fairshare.logic.commands;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.model.Model;
@@ -76,7 +77,7 @@ public class UpdateCommand extends Command {
         double amount = updateFields.getAmount().orElse(targetExpense.getAmount());
         Person payer = updateFields.getPayer().orElse(targetExpense.getPayer());
         List<Participant> participants = updateFields.getParticipants().orElse(targetExpense.getParticipants());
-        List<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
+        Set<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
 
         return new Expense(group, expenseName, amount, payer, participants, tags, targetExpense.getExpenseType());
     }
@@ -96,7 +97,7 @@ public class UpdateCommand extends Command {
             participants = targetExpense.getParticipants();
         }
 
-        List<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
+        Set<Tag> tags = updateFields.getTags().orElse(targetExpense.getTags());
 
         return new Expense(group, expenseName, amount, payer, participants, tags, targetExpense.getExpenseType());
     }
@@ -130,7 +131,7 @@ public class UpdateCommand extends Command {
         private Double amount;
         private Person payer;
         private List<Participant> participants;
-        private List<Tag> tags;
+        private Set<Tag> tags;
         private Participant receiver; // Used for updating a settlement
 
         /**
@@ -224,20 +225,20 @@ public class UpdateCommand extends Command {
         }
 
         /**
-         * Sets the new list of tags associated with the expense.
+         * Sets the new set of tags associated with the expense.
          *
-         * @param tags The updated list of {@code Tag} objects.
+         * @param tags The updated set of {@code Tag} objects.
          */
-        public void setTags(List<Tag> tags) {
+        public void setTags(Set<Tag> tags) {
             this.tags = tags;
         }
 
         /**
-         * Returns the updated list of tags, if any.
+         * Returns the updated set of tags, if any.
          *
-         * @return An {@code Optional} containing the new tag list, or empty if none.
+         * @return An {@code Optional} containing the new tag set, or empty if none.
          */
-        public Optional<List<Tag>> getTags() {
+        public Optional<Set<Tag>> getTags() {
             return Optional.ofNullable(this.tags);
         }
 
