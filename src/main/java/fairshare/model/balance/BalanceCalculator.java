@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.Participant;
@@ -31,7 +32,7 @@ public class BalanceCalculator {
         for (Expense expense : expenses) {
             double totalAmt = expense.getAmount();
             Person payer = expense.getPayer();
-            List<Participant> participants = expense.getParticipants();
+            Set<Participant> participants = expense.getParticipants();
 
             if (!participants.isEmpty()) {
                 balances.put(payer, balances.getOrDefault(payer, 0d) + totalAmt);

@@ -2,9 +2,12 @@ package fairshare.logic.parser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.expense.Participant;
@@ -41,9 +44,7 @@ public class ParserUtil {
                 data = new ArrayList<>(List.of(argData));
             } else {
                 data = map.get(argType);
-                if (!data.contains(argData)) {
-                    data.add(argData);
-                }
+                data.add(argData);
             }
             map.put(argType, data);
         }
@@ -167,10 +168,10 @@ public class ParserUtil {
      * Parses a list of raw participant strings into a list of {@code Participant} objects.
      *
      * @param strParticipants A list of unparsed participant strings
-     * @return A list of {@code Participant} objets.
+     * @return A set of {@code Participant} objets.
      * @throws ParseException If any of the participant strings are formatted incorrectly.
      */
-    public static List<Participant> parseParticipants(List<String> strParticipants) throws ParseException {
+    public static Set<Participant> parseParticipants(List<String> strParticipants) throws ParseException {
         boolean isEqualSplit = strParticipants.stream()
                 .anyMatch(str -> !str.contains(":"));
         boolean isUnequalSplit = strParticipants.stream()
@@ -181,24 +182,28 @@ public class ParserUtil {
                     "Invalid format: If splitting by proportion, every participant must have a specified share.");
         }
 
-        List<Participant> participants = new ArrayList<>();
+        Set<Participant> participants = new HashSet<>();
         for (String p : strParticipants) {
-            participants.add(parseParticipant(p));
+            Participant newParticipant = parseParticipant(p);
+
+            if (!participants.add(newParticipant)) {
+                throw new ParseException("An expense cannot have duplicate participants.");
+            }
         }
 
         return participants;
     }
 
     /**
-     * Parses a list of raw tags into a list of {@code Tag} objects.
+     * Parses a list of raw tags into a set of {@code Tag} objects.
      *
      * @param tags A list of unparsed tag strings.
-     * @return A list of {@code Tag} objects.
+     * @return A set of {@code Tag} objects.
      */
-    public static List<Tag> parseTags(List<String> tags) {
+    public static Set<Tag> parseTags(List<String> tags) {
         return tags.stream()
                 .map(tagName -> new Tag(tagName))
-                .toList();
+                .collect(Collectors.toSet());
     }
 
     private static Participant parseParticipant(String strParticipant) throws ParseException {

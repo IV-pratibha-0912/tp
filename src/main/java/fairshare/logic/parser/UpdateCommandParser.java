@@ -3,6 +3,7 @@ package fairshare.logic.parser;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import fairshare.logic.commands.UpdateCommand;
 import fairshare.logic.commands.UpdateCommand.UpdateFields;
@@ -89,7 +90,7 @@ public class UpdateCommandParser implements Parser {
     private void setParticipants(Map<String, List<String>> map, UpdateFields updateFields) throws ParseException {
         Optional<List<String>> strParticipants = ParserUtil.getOptionalMultiFieldData(map, "s");
         if (strParticipants.isPresent()) {
-            List<Participant> participants = ParserUtil.parseParticipants(strParticipants.get());
+            Set<Participant> participants = ParserUtil.parseParticipants(strParticipants.get());
             updateFields.setParticipants(participants);
         }
     }
@@ -97,7 +98,7 @@ public class UpdateCommandParser implements Parser {
     private void setTags(Map<String, List<String>> map, UpdateFields updateFields) throws ParseException {
         Optional<List<String>> strTags = ParserUtil.getOptionalMultiFieldData(map, "t");
         if (strTags.isPresent()) {
-            List<Tag> tags = ParserUtil.parseTags(strTags.get());
+            Set<Tag> tags = ParserUtil.parseTags(strTags.get());
             updateFields.setTags(tags);
         }
     }

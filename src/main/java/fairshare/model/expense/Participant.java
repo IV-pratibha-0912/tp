@@ -37,4 +37,24 @@ public class Participant {
     public int getShares() {
         return this.shares;
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        if (!(other instanceof Participant)) {
+            return false;
+        }
+
+        Participant otherParticipant = (Participant) other;
+        return this.person.equals(otherParticipant.person);
+    }
+
+    @Override
+    public int hashCode() {
+        // Two participants are the same if the two persons are the same, disregarding shares.
+        return this.person.hashCode();
+    }
 }

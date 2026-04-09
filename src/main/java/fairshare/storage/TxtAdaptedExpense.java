@@ -2,6 +2,7 @@ package fairshare.storage;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import fairshare.model.expense.Expense;
@@ -24,8 +25,8 @@ public class TxtAdaptedExpense {
     private final String expenseName;
     private final double amount;
     private final TxtAdaptedPerson payer;
-    private final List<TxtAdaptedParticipant> participants;
-    private final List<TxtAdaptedTag> tags;
+    private final Set<TxtAdaptedParticipant> participants;
+    private final Set<TxtAdaptedTag> tags;
     private final ExpenseType expenseType;
 
     /**
@@ -40,10 +41,10 @@ public class TxtAdaptedExpense {
         this.payer = new TxtAdaptedPerson(source.getPayer());
         this.participants = source.getParticipants().stream()
                 .map(TxtAdaptedParticipant::new)
-                .toList();
+                .collect(Collectors.toSet());
         this.tags = source.getTags().stream()
                 .map(TxtAdaptedTag::new)
-                .toList();
+                .collect(Collectors.toSet());
         this.expenseType = source.getExpenseType();
     }
 
@@ -58,7 +59,7 @@ public class TxtAdaptedExpense {
      * @param tags        the list of adapted tags; cannot be null.
      */
     public TxtAdaptedExpense(TxtAdaptedGroup group, String expenseName, double amount, TxtAdaptedPerson payer,
-                             List<TxtAdaptedParticipant> participants, List<TxtAdaptedTag> tags,
+                             Set<TxtAdaptedParticipant> participants, Set<TxtAdaptedTag> tags,
                              ExpenseType expenseType) {
         this.group = group;
         this.expenseName = expenseName;
@@ -97,20 +98,20 @@ public class TxtAdaptedExpense {
     }
 
     /**
-     * Returns the list of participants sharing this expense.
+     * Returns the set of participants sharing this expense.
      *
-     * @return a list of {@code TxtAdaptedPerson}.
+     * @return a set of {@code TxtAdaptedPerson}.
      */
-    public List<TxtAdaptedParticipant> getParticipants() {
+    public Set<TxtAdaptedParticipant> getParticipants() {
         return participants;
     }
 
     /**
-     * Returns the list of tags associated with this expense.
+     * Returns the set of tags associated with this expense.
      *
-     * @return a list of {@code TxtAdaptedTag}.
+     * @return a set of {@code TxtAdaptedTag}.
      */
-    public List<TxtAdaptedTag> getTags() {
+    public Set<TxtAdaptedTag> getTags() {
         return tags;
     }
 
@@ -123,15 +124,15 @@ public class TxtAdaptedExpense {
         Group group = this.group.toModelType();
         Person payer = this.payer.toModelType();
 
-        List<Participant> participants = this.participants.stream()
+        Set<Participant> participants = this.participants.stream()
                 .map(TxtAdaptedParticipant::toModelType)
-                .toList();
+                .collect(Collectors.toSet());
 
-        List<Tag> tagList = tags.stream()
+        Set<Tag> tagSet = tags.stream()
                 .map(TxtAdaptedTag::toModelType)
-                .collect(Collectors.toList());
+                .collect(Collectors.toSet());
 
-        return new Expense(group, expenseName, amount, payer, participants, tagList, expenseType);
+        return new Expense(group, expenseName, amount, payer, participants, tagSet, expenseType);
     }
 
     /**
@@ -186,15 +187,15 @@ public class TxtAdaptedExpense {
         double amount = Double.parseDouble(parts[2].trim());
         TxtAdaptedPerson payer = TxtAdaptedPerson.deserialize(parts[3]);
 
-        List<TxtAdaptedParticipant> participants = Arrays.stream(parts[4].split(LIST_SEPARATOR))
+        Set<TxtAdaptedParticipant> participants = Arrays.stream(parts[4].split(LIST_SEPARATOR))
                 .filter(s -> !s.isBlank())
                 .map(TxtAdaptedParticipant::deserialize)
-                .toList();
+                .collect(Collectors.toSet());
 
-        List<TxtAdaptedTag> tags = Arrays.stream(parts[5].split(LIST_SEPARATOR))
+       Set<TxtAdaptedTag> tags = Arrays.stream(parts[5].split(LIST_SEPARATOR))
                 .filter(s -> !s.isBlank())
                 .map(TxtAdaptedTag::deserialize)
-                .toList();
+                .collect(Collectors.toSet());
 
         ExpenseType expenseType = ExpenseType.valueOf(parts[6]);
 

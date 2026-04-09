@@ -2,6 +2,7 @@ package fairshare.model.expense;
 
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 import fairshare.model.group.Group;
 import fairshare.model.person.Person;
@@ -15,8 +16,8 @@ public class Expense {
     private String expenseName;
     private double amount;
     private Person payer;
-    private List<Participant> participants;
-    private List<Tag> tags;
+    private Set<Participant> participants;
+    private Set<Tag> tags;
     private ExpenseType expenseType;
 
     /**
@@ -26,11 +27,11 @@ public class Expense {
      * @param expenseName The name of the expense.
      * @param amount The amount (cost) of the expense.
      * @param payer The person who paid for the expense.
-     * @param participants The list of participants sharing the cost of this expense.
-     * @param tags The list of categorical tags associated with this expense.
+     * @param participants The set of participants sharing the cost of this expense.
+     * @param tags The set of categorical tags associated with this expense.
      */
     public Expense(Group group, String expenseName, double amount, Person payer,
-                   List<Participant> participants, List<Tag> tags, ExpenseType expenseType) {
+                   Set<Participant> participants, Set<Tag> tags, ExpenseType expenseType) {
         this.group = group;
         this.expenseName = expenseName;
         this.amount = amount;
@@ -50,11 +51,11 @@ public class Expense {
     }
 
     /**
-     * Returns the list of participants involved in this expense.
+     * Returns the set of participants involved in this expense.
      *
-     * @return A list of {@code Participant} objects.
+     * @return A set of {@code Participant} objects.
      */
-    public List<Participant> getParticipants() {
+    public Set<Participant> getParticipants() {
         return this.participants;
     }
 
@@ -77,11 +78,11 @@ public class Expense {
     }
 
     /**
-     * Returns the list of tags categorized under this expense.
+     * Returns the set of tags categorized under this expense.
      *
-     * @return A list of {@code Tag} objects.
+     * @return A set of {@code Tag} objects.
      */
-    public List<Tag> getTags() {
+    public Set<Tag> getTags() {
         return this.tags;
     }
 
@@ -130,8 +131,8 @@ public class Expense {
         String settlementName = "Settlement";
         Participant receive = new Participant(receiver, 1);
 
-        return new Expense(group, settlementName, amount, payer, List.of(receive),
-                List.of(), ExpenseType.SETTLEMENT);
+        return new Expense(group, settlementName, amount, payer, Set.of(receive),
+                Set.of(), ExpenseType.SETTLEMENT);
     }
 
     @Override

@@ -3,6 +3,7 @@ package fairshare.logic.parser;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import fairshare.logic.commands.AddCommand;
 import fairshare.logic.parser.exceptions.ParseException;
@@ -34,14 +35,14 @@ public class AddCommandParser implements Parser {
         Person payer = new Person(ParserUtil.getSingleFieldData(map, "p"));
 
         List<String> strParticipants = ParserUtil.getMultiFieldData(map, "s");
-        List<Participant> participants = ParserUtil.parseParticipants(strParticipants);
+        Set<Participant> participants = ParserUtil.parseParticipants(strParticipants);
 
         Optional<List<String>> strTags = ParserUtil.getOptionalMultiFieldData(map, "t");
-        List<Tag> tags;
+        Set<Tag> tags;
         if (strTags.isPresent()) {
             tags = ParserUtil.parseTags(strTags.get());
         } else {
-            tags = List.of();
+            tags = Set.of();
         }
 
         Expense expense = new Expense(group, expenseName, amount, payer, participants, tags, ExpenseType.EXPENSE);
