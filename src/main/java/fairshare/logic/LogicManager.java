@@ -1,6 +1,7 @@
 package fairshare.logic;
 
 import java.util.List;
+import java.util.Map;
 
 import fairshare.logic.commands.Command;
 import fairshare.logic.commands.CommandResult;
@@ -10,6 +11,7 @@ import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.Model;
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
+import fairshare.model.group.Group;
 import fairshare.storage.Storage;
 import fairshare.storage.exceptions.StorageException;
 import javafx.collections.ObservableList;
@@ -58,7 +60,7 @@ public class LogicManager implements Logic {
     }
 
     @Override
-    public List<Balance> calculateBalances() {
+    public Map<Group, List<Balance>> calculateBalances() {
         return model.calculateBalances();
     }
 

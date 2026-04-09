@@ -1,10 +1,12 @@
 package fairshare.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
+import fairshare.model.group.Group;
 import javafx.collections.ObservableList;
 
 /**
@@ -62,9 +64,10 @@ public interface Model {
     List<Expense> getExpenseList();
 
     /**
-     * Calculates and returns the simplified list of debt settlements across all expenses.
+     * Calculates and returns the simplified list of debts, grouped by their respective groups.
      *
-     * @return A list of {@code Balance} objects each representing a debt settlement.
+     * @return A map where each key is a {@code Group} and the corresponding value is a list of {@code Balance}
+     * objects representing the balances within that specific group.
      */
-    List<Balance> calculateBalances();
+    Map<Group, List<Balance>> calculateBalances();
 }
