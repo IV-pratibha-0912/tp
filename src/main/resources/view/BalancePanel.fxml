@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.Accordion?>
 <VBox xmlns:fx="http://javafx.com/fxml"
       style="-fx-background-color: #e8eef7;">
 
@@ -15,9 +16,9 @@
         </padding>
     </Label>
 
-    <ListView fx:id="balanceListView"
-              VBox.vgrow="ALWAYS"
-              style="-fx-background-color: #e8eef7;
+    <Accordion fx:id="balancesAccordion"
+               VBox.vgrow="ALWAYS"
+               style="-fx-background-color: #e8eef7;
                      -fx-border-color: transparent;
                      -fx-focus-color: transparent;
                      -fx-faint-focus-color: transparent;"/>

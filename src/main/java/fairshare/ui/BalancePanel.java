@@ -7,17 +7,17 @@ import java.util.List;
 import java.util.Map;
 
 import fairshare.model.balance.Balance;
+import fairshare.model.group.Group;
 import fairshare.ui.exceptions.UiException;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListCell;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.VBox;
 
 /**
- * A UI panel that displays the net balance summary,
+ * A UI panel that displays the net balance summary by Group,
  * showing who owes whom and how much.
  */
 public class BalancePanel {
@@ -27,18 +27,17 @@ public class BalancePanel {
     private Region root;
 
     @FXML
-    private ListView<Map.Entry<String, List<Balance>>> balanceListView;
+    private Accordion balancesAccordion;
 
     @FXML
     private Label emptyStateLabel;
 
     /**
-     * Constructs a {@code BalancePanel} with the given list of balances.
+     * Constructs a {@code BalancePanel} with the given map of group balances.
      *
-     * @param balances the initial list of balances to display;
-     *                 cannot be null.
+     * @param groupBalances the initial map of group balances to display.
      */
-    public BalancePanel(List<Balance> balances) {
+    public BalancePanel(Map<Group, List<Balance>> groupBalances) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
                     BalancePanel.class.getResource(FXML));
@@ -48,9 +47,8 @@ public class BalancePanel {
             throw new UiException("Failed to load " + FXML, e);
         }
 
-        setBalances(balances);
-        balanceListView.setCellFactory(
-                lv -> new BalanceListViewCell());
+        setBalances(groupBalances);
+
     }
 
     /**
@@ -63,33 +61,64 @@ public class BalancePanel {
     }
 
     /**
-     * Refreshes the panel with an updated list of balances.
+     * Refreshes the panel with an updated map of group balances.
      *
-     * @param balances the updated list of balances; cannot be null.
+     * @param groupBalances the updated map of group balances.
      */
-    public void refresh(List<Balance> balances) {
-        setBalances(balances);
+    public void refresh(Map<Group, List<Balance>> groupBalances) {
+        setBalances(groupBalances);
     }
 
-    /**
-     * Groups balances by debtor name and sets them on the list view.
-     *
-     * @param balances the list of balances to group and display.
-     */
-    private void setBalances(List<Balance> balances) {
-        Map<String, List<Balance>> grouped = new LinkedHashMap<>();
+    private void setBalances(Map<Group, List<Balance>> groupBalances) {
+        balancesAccordion.getPanes().clear(); // Clear old UI
 
-        for (Balance balance : balances) {
-            String debtorName = balance.getDebtor().getName();
-            grouped.computeIfAbsent(debtorName,
-                    k -> new ArrayList<>()).add(balance);
+        if (groupBalances.isEmpty()) {
+            updateEmptyState(true);
+            return;
         }
 
-        balanceListView.setItems(
-                FXCollections.observableArrayList(
-                        grouped.entrySet()));
+        updateEmptyState(false);
 
-        updateEmptyState(grouped.isEmpty());
+        // Build the Accordion Panes dynamically
+        for (Map.Entry<Group, List<Balance>> entry : groupBalances.entrySet()) {
+            Group group = entry.getKey();
+            List<Balance> debts = entry.getValue();
+
+            VBox cardContainer = new VBox();
+            cardContainer.setSpacing(5);
+            cardContainer.setStyle("-fx-padding: 10;");
+
+            if (debts.isEmpty()) {
+                // The "All Settled" hybrid approach!
+                Label settledLabel = new Label("All settled up!");
+                settledLabel.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-padding: 5;");
+                cardContainer.getChildren().add(settledLabel);
+            } else {
+                // Reuse existing BalanceCard logic by grouping by debtor inside this group
+                Map<String, List<Balance>> debtsByPerson = new LinkedHashMap<>();
+                for (Balance balance : debts) {
+                    String debtorName = balance.getDebtor().getName();
+                    debtsByPerson.computeIfAbsent(debtorName, k -> new ArrayList<>()).add(balance);
+                }
+
+                for (Map.Entry<String, List<Balance>> personEntry : debtsByPerson.entrySet()) {
+                    BalanceCard card = new BalanceCard(personEntry.getKey(), personEntry.getValue());
+                    cardContainer.getChildren().add(card.getRoot());
+                }
+            }
+
+            // Create the Collapsible Header
+            TitledPane groupPane = new TitledPane();
+            groupPane.setText("Group: " + group.getGroupName().toUpperCase());
+            groupPane.setContent(cardContainer);
+
+            balancesAccordion.getPanes().add(groupPane);
+        }
+
+        // Auto-expand the first group for better UX
+        if (!balancesAccordion.getPanes().isEmpty()) {
+            balancesAccordion.setExpandedPane(balancesAccordion.getPanes().get(0));
+        }
     }
 
     /**
@@ -103,37 +132,4 @@ public class BalancePanel {
         emptyStateLabel.setManaged(isEmpty);
     }
 
-    /**
-     * A custom {@code ListCell} that renders each person's balances
-     * as a {@code BalanceCard}.
-     */
-    private static class BalanceListViewCell
-            extends ListCell<Map.Entry<String, List<Balance>>> {
-
-        /**
-         * Updates the cell with the given balance entry.
-         *
-         * @param entry   the map entry containing person name and
-         *                their list of balances.
-         * @param isEmpty whether the cell is empty.
-         */
-        @Override
-        protected void updateItem(
-                Map.Entry<String, List<Balance>> entry,
-                boolean isEmpty) {
-            super.updateItem(entry, isEmpty);
-
-            if (isEmpty || entry == null) {
-                setGraphic(null);
-                setText(null);
-                setStyle("-fx-background-color: transparent;");
-            } else {
-                setGraphic(new BalanceCard(
-                        entry.getKey(),
-                        entry.getValue()).getRoot());
-                setStyle("-fx-background-color: transparent;"
-                        + "-fx-padding: 4 10 4 10;");
-            }
-        }
-    }
 }
