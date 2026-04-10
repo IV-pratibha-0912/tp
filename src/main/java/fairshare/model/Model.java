@@ -67,7 +67,7 @@ public interface Model {
      * Calculates and returns the simplified list of debts, grouped by their respective groups.
      *
      * @return A map where each key is a {@code Group} and the corresponding value is a list of {@code Balance}
-     * objects representing the balances within that specific group.
+     *     objects representing the balances within that specific group.
      */
     Map<Group, List<Balance>> calculateBalances();
 }

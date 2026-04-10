@@ -1,7 +1,6 @@
 package fairshare.storage;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -192,10 +191,10 @@ public class TxtAdaptedExpense {
                 .map(TxtAdaptedParticipant::deserialize)
                 .collect(Collectors.toSet());
 
-       Set<TxtAdaptedTag> tags = Arrays.stream(parts[5].split(LIST_SEPARATOR))
-                .filter(s -> !s.isBlank())
-                .map(TxtAdaptedTag::deserialize)
-                .collect(Collectors.toSet());
+        Set<TxtAdaptedTag> tags = Arrays.stream(parts[5].split(LIST_SEPARATOR))
+               .filter(s -> !s.isBlank())
+               .map(TxtAdaptedTag::deserialize)
+               .collect(Collectors.toSet());
 
         ExpenseType expenseType = ExpenseType.valueOf(parts[6]);
 

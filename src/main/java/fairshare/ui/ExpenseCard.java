@@ -139,8 +139,7 @@ public class ExpenseCard {
         for (Participant p : expense.getParticipants()) {
             double share = (totalAmount / totalShares)
                     * p.getShares();
-            int percentage = (int) Math.round(
-                    (p.getShares() * 100.0) / totalShares);
+            int percentage = (int) Math.round((p.getShares() * 100.0) / totalShares);
 
             Label chip = new Label(
                     p.getPerson().getName()

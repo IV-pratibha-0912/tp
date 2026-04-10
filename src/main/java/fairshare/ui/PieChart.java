@@ -28,8 +28,8 @@ public class PieChart {
     private static final String UNTAGGED_LABEL = "Untagged";
 
     private static final String[] FIXED_COLOURS = {
-            "#4a7fe8", "#e8734a", "#4ae87f", "#e8d44a",
-            "#a44ae8", "#4ae8d4", "#e84a7f", "#7fe84a"
+        "#4a7fe8", "#e8734a", "#4ae87f", "#e8d44a",
+        "#a44ae8", "#4ae8d4", "#e84a7f", "#7fe84a"
     };
 
     private final Map<String, String> colourMap = new HashMap<>();
@@ -100,17 +100,16 @@ public class PieChart {
         byTagButton.setSelected(true);
         updateToggleStyle(byTagButton, byGroupButton);
 
-        toggleGroup.selectedToggleProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal == null) {
-                        oldVal.setSelected(true);
-                        return;
-                    }
-                    updateToggleStyle(byTagButton, byGroupButton);
-                    if (lastExpenses != null) {
-                        refresh(lastExpenses);
-                    }
-                });
+        toggleGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+                return;
+            }
+            updateToggleStyle(byTagButton, byGroupButton);
+            if (lastExpenses != null) {
+                refresh(lastExpenses);
+            }
+        });
     }
 
     private void updateToggleStyle(ToggleButton tagBtn,
@@ -195,8 +194,7 @@ public class PieChart {
                 colourIndex++;
             }
 
-            int percentage = (int) Math.round(
-                    (amount / totalAmount) * 100);
+            int percentage = (int) Math.round((amount / totalAmount) * 100);
 
             pieData.add(new javafx.scene.chart.PieChart.Data(
                     label + " $"

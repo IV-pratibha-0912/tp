@@ -21,7 +21,7 @@ public class BalanceCalculator {
      *
      * @param expenses The list of expenses.
      * @return A map where the key is the {@code Group} and the value is a list of {@code Balance} objects
-     * representing the final simplified debts.
+     *     representing the final simplified debts.
      */
     public static Map<Group, List<Balance>> calculate(List<Expense> expenses) {
         // Filter expenses by their respective groups
