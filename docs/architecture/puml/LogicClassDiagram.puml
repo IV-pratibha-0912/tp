@@ -86,7 +86,6 @@ Logic ..> CommandResult
 LogicManager .down.> CommandResult
 Command .up.> CommandResult : <<create>>
 
-' Hidden lines to force clean layout routing
 Storage --[hidden] Model
 Command .[hidden]up.> Storage
 
