@@ -1,12 +1,14 @@
 package fairshare.model;
 
 import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 import fairshare.model.balance.Balance;
 import fairshare.model.balance.BalanceCalculator;
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.ExpenseList;
+import fairshare.model.group.Group;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
@@ -72,7 +74,7 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public List<Balance> calculateBalances() {
+    public Map<Group, List<Balance>> calculateBalances() {
         return BalanceCalculator.calculate(filteredExpenses);
     }
 }

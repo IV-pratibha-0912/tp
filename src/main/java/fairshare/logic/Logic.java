@@ -1,12 +1,14 @@
 package fairshare.logic;
 
 import java.util.List;
+import java.util.Map;
 
 import fairshare.logic.commands.CommandResult;
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
+import fairshare.model.group.Group;
 import javafx.collections.ObservableList;
 
 /**
@@ -33,11 +35,12 @@ public interface Logic {
     ObservableList<Expense> getFilteredExpenseList();
 
     /**
-     * Returns the list of balances calculated from all expenses.
+     * Calculates and returns the simplified list of debts, grouped by their respective groups.
      *
-     * @return a list of {@code Balance} objects.
+     * @return A map where each key is a {@code Group} and the corresponding value is a list of {@code Balance}
+     * objects representing the balances within that specific group.
      */
-    List<Balance> calculateBalances();
+    Map<Group, List<Balance>> calculateBalances();
 
     /**
      * Returns the full unfiltered list of expenses.

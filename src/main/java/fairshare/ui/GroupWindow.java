@@ -9,6 +9,7 @@ import java.util.Map;
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.ExpenseType;
+import fairshare.model.group.Group;
 import fairshare.ui.exceptions.UiException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -80,11 +81,11 @@ public class GroupWindow {
      * Shows the group window with updated data.
      *
      * @param expenses the full list of expenses; cannot be null.
-     * @param balances the current list of balances; cannot be null.
+     * @param groupBalances the current list of balances; cannot be null.
      */
     public void show(List<Expense> expenses,
-                     List<Balance> balances) {
-        refresh(expenses, balances);
+                     Map<Group, List<Balance>> groupBalances) {
+        refresh(expenses, groupBalances);
         if (!groupStage.isShowing()) {
             groupStage.show();
         }
@@ -93,7 +94,7 @@ public class GroupWindow {
     }
 
     private void refresh(List<Expense> expenses,
-                         List<Balance> balances) {
+                         Map<Group, List<Balance>> balances) {
         activeGroupsContainer.getChildren().clear();
         pastGroupsContainer.getChildren().clear();
 
@@ -105,8 +106,10 @@ public class GroupWindow {
                     name, k -> new ArrayList<>()).add(e);
         }
 
-        List<String> activeDebtor = balances.stream()
+        List<String> activeDebtor = balances.values().stream()
+                .flatMap(List::stream)
                 .map(b -> b.getDebtor().getName())
+                .distinct()
                 .toList();
 
         List<String> activeGroups = new ArrayList<>();
@@ -218,12 +221,12 @@ public class GroupWindow {
      * Refreshes the group window data if it is currently showing.
      *
      * @param expenses the full list of expenses; cannot be null.
-     * @param balances the current list of balances; cannot be null.
+     * @param groupBalances the current list of balances; cannot be null.
      */
     public void refreshIfShowing(List<Expense> expenses,
-                                 List<Balance> balances) {
+                                 Map<Group, List<Balance>> groupBalances) {
         if (groupStage.isShowing()) {
-            refresh(expenses, balances);
+            refresh(expenses, groupBalances);
         }
     }
 }

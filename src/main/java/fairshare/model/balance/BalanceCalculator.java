@@ -8,6 +8,7 @@ import java.util.Set;
 
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.Participant;
+import fairshare.model.group.Group;
 import fairshare.model.person.Person;
 
 /**
@@ -16,14 +17,35 @@ import fairshare.model.person.Person;
 public class BalanceCalculator {
 
     /**
-     * Calculates the simplified list of balances (debts) for a given list of expenses.
+     * Calculates the simplified list of balances (debts) for each group given a list of expenses.
      *
      * @param expenses The list of expenses.
-     * @return A list of {@code Balance} objects representing the final simplified debts.
+     * @return A map where the key is the {@code Group} and the value is a list of {@code Balance} objects
+     * representing the final simplified debts.
      */
-    public static List<Balance> calculate(List<Expense> expenses) {
-        Map<Person, Double> netAmts = calculateNetAmounts(expenses);
-        return generateBalances(netAmts);
+    public static Map<Group, List<Balance>> calculate(List<Expense> expenses) {
+        // Filter expenses by their respective groups
+        Map<Group, List<Expense>> groupedExpenses = new HashMap<>();
+        for (Expense expense : expenses) {
+            Group expenseGroup = expense.getGroup();
+            if (groupedExpenses.containsKey(expenseGroup)) {
+                List<Expense> expenseList = groupedExpenses.get(expenseGroup);
+                expenseList.add(expense);
+            } else {
+                List<Expense> expenseList = new ArrayList<>(List.of(expense));
+                groupedExpenses.put(expenseGroup, expenseList);
+            }
+        }
+
+        // Calculate final balances for each group
+        Map<Group, List<Balance>> groupBalances = new HashMap<>();
+        for (Map.Entry<Group, List<Expense>> entry : groupedExpenses.entrySet()) {
+            Map<Person, Double> netAmts = calculateNetAmounts(entry.getValue());
+            List<Balance> balances = generateBalances(netAmts);
+            groupBalances.put(entry.getKey(), balances);
+        }
+
+        return groupBalances;
     }
 
     private static Map<Person, Double> calculateNetAmounts(List<Expense> expenses) {
