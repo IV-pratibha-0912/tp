@@ -9,15 +9,17 @@ import java.util.Map;
 import fairshare.model.balance.Balance;
 import fairshare.model.group.Group;
 import fairshare.ui.exceptions.UiException;
-import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.*;
+import javafx.geometry.Insets;
+import javafx.scene.control.Accordion;
+import javafx.scene.control.Label;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 /**
- * A UI panel that displays the net balance summary by Group,
+ * A UI panel that displays the net balance summary by group,
  * showing who owes whom and how much.
  */
 public class BalancePanel {
@@ -33,9 +35,11 @@ public class BalancePanel {
     private Label emptyStateLabel;
 
     /**
-     * Constructs a {@code BalancePanel} with the given map of group balances.
+     * Constructs a {@code BalancePanel} with the given map of
+     * group balances.
      *
-     * @param groupBalances the initial map of group balances to display.
+     * @param groupBalances the initial map of group balances
+     *                      to display.
      */
     public BalancePanel(Map<Group, List<Balance>> groupBalances) {
         try {
@@ -48,7 +52,6 @@ public class BalancePanel {
         }
 
         setBalances(groupBalances);
-
     }
 
     /**
@@ -69,8 +72,9 @@ public class BalancePanel {
         setBalances(groupBalances);
     }
 
-    private void setBalances(Map<Group, List<Balance>> groupBalances) {
-        balancesAccordion.getPanes().clear(); // Clear old UI
+    private void setBalances(
+            Map<Group, List<Balance>> groupBalances) {
+        balancesAccordion.getPanes().clear();
 
         if (groupBalances.isEmpty()) {
             updateEmptyState(true);
@@ -79,46 +83,95 @@ public class BalancePanel {
 
         updateEmptyState(false);
 
-        // Build the Accordion Panes dynamically
-        for (Map.Entry<Group, List<Balance>> entry : groupBalances.entrySet()) {
+        for (Map.Entry<Group, List<Balance>> entry
+                : groupBalances.entrySet()) {
             Group group = entry.getKey();
             List<Balance> debts = entry.getValue();
 
-            VBox cardContainer = new VBox();
-            cardContainer.setSpacing(5);
-            cardContainer.setStyle("-fx-padding: 10;");
-
-            if (debts.isEmpty()) {
-                // The "All Settled" hybrid approach!
-                Label settledLabel = new Label("All settled up!");
-                settledLabel.setStyle("-fx-text-fill: #2e7d32; -fx-font-weight: bold; -fx-padding: 5;");
-                cardContainer.getChildren().add(settledLabel);
-            } else {
-                // Reuse existing BalanceCard logic by grouping by debtor inside this group
-                Map<String, List<Balance>> debtsByPerson = new LinkedHashMap<>();
-                for (Balance balance : debts) {
-                    String debtorName = balance.getDebtor().getName();
-                    debtsByPerson.computeIfAbsent(debtorName, k -> new ArrayList<>()).add(balance);
-                }
-
-                for (Map.Entry<String, List<Balance>> personEntry : debtsByPerson.entrySet()) {
-                    BalanceCard card = new BalanceCard(personEntry.getKey(), personEntry.getValue());
-                    cardContainer.getChildren().add(card.getRoot());
-                }
-            }
-
-            // Create the Collapsible Header
-            TitledPane groupPane = new TitledPane();
-            groupPane.setText("Group: " + group.getGroupName().toUpperCase());
-            groupPane.setContent(cardContainer);
-
+            TitledPane groupPane = createGroupPane(
+                    group, debts);
             balancesAccordion.getPanes().add(groupPane);
         }
 
-        // Auto-expand the first group for better UX
         if (!balancesAccordion.getPanes().isEmpty()) {
-            balancesAccordion.setExpandedPane(balancesAccordion.getPanes().get(0));
+            balancesAccordion.setExpandedPane(
+                    balancesAccordion.getPanes().get(0));
         }
+    }
+
+    /**
+     * Creates a styled {@code TitledPane} for a group showing
+     * its balance cards or a settled message.
+     *
+     * @param group the group to display.
+     * @param debts the list of balances for this group.
+     * @return the styled {@code TitledPane}.
+     */
+    private TitledPane createGroupPane(Group group,
+                                       List<Balance> debts) {
+        VBox cardContainer = new VBox(8);
+        cardContainer.setPadding(new Insets(10, 10, 10, 10));
+        cardContainer.setStyle(
+                "-fx-background-color: #e8eef7;");
+
+        if (debts.isEmpty()) {
+            Label settledLabel = new Label(
+                    "✓  All settled up!");
+            settledLabel.setStyle(
+                    "-fx-text-fill: #2e7d32;"
+                            + "-fx-font-size: 12;"
+                            + "-fx-font-weight: bold;"
+                            + "-fx-background-color: #e8f5e9;"
+                            + "-fx-background-radius: 6;"
+                            + "-fx-padding: 6 12 6 12;");
+            cardContainer.getChildren().add(settledLabel);
+        } else {
+            Map<String, List<Balance>> debtsByPerson =
+                    new LinkedHashMap<>();
+            for (Balance balance : debts) {
+                String debtorName =
+                        balance.getDebtor().getName();
+                debtsByPerson.computeIfAbsent(
+                        debtorName,
+                        k -> new ArrayList<>()).add(balance);
+            }
+
+            for (Map.Entry<String, List<Balance>> personEntry
+                    : debtsByPerson.entrySet()) {
+                BalanceCard card = new BalanceCard(
+                        personEntry.getKey(),
+                        personEntry.getValue());
+                cardContainer.getChildren().add(
+                        card.getRoot());
+            }
+        }
+
+        TitledPane groupPane = new TitledPane();
+        groupPane.setContent(cardContainer);
+
+        boolean isSettled = debts.isEmpty();
+        String statusIndicator = isSettled ? "✓ " : "● ";
+        String statusColour = isSettled
+                ? "#2e7d32" : "#ff9800";
+
+        Label titleLabel = new Label(
+                statusIndicator
+                        + group.getGroupName().toUpperCase());
+        titleLabel.setStyle(
+                "-fx-font-size: 12;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-text-fill: " + statusColour + ";");
+
+        groupPane.setGraphic(titleLabel);
+        groupPane.setText("");
+        groupPane.setStyle(
+                "-fx-background-color: #ffffff;"
+                        + "-fx-background-radius: 8;"
+                        + "-fx-border-color: #c5d0e8;"
+                        + "-fx-border-radius: 8;"
+                        + "-fx-border-width: 1;");
+
+        return groupPane;
     }
 
     /**
@@ -131,5 +184,4 @@ public class BalancePanel {
         emptyStateLabel.setVisible(isEmpty);
         emptyStateLabel.setManaged(isEmpty);
     }
-
 }
