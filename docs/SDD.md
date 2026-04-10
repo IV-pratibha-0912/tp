@@ -108,6 +108,14 @@ The system is organized into four layers. Each layer's class diagram is shown be
 
 **UI Layer:**
 ![UI Class Diagram](architecture/UiClassDiagram.png)
+- BalancePanel uses an Accordion grouped by group name,
+  with each group expandable to show its balance cards.
+  Active groups show an orange indicator, settled groups
+  show a green indicator.
+- TagPieChart is now called PieChart and supports toggling
+  between spending by tag and spending by group
+- PieChart uses fixed colours per tag/group so colours do
+  not change on refresh
 
 **Logic Layer:**
 ![Logic Class Diagram](architecture/LogicClassDiagram.png)
@@ -132,8 +140,9 @@ The sequence diagram above illustrates the flow when a user types
 6. `AddCommand` calls `addExpense()` on `Model`
 7. `Model` calls `BalanceCalculator.calculate()` to recompute balances
 8. `LogicManager` calls `saveFairShare()` on `Storage`
-9. `MainWindow` refreshes `ExpenseListPanel`, `BalancePanel`,
-   `TagPieChart`, `StatusBar` and `GroupWindow` (if open)
+9. MainWindow refreshes ExpenseListPanel, BalancePanel
+   (grouped by group), PieChart, StatusBar and GroupWindow
+   (if open)
 
 **Delete Expense:**
 ![Delete Expense Sequence Diagram](architecture/DeleteExpenseSequenceDiagram.png)
@@ -237,6 +246,12 @@ controller wiring explicit and consistent across all UI components.
 
 **Rationale:** While `ExpenseListPanel` updates automatically via`ObservableList` binding, the other panels derive computed data
 (balances, tag totals, group status) that must be recalculated and re-rendered explicitly after each change.
+
+### 5.9 Balance Panel Grouped by Group
+**Decision:** Display balances in an accordion grouped by group name rather than a flat list.
+
+**Rationale:** When multiple groups exist, a flat balance list is confusing since the same person may owe different amounts in different groups. Grouping by group name makes
+it clear which debts belong to which trip or event.
 
 ## 6. Testing
 
