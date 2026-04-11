@@ -37,7 +37,6 @@
         <Label fx:id="payerLabel"
                style="-fx-text-fill: #2c041d;
                       -fx-font-size: 12;
-                      -fx-background-color: #eedc9a;
                       -fx-font-style: italic;
                       -fx-font-weight: bold"/>
         <VBox fx:id="participantsContainer" spacing="4"/>

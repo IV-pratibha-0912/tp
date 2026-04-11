@@ -3,7 +3,7 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      prefWidth="1100" prefHeight="700"
+      prefWidth="1000" prefHeight="700"
       style="-fx-background-color: #e8eef7;">
 
     <StackPane fx:id="headerPlaceholder"/>
