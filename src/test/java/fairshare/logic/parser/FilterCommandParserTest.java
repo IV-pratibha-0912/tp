@@ -3,17 +3,18 @@ package fairshare.logic.parser;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Predicate;
 
-import fairshare.model.expense.ExpenseType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import fairshare.logic.commands.FilterCommand;
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.expense.Expense;
+import fairshare.model.expense.ExpenseType;
 import fairshare.model.expense.Participant;
 import fairshare.model.group.Group;
 import fairshare.model.person.Person;
@@ -33,12 +34,12 @@ public class FilterCommandParserTest {
         double expense1Amt = 25.0d;
         Person expense1Payer = new Person("john");
         ExpenseType expense1Type = ExpenseType.EXPENSE;
-        List<Participant> expense1Participants = new ArrayList<>(
+        Set<Participant> expense1Participants = new HashSet<>(
                 List.of(
                         new Participant(expense1Payer, 1),
                         new Participant(new Person("alice"), 1),
                         new Participant(new Person("jamie"), 1)));
-        List<Tag> expense1Tags = new ArrayList<>(List.of(new Tag("food"), new Tag("jb")));
+        Set<Tag> expense1Tags = new HashSet<>(List.of(new Tag("food"), new Tag("jb")));
         expense1 = new Expense(expense1Group, expense1Name, expense1Amt,
                 expense1Payer, expense1Participants, expense1Tags, expense1Type);
 
@@ -47,12 +48,12 @@ public class FilterCommandParserTest {
         double expense2Amt = 54.0d;
         Person expense2Payer = new Person("alice");
         ExpenseType expense2Type = ExpenseType.EXPENSE;
-        List<Participant> expense2Participants = new ArrayList<>(
+        Set<Participant> expense2Participants = new HashSet<>(
                 List.of(
                         new Participant(expense2Payer, 1),
                         new Participant(new Person("jamie"), 1),
                         new Participant(new Person("carrie"), 1)));
-        List<Tag> expense2Tags = new ArrayList<>(List.of(new Tag("food"), new Tag("school")));
+        Set<Tag> expense2Tags = new HashSet<>(List.of(new Tag("food"), new Tag("school")));
         expense2 = new Expense(expense2Group, expense2Name, expense2Amt,
                 expense2Payer, expense2Participants, expense2Tags, expense2Type);
     }

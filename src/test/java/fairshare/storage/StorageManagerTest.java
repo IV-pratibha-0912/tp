@@ -8,14 +8,16 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-import fairshare.model.expense.ExpenseType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import fairshare.model.expense.Expense;
+import fairshare.model.expense.ExpenseType;
 import fairshare.model.expense.Participant;
 import fairshare.model.group.Group;
 import fairshare.model.person.Person;
@@ -50,11 +52,11 @@ public class StorageManagerTest {
         Group group = new Group("malaysia");
         Person payer = new Person("alice");
         ExpenseType expenseType = ExpenseType.EXPENSE;
-        List<Participant> participants = new ArrayList<>(
+        Set<Participant> participants = new HashSet<>(
                 List.of(
                         new Participant(payer, 1),
                         new Participant(new Person("bob"), 2)));
-        List<Tag> tags = new ArrayList<>(List.of(new Tag("food")));
+        Set<Tag> tags = new HashSet<>(List.of(new Tag("food")));
         Expense expense = new Expense(group, "lunch", 20.0,
                 payer, participants, tags, expenseType);
 
@@ -76,21 +78,29 @@ public class StorageManagerTest {
         Group group = new Group("malaysia");
         Person payer = new Person("alice");
         ExpenseType expenseType = ExpenseType.EXPENSE;
-        List<Participant> participants = new ArrayList<>(
+        Set<Participant> participants = new HashSet<>(
                 List.of(
                         new Participant(new Person("bob"), 2),
                         new Participant(new Person("mary"), 1)));
-        List<Tag> tags = new ArrayList<>(List.of(new Tag("food")));
+        Set<Tag> tags = new HashSet<>(List.of(new Tag("food")));
         Expense expense = new Expense(group, "lunch", 30.0,
                 payer, participants, tags, expenseType);
 
         storageManager.saveFairShare(List.of(expense));
         List<Expense> loaded = storageManager.readFairShare();
 
-        assertEquals(2,
-                loaded.get(0).getParticipants().get(0).getShares());
-        assertEquals(1,
-                loaded.get(0).getParticipants().get(1).getShares());
+        Participant bob = loaded.get(0).getParticipants().stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("alice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("john should be in the set"));
+
+        Participant mary = loaded.get(0).getParticipants().stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("mary"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("mary should be in the set"));
+
+        assertEquals(2, bob.getShares());
+        assertEquals(2, mary.getShares());
     }
 
     @Test
@@ -101,17 +111,17 @@ public class StorageManagerTest {
         Person bob = new Person("bob");
         ExpenseType expenseType = ExpenseType.EXPENSE;
 
-        List<Participant> participants1 = new ArrayList<>(
+        Set<Participant> participants1 = new HashSet<>(
                 List.of(new Participant(alice, 1),
                         new Participant(bob, 1)));
-        List<Participant> participants2 = new ArrayList<>(
+        Set<Participant> participants2 = new HashSet<>(
                 List.of(new Participant(bob, 2),
                         new Participant(alice, 1)));
 
         Expense expense1 = new Expense(group, "lunch", 20.0, alice,
-                participants1, List.of(new Tag("food")), expenseType);
+                participants1, Set.of(new Tag("food")), expenseType);
         Expense expense2 = new Expense(group, "taxi", 30.0, bob,
-                participants2, List.of(new Tag("transport")), expenseType);
+                participants2, Set.of(new Tag("transport")), expenseType);
 
         storageManager.saveFairShare(List.of(expense1, expense2));
         List<Expense> loaded = storageManager.readFairShare();

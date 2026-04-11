@@ -1,12 +1,12 @@
 package fairshare.logic.commands;
 
-import org.junit.jupiter.api.Test;
-
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
 
 public class CommandResultTest {
 
@@ -14,7 +14,7 @@ public class CommandResultTest {
     @Test
     public void constructor_nullResponse_throwsAssertionError() {
         String response = null;
-        assertThrows(AssertionError.class, () -> new CommandResult(response, false, false ));
+        assertThrows(AssertionError.class, () -> new CommandResult(response, false, false));
     }
 
     // Test creating an instance of CommandResult of a command that is not help or exit.

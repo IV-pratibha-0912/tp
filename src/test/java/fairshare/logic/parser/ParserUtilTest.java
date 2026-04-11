@@ -1,20 +1,20 @@
 package fairshare.logic.parser;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
-import fairshare.model.expense.Participant;
-import fairshare.model.person.Person;
-import fairshare.model.tag.Tag;
 import org.junit.jupiter.api.Test;
 
 import fairshare.logic.parser.exceptions.ParseException;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import fairshare.model.expense.Participant;
+import fairshare.model.tag.Tag;
 
 public class ParserUtilTest {
 
@@ -195,26 +195,42 @@ public class ParserUtilTest {
     @Test
     public void parseParticipants_validNoProportion_returnsDefaultShares() throws ParseException {
         List<String> rawParticipants = List.of("alice", "john");
-        List<Participant> result = ParserUtil.parseParticipants(rawParticipants);
+        Set<Participant> result = ParserUtil.parseParticipants(rawParticipants);
 
         assertEquals(2, result.size());
-        assertEquals(new Person("alice"), result.get(0).getPerson());
-        assertEquals(1, result.get(0).getShares());
-        assertEquals(new Person("john"), result.get(1).getPerson());
-        assertEquals(1, result.get(1).getShares());
+
+        Participant alice = result.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("alice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("alice should be in the set"));
+        assertEquals(1, alice.getShares());
+
+        Participant john = result.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("john"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("john should be in the set"));
+        assertEquals(1, john.getShares());
     }
 
     // Test parse participants with specified proportions (uneven split).
     @Test
     public void parseParticipants_validProportion_returnsSpecifiedShares() throws ParseException {
         List<String> rawParticipants = List.of("john:2", "alice:3");
-        List<Participant> result = ParserUtil.parseParticipants(rawParticipants);
+        Set<Participant> result = ParserUtil.parseParticipants(rawParticipants);
 
         assertEquals(2, result.size());
-        assertEquals(new Person("john"), result.get(0).getPerson());
-        assertEquals(2, result.get(0).getShares());
-        assertEquals(new Person("alice"), result.get(1).getPerson());
-        assertEquals(3, result.get(1).getShares());
+
+        Participant john = result.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("john"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("john should be in the set"));
+        assertEquals(2, john.getShares());
+
+        Participant alice = result.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("alice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("alice should be in the set"));
+        assertEquals(3, alice.getShares());
     }
 
     // Test parse participants with invalid specified proportions.
@@ -238,10 +254,10 @@ public class ParserUtilTest {
     @Test
     public void parseTags_validTags_returnsTagList() {
         List<String> rawTags = List.of("food", "transport");
-        List<Tag> result = ParserUtil.parseTags(rawTags);
+        Set<Tag> result = ParserUtil.parseTags(rawTags);
 
         assertEquals(2, result.size());
-        assertEquals(new Tag("food"), result.get(0));
-        assertEquals(new Tag("transport"), result.get(1));
+        assertTrue(result.contains(new Tag("food")));
+        assertTrue(result.contains(new Tag("transport")));
     }
 }

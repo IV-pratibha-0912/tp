@@ -3,8 +3,9 @@ package fairshare.storage;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,12 +27,12 @@ public class TxtAdaptedExpenseTest {
         Group group = new Group("malaysia");
         Person payer = new Person("alice");
         ExpenseType expenseType = ExpenseType.EXPENSE;
-        List<Participant> participants = new ArrayList<>(
+        Set<Participant> participants = new HashSet<>(
                 List.of(
                         new Participant(payer, 1),
                         new Participant(new Person("bob"), 2),
                         new Participant(new Person("carol"), 1)));
-        List<Tag> tags = new ArrayList<>(
+        Set<Tag> tags = new HashSet<>(
                 List.of(new Tag("food"), new Tag("trip")));
 
         expense = new Expense(group, "lunch", 30.0, payer,
@@ -70,10 +71,15 @@ public class TxtAdaptedExpenseTest {
         Expense result = TxtAdaptedExpense.deserialize(line)
                 .toModelType();
 
-        assertEquals("bob",
-                result.getParticipants().get(1).getPerson().getName());
-        assertEquals(2,
-                result.getParticipants().get(1).getShares());
+        Set<Participant> participants = result.getParticipants();
+        assertEquals(3, participants.size());
+
+        Participant bob = participants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "Bob should be in the set"));
+        assertEquals(2, bob.getShares());
     }
 
     @Test
@@ -124,10 +130,14 @@ public class TxtAdaptedExpenseTest {
     public void toModelType_correctShares() {
         Expense result = adaptedExpense.toModelType();
 
-        assertEquals("bob",
-                result.getParticipants().get(1).getPerson().getName());
-        assertEquals(2,
-                result.getParticipants().get(1).getShares());
+        Set<Participant> participants = result.getParticipants();
+
+        Participant bob = participants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "bob should be in the set"));
+        assertEquals(2, bob.getShares());
     }
 
     @Test
@@ -157,8 +167,18 @@ public class TxtAdaptedExpenseTest {
         Expense result = TxtAdaptedExpense.deserialize(serialized)
                 .toModelType();
 
-        assertEquals(
-                expense.getParticipants().get(1).getShares(),
-                result.getParticipants().get(1).getShares());
+        Participant originalBob = expense.getParticipants().stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "bob should be in the serialized set"));
+
+        Participant resultBob = result.getParticipants().stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError(
+                        "bob should be in the deserialized set"));
+
+        assertEquals(originalBob.getShares(), resultBob.getShares());
     }
 }

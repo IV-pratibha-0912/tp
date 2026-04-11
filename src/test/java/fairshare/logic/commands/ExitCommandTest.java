@@ -1,13 +1,13 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import org.mockito.Mockito;
-
-import org.junit.jupiter.api.Test;
-
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import fairshare.model.Model;
 
 public class ExitCommandTest {
 

@@ -1,14 +1,16 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import fairshare.model.expense.Expense;
-import org.junit.jupiter.api.Test;
-
-import org.mockito.Mockito;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import fairshare.model.Model;
+import fairshare.model.expense.Expense;
 
 public class AddCommandTest {
 

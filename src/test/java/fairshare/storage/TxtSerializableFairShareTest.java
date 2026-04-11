@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,18 +42,18 @@ public class TxtSerializableFairShareTest {
 
         expense1 = new Expense(
                 group, "lunch", 20.0, alice,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(alice, 1),
                         new Participant(bob, 1))),
-                new ArrayList<>(List.of(new Tag("food"))),
+                new HashSet<>(List.of(new Tag("food"))),
                 ExpenseType.EXPENSE);
 
         expense2 = new Expense(
                 group, "taxi", 30.0, bob,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(bob, 2),
                         new Participant(alice, 1))),
-                new ArrayList<>(List.of(new Tag("transport"))),
+                new HashSet<>(List.of(new Tag("transport"))),
                 ExpenseType.EXPENSE);
     }
 
@@ -143,20 +145,28 @@ public class TxtSerializableFairShareTest {
     }
 
     @Test
-    public void loadFromFile_validFile_correctShares()
-            throws IOException {
-        TxtSerializableFairShare serializable =
-                new TxtSerializableFairShare(List.of(expense2));
+    public void loadFromFile_validFile_correctShares() throws IOException {
+        TxtSerializableFairShare serializable = new TxtSerializableFairShare(List.of(expense2));
         serializable.saveToFile(testFilePath);
 
         List<Expense> loaded = TxtSerializableFairShare
                 .loadFromFile(testFilePath)
                 .toModelType();
 
-        assertEquals(2,
-                loaded.get(0).getParticipants().get(0).getShares());
-        assertEquals(1,
-                loaded.get(0).getParticipants().get(1).getShares());
+        Set<Participant> loadedParticipants = loaded.get(0).getParticipants();
+
+        Participant bob = loadedParticipants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("bob should be in the loaded set"));
+
+        Participant alice = loadedParticipants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("alice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("alice should be in the loaded set"));
+
+        assertEquals(2, bob.getShares());
+        assertEquals(1, alice.getShares());
     }
 
     @Test
@@ -212,8 +222,8 @@ public class TxtSerializableFairShareTest {
 
         Expense settlement = new Expense(
                 group, "Settlement", 10.0, alice,
-                new ArrayList<>(List.of(new Participant(bob, 1))),
-                new ArrayList<>(),
+                new HashSet<>(List.of(new Participant(bob, 1))),
+                new HashSet<>(),
                 ExpenseType.SETTLEMENT);
 
         TxtSerializableFairShare serializable =

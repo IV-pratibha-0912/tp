@@ -1,16 +1,17 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import fairshare.model.expense.Expense;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
 
 import java.util.function.Predicate;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.verify;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import fairshare.model.Model;
+import fairshare.model.expense.Expense;
 
 public class FilterCommandTest {
     private Predicate<Expense> viewAll = x -> true;
@@ -18,7 +19,7 @@ public class FilterCommandTest {
     // Test creating an instance of FilterCommand with a null predicate.
     @Test
     public void constructor_nullPredicate_throwsAssertionError() {
-        Predicate<Expense> predicate  = null;
+        Predicate<Expense> predicate = null;
 
         assertThrows(AssertionError.class, () -> new FilterCommand(predicate));
     }
