@@ -1,26 +1,29 @@
 package fairshare.logic;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
 import fairshare.logic.commands.CommandResult;
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.logic.parser.exceptions.ParseException;
 import fairshare.model.Model;
 import fairshare.model.balance.Balance;
 import fairshare.model.expense.Expense;
+import fairshare.model.group.Group;
 import fairshare.storage.Storage;
-
 import fairshare.storage.exceptions.StorageException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class LogicManagerTest {
     private Model model;
@@ -53,7 +56,7 @@ public class LogicManagerTest {
 
         String userInput = "list";
 
-        CommandResult cmdRes =  logicManager.execute(userInput);
+        CommandResult cmdRes = logicManager.execute(userInput);
 
         String listSuccessMessage = "Listing all expenses.";
         assertEquals(listSuccessMessage, cmdRes.getResponse());
@@ -84,10 +87,10 @@ public class LogicManagerTest {
         storage = Mockito.mock(Storage.class);
         LogicManager logicManager = new LogicManager(model, storage);
 
-        List<Balance> balances = List.of();
-        when(model.calculateBalances()).thenReturn(balances);
+        Map<Group, List<Balance>> groupBalances = new HashMap<>();
+        when(model.calculateBalances()).thenReturn(groupBalances);
 
-        assertEquals(balances, logicManager.calculateBalances());
+        assertEquals(groupBalances, logicManager.calculateBalances());
         verify(model).calculateBalances(); // Verify model.calculateBalances() is called.
     }
 

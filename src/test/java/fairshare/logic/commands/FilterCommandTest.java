@@ -1,16 +1,21 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import fairshare.model.expense.Expense;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.function.Predicate;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import java.util.function.Predicate;
-
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.verify;
+import fairshare.model.Model;
+import fairshare.model.expense.Expense;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 public class FilterCommandTest {
     private Predicate<Expense> viewAll = x -> true;
@@ -18,7 +23,7 @@ public class FilterCommandTest {
     // Test creating an instance of FilterCommand with a null predicate.
     @Test
     public void constructor_nullPredicate_throwsAssertionError() {
-        Predicate<Expense> predicate  = null;
+        Predicate<Expense> predicate = null;
 
         assertThrows(AssertionError.class, () -> new FilterCommand(predicate));
     }
@@ -36,10 +41,14 @@ public class FilterCommandTest {
     @Test
     public void execute_validModelAndPredicate_success() {
         Model model = Mockito.mock(Model.class);
+
+        ObservableList<Expense> expenses = FXCollections.observableArrayList(List.of(Mockito.mock(Expense.class)));
+        when(model.getFilteredExpenseList()).thenReturn(expenses);
+
         FilterCommand filterCmd = new FilterCommand(viewAll);
         CommandResult cmdRes = filterCmd.execute(model);
 
-        String successMessage = "Filter success.";
+        String successMessage = "Filter success. Displaying 1 expenses.";
         assertEquals(successMessage, cmdRes.getResponse());
 
         assertFalse(cmdRes.getIsHelp());

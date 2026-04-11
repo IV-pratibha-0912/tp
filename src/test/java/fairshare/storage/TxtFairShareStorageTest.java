@@ -8,7 +8,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,10 +42,10 @@ public class TxtFairShareStorageTest {
         Person alice = new Person("alice");
         expense = new Expense(
                 group, "lunch", 20.0, alice,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(alice, 1),
                         new Participant(new Person("bob"), 1))),
-                new ArrayList<>(List.of(new Tag("food"))),
+                new HashSet<>(List.of(new Tag("food"))),
                 ExpenseType.EXPENSE);
     }
 
@@ -76,7 +78,7 @@ public class TxtFairShareStorageTest {
         assertEquals("lunch", loaded.get(0).getExpenseName());
         assertEquals(20.0, loaded.get(0).getAmount());
         assertEquals("alice", loaded.get(0).getPayer().getName());
-        assertEquals("malaysia",
+        assertEquals("MALAYSIA",
                 loaded.get(0).getGroup().getGroupName());
     }
 
@@ -135,10 +137,10 @@ public class TxtFairShareStorageTest {
         Person bob = new Person("bob");
         Expense expense2 = new Expense(
                 group, "taxi", 30.0, bob,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(bob, 2),
                         new Participant(new Person("alice"), 1))),
-                new ArrayList<>(List.of(new Tag("transport"))),
+                new HashSet<>(List.of(new Tag("transport"))),
                 ExpenseType.EXPENSE);
 
         storage.saveFairShare(List.of(expense, expense2));
@@ -156,9 +158,9 @@ public class TxtFairShareStorageTest {
         Person alice = new Person("alice");
         Expense settlement = new Expense(
                 group, "Settlement", 10.0, alice,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(new Person("bob"), 1))),
-                new ArrayList<>(),
+                new HashSet<>(),
                 ExpenseType.SETTLEMENT);
 
         storage.saveFairShare(List.of(settlement));
@@ -174,10 +176,21 @@ public class TxtFairShareStorageTest {
         storage.saveFairShare(List.of(expense));
         List<Expense> loaded = storage.readFairShare();
 
-        assertEquals(1,
-                loaded.get(0).getParticipants().get(0).getShares());
-        assertEquals(1,
-                loaded.get(0).getParticipants().get(1).getShares());
+        Set<Participant> loadedParticipants = loaded.get(0).getParticipants();
+        assertEquals(2, loadedParticipants.size());
+
+        Participant alice = loadedParticipants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("alice"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("alice should be in the set"));
+
+        Participant bob = loadedParticipants.stream()
+                .filter(p -> p.getPerson().getName().equalsIgnoreCase("bob"))
+                .findFirst()
+                .orElseThrow(() -> new AssertionError("bob should be in the set"));
+
+        assertEquals(1, alice.getShares());
+        assertEquals(1, bob.getShares());
     }
 
     @Test
@@ -189,9 +202,9 @@ public class TxtFairShareStorageTest {
         Person carol = new Person("carol");
         Expense newExpense = new Expense(
                 group, "sushi", 50.0, carol,
-                new ArrayList<>(List.of(
+                new HashSet<>(List.of(
                         new Participant(carol, 1))),
-                new ArrayList<>(),
+                new HashSet<>(),
                 ExpenseType.EXPENSE);
 
         storage.saveFairShare(List.of(newExpense));

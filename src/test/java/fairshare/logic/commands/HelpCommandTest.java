@@ -1,10 +1,13 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.*;
+import fairshare.model.Model;
 
 public class HelpCommandTest {
 

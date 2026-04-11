@@ -1,21 +1,22 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import fairshare.model.expense.Expense;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.verify;
+
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.mockito.Mockito.verify;
+import fairshare.model.Model;
+import fairshare.model.expense.Expense;
 
 public class SettleCommandTest {
 
     // Test creating an instance of SettleCommand with a null settlement
     @Test
     public void constructor_nullSettlement_throwsAssertionError() {
-        Expense settlement  = null;
+        Expense settlement = null;
 
         assertThrows(AssertionError.class, () -> new SettleCommand(settlement));
     }
