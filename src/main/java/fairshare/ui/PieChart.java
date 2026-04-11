@@ -106,17 +106,16 @@ public class PieChart {
         byTagButton.setSelected(true);
         updateToggleStyle(byTagButton, byGroupButton);
 
-        toggleGroup.selectedToggleProperty().addListener(
-                (obs, oldVal, newVal) -> {
-                    if (newVal == null) {
-                        oldVal.setSelected(true);
-                        return;
-                    }
-                    updateToggleStyle(byTagButton, byGroupButton);
-                    if (lastExpenses != null) {
-                        refresh(lastExpenses);
-                    }
-                });
+        toggleGroup.selectedToggleProperty().addListener((obs, oldVal, newVal) -> {
+            if (newVal == null) {
+                oldVal.setSelected(true);
+                return;
+            }
+            updateToggleStyle(byTagButton, byGroupButton);
+            if (lastExpenses != null) {
+                refresh(lastExpenses);
+            }
+        });
     }
 
     private void updateToggleStyle(ToggleButton tagBtn,
@@ -201,8 +200,7 @@ public class PieChart {
                 colourIndex++;
             }
 
-            int percentage = (int) Math.round(
-                    (amount / totalAmount) * 100);
+            int percentage = (int) Math.round((amount / totalAmount) * 100);
 
             pieData.add(new javafx.scene.chart.PieChart.Data(
                     label + " $"

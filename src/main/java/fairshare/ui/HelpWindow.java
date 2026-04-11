@@ -23,7 +23,7 @@ public class HelpWindow {
     private static final int HEIGHT = 400;
     private static final String MESSAGE_HELP =
             """
-            
+
             ─────────────────────────────────────
                       MANAGING EXPENSES
             ─────────────────────────────────────
@@ -31,19 +31,18 @@ public class HelpWindow {
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 Equal split:
                 add n/NAME a/AMOUNT g/GROUP p/PAYER s/PERSON...
-                
+
                 Proportional split:
                 add n/NAME a/AMOUNT g/GROUP p/PAYER s/PERSON:PARTS...
-                
+
                 💡 Tip: s/alice:3 s/bob:1 means alice pays 3/4, bob pays 1/4
                 📌 Example: add n/Lunch a/20.0 g/JB p/alice s/alice:3 s/bob:1 t/food
-    
+
             🗑️  DELETE AN EXPENSE
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 delete INDEX
                 📌 Example: delete 1
-                
-                
+ 
             🗑️  CLEAR ALL EXPENSES
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 clear
@@ -51,8 +50,8 @@ public class HelpWindow {
             ✏️  UPDATE AN EXPENSE
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 update INDEX [n/NAME] [a/AMOUNT] [p/PAYER] [s/PERSON...]
-                📌 Example: update 2 a/50.0 p/bob    
-                
+                📌 Example: update 2 a/50.0 p/bob
+
             ─────────────────────────────────────
                        SETTLING DEBTS
             ─────────────────────────────────────
@@ -60,7 +59,7 @@ public class HelpWindow {
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 settle g/GROUP p/PAYER r/RECEIVER a/AMOUNT
                 📌 Example: settle g/JB p/alice r/bob a/10.0
-                
+
             ─────────────────────────────────────
                      VIEWING & SEARCHING
             ─────────────────────────────────────
@@ -72,18 +71,18 @@ public class HelpWindow {
                 filter s/PERSON     → by participant
                 filter t/TAG        → by tag
                 📌 Example: filter g/JB
-    
+
             📋  LIST ALL EXPENSES
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 list
-                
+
             ─────────────────────────────────────
                            OTHER
             ─────────────────────────────────────
             ❓  HELP
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 help
-    
+
             🚪  EXIT
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 exit""";
