@@ -1,5 +1,20 @@
 package fairshare.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.util.List;
+import java.util.Set;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Mockito;
+
 import fairshare.logic.commands.exceptions.CommandException;
 import fairshare.model.Model;
 import fairshare.model.expense.Expense;
@@ -10,16 +25,6 @@ import fairshare.model.person.Person;
 import fairshare.model.tag.Tag;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Mockito;
-
-import java.util.List;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 
 public class UpdateCommandTest {
 
@@ -109,7 +114,7 @@ public class UpdateCommandTest {
         when(model.getFilteredExpenseList()).thenReturn(filteredExpenseList);
 
         UpdateCommand.UpdateFields updateFields = new UpdateCommand.UpdateFields();
-        List<Tag> tags = List.of(new Tag("food"));
+        Set<Tag> tags = Set.of(new Tag("food"));
         updateFields.setTags(tags);
 
         UpdateCommand updateCmd = new UpdateCommand(0, updateFields);
@@ -130,7 +135,7 @@ public class UpdateCommandTest {
         when(model.getFilteredExpenseList()).thenReturn(filteredExpenseList);
 
         UpdateCommand.UpdateFields updateFields = new UpdateCommand.UpdateFields();
-        List<Participant> participants = List.of(Mockito.mock(Participant.class));
+        Set<Participant> participants = Set.of(Mockito.mock(Participant.class));
         updateFields.setParticipants(participants);
 
         UpdateCommand updateCmd = new UpdateCommand(0, updateFields);
@@ -198,7 +203,7 @@ public class UpdateCommandTest {
 
         // Verify updated expense fields.
         Expense updatedExpense = expenseCaptor.getValue();
-        assertEquals("john", updatedExpense.getParticipants().getFirst().getPerson().getName());
+        assertTrue(updatedExpense.getParticipants().contains(new Participant(new Person("john"), 1)));
         assertEquals(20.00d, updatedExpense.getAmount());
     }
 
@@ -210,7 +215,7 @@ public class UpdateCommandTest {
         when(expense.getExpenseName()).thenReturn("old");
         when(expense.getAmount()).thenReturn(5.00);
         when(expense.getPayer()).thenReturn(Mockito.mock(Person.class));
-        when(expense.getParticipants()).thenReturn(List.of());
+        when(expense.getParticipants()).thenReturn(Set.of());
 
         return expense;
     }

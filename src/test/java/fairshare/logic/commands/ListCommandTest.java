@@ -1,13 +1,14 @@
 package fairshare.logic.commands;
 
-import fairshare.model.Model;
-import org.junit.jupiter.api.Test;
-import org.mockito.Mockito;
-
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
+
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+
+import fairshare.model.Model;
 
 public class ListCommandTest {
 
