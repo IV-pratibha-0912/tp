@@ -7,18 +7,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
+
 <HBox xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
-      spacing="12"
-      style="-fx-background-color: #4a7fe8;
-             -fx-effect: dropshadow(gaussian,
-                         rgba(0,0,0,0.15), 6, 0, 0, 2);">
-    <padding>
-        <Insets top="14" right="20" bottom="14" left="20"/>
-    </padding>
+      spacing="15"
+      style="-fx-background-color: #FFFFFF;
+             -fx-border-color: #E2E8F0;
+             -fx-border-width: 0 0 1 0;"> <padding>
+    <Insets top="12" right="20" bottom="12" left="20"/>
+</padding>
 
-    <ImageView fitWidth="100"
-               fitHeight="100"
+    <ImageView fitWidth="45"
+               fitHeight="45"
                preserveRatio="true">
         <image>
             <Image url="@/images/fairshare_logo.png"/>
@@ -28,30 +28,28 @@
     <VBox spacing="2"
           alignment="CENTER_LEFT">
         <Label text="FairShare"
-               style="-fx-font-size: 22;
+               style="-fx-font-size: 20;
                       -fx-font-weight: bold;
-                      -fx-text-fill: white;"/>
-        <Label text="Shared Expense Tracker"
-               style="-fx-font-size: 11;
-                      -fx-text-fill: rgba(255,255,255,0.75);"/>
-    </VBox>
+                      -fx-text-fill: #0F172A;"/> <Label text="Shared Expense Tracker"
+                                                        style="-fx-font-size: 12;
+                      -fx-text-fill: #64748B;"/> </VBox>
 
     <Region HBox.hgrow="ALWAYS"/>
 
     <Label text="Type 'help' for commands"
-           style="-fx-font-size: 11;
-                  -fx-text-fill: rgba(255,255,255,0.65);
+           style="-fx-font-size: 12;
+                  -fx-text-fill: #94A3B8;
                   -fx-font-style: italic;"/>
 
     <Button fx:id="groupsButton"
             text="Groups"
-            style="-fx-background-color: rgba(255,255,255,0.2);
-                   -fx-text-fill: white;
-                   -fx-border-color: rgba(255,255,255,0.4);
+            style="-fx-background-color: #F8FAFC;
+                   -fx-text-fill: #3B82F6;
+                   -fx-border-color: #E2E8F0;
                    -fx-border-radius: 6;
                    -fx-background-radius: 6;
-                   -fx-font-size: 12;
+                   -fx-font-size: 13;
+                   -fx-font-weight: bold;
                    -fx-cursor: hand;
-                   -fx-padding: 6 14 6 14;"/>
-
+                   -fx-padding: 8 16 8 16;"/>
 </HBox>
