@@ -33,7 +33,7 @@
     </ScrollPane>
 
     <Label fx:id="emptyStateLabel"
-           text="Everything is settled."
+           text="No outstanding balances."
            style="-fx-text-fill: #64748B;
                   -fx-font-size: 13;"
            wrapText="true">
