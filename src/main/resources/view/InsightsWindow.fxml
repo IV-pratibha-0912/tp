@@ -14,7 +14,7 @@
                     bottom="20" left="20"/>
         </padding>
 
-        <Label text="Group Statistics"
+        <Label text="Group Insights"
                style="-fx-font-size: 20;
                       -fx-font-weight: bold;
                       -fx-text-fill: #0F172A;"/>

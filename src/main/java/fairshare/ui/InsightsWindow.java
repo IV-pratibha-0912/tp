@@ -33,10 +33,10 @@ import javafx.stage.Stage;
 /**
  * A popup window that displays group statistics for all groups.
  */
-public class GroupWindow {
+public class InsightsWindow {
 
-    private static final String FXML = "/view/GroupWindow.fxml";
-    private static final String TITLE = "Groups";
+    private static final String FXML = "/view/InsightsWindow.fxml";
+    private static final String TITLE = "Insights";
     private static final int WIDTH = 420;
     private static final int HEIGHT = 550;
 
@@ -56,7 +56,7 @@ public class GroupWindow {
                     + "-fx-effect: dropshadow(gaussian,"
                     + "rgba(15,23,42,0.06), 18, 0, 0, 4);";
 
-    private final Stage groupStage;
+    private final Stage insightStage;
 
     @FXML
     private VBox activeGroupsContainer;
@@ -71,28 +71,28 @@ public class GroupWindow {
     private Label noPastLabel;
 
     /**
-     * Constructs a {@code GroupWindow}.
+     * Constructs a {@code InsightsWindow}.
      *
      * @param primaryStage the primary stage; cannot be null.
      */
-    public GroupWindow(Stage primaryStage) {
+    public InsightsWindow(Stage primaryStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
-                    GroupWindow.class.getResource(FXML));
+                    InsightsWindow.class.getResource(FXML));
             fxmlLoader.setController(this);
             Parent root = fxmlLoader.load();
 
-            groupStage = new Stage();
-            groupStage.setTitle(TITLE);
-            groupStage.getIcons().add(new Image(
+            insightStage = new Stage();
+            insightStage.setTitle(TITLE);
+            insightStage.getIcons().add(new Image(
                     getClass().getResourceAsStream("/images/group.png")));
             Scene scene = new Scene(root, WIDTH, HEIGHT);
             scene.getStylesheets().add(
                     getClass().getResource("/view/styles.css")
                             .toExternalForm());
-            groupStage.setScene(scene);
-            groupStage.initModality(Modality.NONE);
-            groupStage.initOwner(primaryStage);
+            insightStage.setScene(scene);
+            insightStage.initModality(Modality.NONE);
+            insightStage.initOwner(primaryStage);
         } catch (IOException e) {
             throw new UiException("Failed to load " + FXML, e);
         }
@@ -108,15 +108,15 @@ public class GroupWindow {
     public void show(List<Expense> expenses,
                      Map<Group, List<Balance>> groupBalances) {
         refresh(expenses, groupBalances);
-        if (!groupStage.isShowing()) {
-            groupStage.show();
+        if (!insightStage.isShowing()) {
+            insightStage.show();
         }
-        groupStage.toFront();
-        groupStage.requestFocus();
+        insightStage.toFront();
+        insightStage.requestFocus();
     }
 
     /**
-     * Refreshes the group window data if it is currently showing.
+     * Refreshes the insights window data if it is currently showing.
      *
      * @param expenses      the full list of expenses; cannot be null.
      * @param groupBalances the current map of group balances;
@@ -124,7 +124,7 @@ public class GroupWindow {
      */
     public void refreshIfShowing(List<Expense> expenses,
                                  Map<Group, List<Balance>> groupBalances) {
-        if (groupStage.isShowing()) {
+        if (insightStage.isShowing()) {
             refresh(expenses, groupBalances);
         }
     }

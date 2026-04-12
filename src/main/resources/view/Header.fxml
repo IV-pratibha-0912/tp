@@ -42,7 +42,7 @@
            style="-fx-font-size: 12;
                   -fx-text-fill: #64748B;"/>
 
-    <Button fx:id="groupsButton"
-            id="groupsButton"
-            text="Groups"/>
+    <Button fx:id="insightsButton"
+            id="insightsButton"
+            text="Insights"/>
 </HBox>
