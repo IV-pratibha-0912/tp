@@ -37,7 +37,7 @@ public class MainWindow implements Ui {
     private CommandBox commandBox;
     private HelpWindow helpWindow;
     private Header header;
-    private GroupWindow groupWindow;
+    private InsightsWindow insightsWindow;
 
     @FXML
     private StackPane expenseListPanelPlaceholder;
@@ -116,9 +116,9 @@ public class MainWindow implements Ui {
 
         helpWindow = new HelpWindow();
 
-        groupWindow = new GroupWindow(primaryStage);
-        header.setOnGroupsClicked(() ->
-                groupWindow.show(
+        insightsWindow = new InsightsWindow(primaryStage);
+        header.setOnInsightsClicked(() ->
+                insightsWindow.show(
                         logic.getExpenseList(),
                         logic.calculateBalances()));
 
@@ -171,8 +171,8 @@ public class MainWindow implements Ui {
 
             balancePanel.refresh(logic.calculateBalances());
             pieChart.refresh(new ArrayList<>(logic.getFilteredExpenseList()));
-            statusBar.refresh(logic.getExpenseList());
-            groupWindow.refreshIfShowing(
+            statusBar.refresh(logic.getFilteredExpenseList());
+            insightsWindow.refreshIfShowing(
                     logic.getExpenseList(),
                     logic.calculateBalances());
 

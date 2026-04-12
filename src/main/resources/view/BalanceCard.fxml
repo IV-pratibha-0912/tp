@@ -3,18 +3,20 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      spacing="4"
-      style="-fx-background-color: #ffffff;
-             -fx-background-radius: 8;
-             -fx-border-radius: 8;
+      spacing="5"
+      style="-fx-background-color: #FFFFFF;
+             -fx-background-radius: 12;
+             -fx-border-color: #E2E8F0;
+             -fx-border-radius: 12;
+             -fx-border-width: 1;
              -fx-effect: dropshadow(gaussian,
-                         rgba(0,0,0,0.08), 4, 0, 0, 2);">
+                         rgba(15,23,42,0.05), 14, 0, 0, 3);">
     <padding>
-        <Insets top="10" right="15" bottom="10" left="15"/>
+        <Insets top="12" right="15" bottom="12" left="15"/>
     </padding>
     <Label fx:id="nameLabel"
            style="-fx-font-size: 14;
                   -fx-font-weight: bold;
-                  -fx-text-fill: #1a2a4a;"/>
-    <VBox fx:id="debtsContainer" spacing="3"/>
+                  -fx-text-fill: #0F172A;"/>
+    <VBox fx:id="debtsContainer" spacing="4"/>
 </VBox>

@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.Region;
 
 /**
@@ -17,6 +18,11 @@ import javafx.scene.layout.Region;
 public class CommandBox {
 
     private static final String FXML = "/view/CommandBox.fxml";
+    private static final String ERROR_STYLE =
+            "-fx-background-color: #FEF2F2;"
+                    + "-fx-border-color: #FCA5A5;"
+                    + "-fx-text-fill: #B91C1C;"
+                    + "-fx-prompt-text-fill: #B91C1C;";
 
     private final CommandExecutor commandExecutor;
     private Region root;
@@ -45,10 +51,8 @@ public class CommandBox {
             throw new UiException("Failed to load " + FXML, e);
         }
 
-        // Reset commandbox text color whenever there is a change in text
         commandTextField.textProperty().addListener((
-                observable, oldValue, newValue) ->
-                        commandTextField.setStyle(""));
+                observable, oldValue, newValue) -> clearErrorStyle());
     }
 
     /**
@@ -74,9 +78,18 @@ public class CommandBox {
         try {
             commandExecutor.execute(commandText);
             commandTextField.clear();
+            clearErrorStyle();
         } catch (CommandException | ParseException e) {
-            commandTextField.setStyle("-fx-text-inner-color: red;");
+            applyErrorStyle();
         }
+    }
+
+    private void clearErrorStyle() {
+        commandTextField.setStyle("");
+    }
+
+    private void applyErrorStyle() {
+        commandTextField.setStyle(ERROR_STYLE);
     }
 
     /**
@@ -101,10 +114,9 @@ public class CommandBox {
         sendButton.setOnAction(event -> handleCommandEntered());
 
         commandTextField.setOnKeyPressed(event -> {
-            if (event.getCode()
-                    == javafx.scene.input.KeyCode.ESCAPE) {
+            if (event.getCode() == KeyCode.ESCAPE) {
                 commandTextField.clear();
-                commandTextField.setStyle("");
+                clearErrorStyle();
             }
         });
     }

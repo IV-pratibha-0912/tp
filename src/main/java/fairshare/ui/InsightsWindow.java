@@ -33,26 +33,30 @@ import javafx.stage.Stage;
 /**
  * A popup window that displays group statistics for all groups.
  */
-public class GroupWindow {
+public class InsightsWindow {
 
-    private static final String FXML = "/view/GroupWindow.fxml";
-    private static final String TITLE = "Groups";
+    private static final String FXML = "/view/InsightsWindow.fxml";
+    private static final String TITLE = "Insights";
     private static final int WIDTH = 420;
     private static final int HEIGHT = 550;
 
-    private static final String ACTIVE_COLOUR = "#cc5500";
-    private static final String SETTLED_COLOUR = "#033500";
-    private static final String TEXT_DARK = "#1a2a4a";
-    private static final String TEXT_MUTED = "#6b7fa8";
-    private static final String CARD_BG = "#ffffff";
+    private static final String ACTIVE_COLOUR = "#D97706";
+    private static final String ACTIVE_SOFT = "#FFF7ED";
+    private static final String SETTLED_COLOUR = "#15803D";
+    private static final String SETTLED_SOFT = "#F0FDF4";
+    private static final String TEXT_DARK = "#0F172A";
+    private static final String TEXT_MUTED = "#64748B";
+    private static final String CARD_BG = "#FFFFFF";
     private static final String CARD_STYLE =
             "-fx-background-color: " + CARD_BG + ";"
-                    + "-fx-background-radius: 10;"
-                    + "-fx-border-radius: 10;"
+                    + "-fx-background-radius: 14;"
+                    + "-fx-border-color: #E2E8F0;"
+                    + "-fx-border-radius: 14;"
+                    + "-fx-border-width: 1;"
                     + "-fx-effect: dropshadow(gaussian,"
-                    + "rgba(74,127,232,0.10), 6, 0, 0, 2);";
+                    + "rgba(15,23,42,0.06), 18, 0, 0, 4);";
 
-    private final Stage groupStage;
+    private final Stage insightStage;
 
     @FXML
     private VBox activeGroupsContainer;
@@ -67,25 +71,28 @@ public class GroupWindow {
     private Label noPastLabel;
 
     /**
-     * Constructs a {@code GroupWindow}.
+     * Constructs a {@code InsightsWindow}.
      *
      * @param primaryStage the primary stage; cannot be null.
      */
-    public GroupWindow(Stage primaryStage) {
+    public InsightsWindow(Stage primaryStage) {
         try {
             FXMLLoader fxmlLoader = new FXMLLoader(
-                    GroupWindow.class.getResource(FXML));
+                    InsightsWindow.class.getResource(FXML));
             fxmlLoader.setController(this);
             Parent root = fxmlLoader.load();
 
-            groupStage = new Stage();
-            groupStage.setTitle(TITLE);
-            groupStage.getIcons().add(new Image(
+            insightStage = new Stage();
+            insightStage.setTitle(TITLE);
+            insightStage.getIcons().add(new Image(
                     getClass().getResourceAsStream("/images/group.png")));
-            groupStage.setScene(
-                    new Scene(root, WIDTH, HEIGHT));
-            groupStage.initModality(Modality.NONE);
-            groupStage.initOwner(primaryStage);
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            scene.getStylesheets().add(
+                    getClass().getResource("/view/styles.css")
+                            .toExternalForm());
+            insightStage.setScene(scene);
+            insightStage.initModality(Modality.NONE);
+            insightStage.initOwner(primaryStage);
         } catch (IOException e) {
             throw new UiException("Failed to load " + FXML, e);
         }
@@ -101,15 +108,15 @@ public class GroupWindow {
     public void show(List<Expense> expenses,
                      Map<Group, List<Balance>> groupBalances) {
         refresh(expenses, groupBalances);
-        if (!groupStage.isShowing()) {
-            groupStage.show();
+        if (!insightStage.isShowing()) {
+            insightStage.show();
         }
-        groupStage.toFront();
-        groupStage.requestFocus();
+        insightStage.toFront();
+        insightStage.requestFocus();
     }
 
     /**
-     * Refreshes the group window data if it is currently showing.
+     * Refreshes the insights window data if it is currently showing.
      *
      * @param expenses      the full list of expenses; cannot be null.
      * @param groupBalances the current map of group balances;
@@ -117,7 +124,7 @@ public class GroupWindow {
      */
     public void refreshIfShowing(List<Expense> expenses,
                                  Map<Group, List<Balance>> groupBalances) {
-        if (groupStage.isShowing()) {
+        if (insightStage.isShowing()) {
             refresh(expenses, groupBalances);
         }
     }
@@ -235,9 +242,9 @@ public class GroupWindow {
         HBox headerRow = new HBox(8);
         headerRow.setAlignment(Pos.CENTER_LEFT);
 
-        Label nameLabel = new Label(groupName.toUpperCase());
+        Label nameLabel = new Label(groupName);
         nameLabel.setStyle(
-                "-fx-font-size: 14;"
+                "-fx-font-size: 15;"
                         + "-fx-font-weight: bold;"
                         + "-fx-text-fill: " + TEXT_DARK + ";");
 
@@ -246,15 +253,17 @@ public class GroupWindow {
 
         String statusColour = isActive
                 ? ACTIVE_COLOUR : SETTLED_COLOUR;
+        String statusSoftColour = isActive
+                ? ACTIVE_SOFT : SETTLED_SOFT;
         Label statusBadge = new Label(
-                isActive ? "● Active" : "✓ Settled");
+                isActive ? "Active" : "Settled");
         statusBadge.setStyle(
                 "-fx-font-size: 10;"
                         + "-fx-font-weight: bold;"
-                        + "-fx-text-fill: #ffffff;"
-                        + "-fx-background-color: " + statusColour + ";"
-                        + "-fx-background-radius: 20;"
-                        + "-fx-padding: 2 8 2 8;");
+                        + "-fx-text-fill: " + statusColour + ";"
+                        + "-fx-background-color: " + statusSoftColour + ";"
+                        + "-fx-background-radius: 999;"
+                        + "-fx-padding: 4 10 4 10;");
 
         headerRow.getChildren().addAll(
                 nameLabel, headerSpacer, statusBadge);
@@ -268,7 +277,7 @@ public class GroupWindow {
                         + "-fx-text-fill: " + TEXT_MUTED + ";");
 
         Separator separator = new Separator();
-        separator.setStyle("-fx-background-color: #e8eef7;");
+        separator.setStyle("-fx-background-color: #E2E8F0;");
 
         VBox statsBox = new VBox(6);
 
@@ -277,13 +286,12 @@ public class GroupWindow {
                     "No expenses recorded yet.");
             noDataLabel.setStyle(
                     "-fx-font-size: 12;"
-                            + "-fx-text-fill: " + TEXT_MUTED + ";"
-                            + "-fx-font-style: italic;");
+                            + "-fx-text-fill: " + TEXT_MUTED + ";");
             statsBox.getChildren().add(noDataLabel);
         } else {
             biggestExpense.ifPresent(e ->
                     statsBox.getChildren().add(createStatRow(
-                            "💰  Biggest expense",
+                            "Biggest expense",
                             e.getExpenseName()
                                     + "  ($"
                                     + String.format("%.2f", e.getAmount())
@@ -296,7 +304,7 @@ public class GroupWindow {
                         .mapToDouble(Expense::getAmount)
                         .sum();
                 statsBox.getChildren().add(createStatRow(
-                        "👑  Top spender",
+                        "Top spender",
                         spender
                                 + "  ($"
                                 + String.format("%.2f", topAmount)
@@ -305,7 +313,7 @@ public class GroupWindow {
 
             topTag.ifPresent(tag ->
                     statsBox.getChildren().add(
-                            createStatRow("🏷️  Top tag", tag)));
+                            createStatRow("Top tag", tag)));
         }
 
         card.getChildren().addAll(
@@ -329,7 +337,7 @@ public class GroupWindow {
         labelNode.setStyle(
                 "-fx-font-size: 11;"
                         + "-fx-text-fill: " + TEXT_MUTED + ";"
-                        + "-fx-min-width: 130;");
+                        + "-fx-min-width: 120;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);

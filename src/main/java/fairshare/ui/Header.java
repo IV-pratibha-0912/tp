@@ -18,7 +18,7 @@ public class Header {
     private HBox root;
 
     @FXML
-    private Button groupsButton;
+    private Button insightsButton;
 
     /**
      * Constructs a {@code Header}.
@@ -44,11 +44,11 @@ public class Header {
     }
 
     /**
-     * Sets the handler called when the Groups button is clicked.
+     * Sets the handler called when the Insights button is clicked.
      *
      * @param handler the handler to call; cannot be null.
      */
-    public void setOnGroupsClicked(Runnable handler) {
-        groupsButton.setOnAction(e -> handler.run());
+    public void setOnInsightsClicked(Runnable handler) {
+        insightsButton.setOnAction(e -> handler.run());
     }
 }

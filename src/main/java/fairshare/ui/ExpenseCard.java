@@ -87,31 +87,51 @@ public class ExpenseCard {
 
     private void applyCardStyle(Expense expense) {
         if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
-            root.setStyle("-fx-background-color: #e8f5e9; "
-                    + "-fx-background-radius: 10; "
-                    + "-fx-border-radius: 10; "
+            root.setStyle("-fx-background-color: #F0FDF4; "
+                    + "-fx-background-radius: 14; "
+                    + "-fx-border-color: #BBF7D0; "
+                    + "-fx-border-radius: 14; "
+                    + "-fx-border-width: 1; "
                     + "-fx-effect: dropshadow(gaussian, "
-                    + "rgba(76,175,80,0.15), 8, 0, 0, 2);");
+                    + "rgba(22,163,74,0.10), 16, 0, 0, 4);");
             groupLabel.setStyle(
-                    "-fx-text-fill: #ffffff; "
+                    "-fx-text-fill: #166534; "
                             + "-fx-font-size: 10; "
                             + "-fx-font-weight: bold; "
-                            + "-fx-background-color: #033500; "
-                            + "-fx-background-radius: 20; "
-                            + "-fx-padding: 2 10 2 10;");
+                            + "-fx-background-color: #DCFCE7; "
+                            + "-fx-background-radius: 999; "
+                            + "-fx-padding: 4 10 4 10;");
+            amountLabel.setStyle(
+                    "-fx-text-fill: #15803D; "
+                            + "-fx-font-size: 14; "
+                            + "-fx-font-weight: bold;");
+            payerLabel.setStyle(
+                    "-fx-text-fill: #166534; "
+                            + "-fx-font-size: 12; "
+                            + "-fx-font-weight: bold;");
         } else {
-            root.setStyle("-fx-background-color: #ffffff; "
-                    + "-fx-background-radius: 10; "
-                    + "-fx-border-radius: 10; "
+            root.setStyle("-fx-background-color: #FFFFFF; "
+                    + "-fx-background-radius: 14; "
+                    + "-fx-border-color: #E2E8F0; "
+                    + "-fx-border-radius: 14; "
+                    + "-fx-border-width: 1; "
                     + "-fx-effect: dropshadow(gaussian, "
-                    + "rgba(74,127,232,0.12), 8, 0, 0, 2);");
+                    + "rgba(15,23,42,0.06), 18, 0, 0, 4);");
             groupLabel.setStyle(
-                    "-fx-text-fill: #ffffff; "
+                    "-fx-text-fill: #0369A1; "
                             + "-fx-font-size: 10; "
                             + "-fx-font-weight: bold; "
-                            + "-fx-background-color: #A8C4D2; "
-                            + "-fx-background-radius: 20; "
-                            + "-fx-padding: 2 10 2 10;");
+                            + "-fx-background-color: #E0F2FE; "
+                            + "-fx-background-radius: 999; "
+                            + "-fx-padding: 4 10 4 10;");
+            amountLabel.setStyle(
+                    "-fx-text-fill: #15803D; "
+                            + "-fx-font-size: 14; "
+                            + "-fx-font-weight: bold;");
+            payerLabel.setStyle(
+                    "-fx-text-fill: #475569; "
+                            + "-fx-font-size: 12; "
+                            + "-fx-font-weight: bold;");
         }
     }
 
@@ -125,7 +145,7 @@ public class ExpenseCard {
     }
 
     private void formatExpense(Expense expense) {
-        payerLabel.setText("Paid by: "
+        payerLabel.setText("Paid by "
                 + expense.getPayer().getName());
 
         int totalShares = expense.getTotalShares();
@@ -134,7 +154,7 @@ public class ExpenseCard {
         javafx.scene.layout.FlowPane chipsPane =
                 new javafx.scene.layout.FlowPane();
         chipsPane.setHgap(6);
-        chipsPane.setVgap(4);
+        chipsPane.setVgap(6);
 
         for (Participant p : expense.getParticipants()) {
             double share = (totalAmount / totalShares)
@@ -146,13 +166,13 @@ public class ExpenseCard {
                             + " · " + percentage + "%"
                             + " · $" + String.format("%.2f", share));
             chip.setStyle(
-                    "-fx-background-color: #e8eef7;"
-                            + "-fx-text-fill: #1a2a4a;"
+                    "-fx-background-color: #F8FAFC;"
+                            + "-fx-text-fill: #334155;"
                             + "-fx-font-size: 11;"
-                            + "-fx-background-radius: 20;"
-                            + "-fx-border-color: #c5d0e8;"
-                            + "-fx-border-radius: 20;"
-                            + "-fx-padding: 3 10 3 10;");
+                            + "-fx-background-radius: 999;"
+                            + "-fx-border-color: #E2E8F0;"
+                            + "-fx-border-radius: 999;"
+                            + "-fx-padding: 4 12 4 12;");
 
             chipsPane.getChildren().add(chip);
         }

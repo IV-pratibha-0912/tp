@@ -1,9 +1,11 @@
 package fairshare.ui;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import fairshare.model.expense.Expense;
 import fairshare.model.expense.ExpenseType;
@@ -28,18 +30,16 @@ public class PieChart {
     private static final String UNTAGGED_LABEL = "Untagged";
 
     private static final String[] FIXED_COLOURS = {
-        "#3B82F6", // Blue
-        "#10B981", // Emerald
-        "#F59E0B", // Amber
-        "#EF4444", // Red
-        "#8B5CF6", // Purple
-        "#06B6D4", // Cyan
-        "#EC4899", // Pink
-        "#64748B" // Slate
+            "#0F766E", // Teal
+            "#0EA5E9", // Sky
+            "#6366F1", // Indigo
+            "#D97706", // Amber
+            "#14B8A6", // Mint
+            "#64748B", // Slate
+            "#8B5CF6", // Violet
+            "#84CC16"  // Lime
     };
 
-    private final Map<String, String> colourMap = new HashMap<>();
-    private int colourIndex = 0;
     private List<Expense> lastExpenses;
 
     private VBox root;
@@ -122,44 +122,41 @@ public class PieChart {
                                    ToggleButton groupBtn) {
         String activeStyle =
                 "-fx-font-size: 11;"
-                        + "-fx-background-color: #A8C4D2;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-background-color: #0F766E;"
                         + "-fx-text-fill: white;"
-                        + "-fx-background-radius: 20;"
-                        + "-fx-border-radius: 20;"
+                        + "-fx-background-radius: 999;"
+                        + "-fx-border-radius: 999;"
                         + "-fx-cursor: hand;"
-                        + "-fx-padding: 2 10 2 10;";
+                        + "-fx-padding: 4 12 4 12;";
         String inactiveStyle =
                 "-fx-font-size: 11;"
-                        + "-fx-background-color: #e8eef7;"
-                        + "-fx-text-fill: #4a7fe8;"
-                        + "-fx-background-radius: 20;"
-                        + "-fx-border-color: #c5d0e8;"
-                        + "-fx-border-radius: 20;"
+                        + "-fx-font-weight: bold;"
+                        + "-fx-background-color: #FFFFFF;"
+                        + "-fx-text-fill: #0F766E;"
+                        + "-fx-background-radius: 999;"
+                        + "-fx-border-color: #CBD5E1;"
+                        + "-fx-border-radius: 999;"
                         + "-fx-cursor: hand;"
-                        + "-fx-padding: 2 10 2 10;";
+                        + "-fx-padding: 4 12 4 12;";
 
-        tagBtn.setStyle(
-                tagBtn.isSelected() ? activeStyle : inactiveStyle);
-        groupBtn.setStyle(
-                groupBtn.isSelected() ? activeStyle : inactiveStyle);
+        tagBtn.setStyle(tagBtn.isSelected() ? activeStyle : inactiveStyle);
+        groupBtn.setStyle(groupBtn.isSelected() ? activeStyle : inactiveStyle);
     }
 
     private void renderByTag(List<Expense> expenses) {
         Map<String, Double> amounts = new HashMap<>();
 
         for (Expense expense : expenses) {
-            if (expense.getExpenseType()
-                    == ExpenseType.SETTLEMENT) {
+            if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
                 continue;
             }
             double amount = expense.getAmount();
             if (expense.getTags().isEmpty()) {
-                amounts.merge(UNTAGGED_LABEL, amount,
-                        Double::sum);
+                amounts.merge(UNTAGGED_LABEL, amount, Double::sum);
             } else {
                 for (var tag : expense.getTags()) {
-                    amounts.merge(tag.getTagName(), amount,
-                            Double::sum);
+                    amounts.merge(tag.getTagName(), amount, Double::sum);
                 }
             }
         }
@@ -171,8 +168,7 @@ public class PieChart {
         Map<String, Double> amounts = new HashMap<>();
 
         for (Expense expense : expenses) {
-            if (expense.getExpenseType()
-                    == ExpenseType.SETTLEMENT) {
+            if (expense.getExpenseType() == ExpenseType.SETTLEMENT) {
                 continue;
             }
             amounts.merge(
@@ -192,34 +188,41 @@ public class PieChart {
                 .mapToDouble(Double::doubleValue)
                 .sum();
 
-        amounts.forEach((label, amount) -> {
-            if (!colourMap.containsKey(label)) {
-                colourMap.put(label,
-                        FIXED_COLOURS[colourIndex
-                                % FIXED_COLOURS.length]);
-                colourIndex++;
-            }
+        if (totalAmount <= 0) {
+            pieChart.setData(pieData);
+            pieChart.setVisible(false);
+            pieChart.setManaged(false);
+            noDataLabel.setVisible(true);
+            noDataLabel.setManaged(true);
+            return;
+        }
 
-            int percentage = (int) Math.round((amount / totalAmount) * 100);
+        Map<String, String> colourMap = buildColourMap(amounts);
 
-            pieData.add(new javafx.scene.chart.PieChart.Data(
-                    label + " $"
-                            + String.format("%.0f", amount)
-                            + " (" + percentage + "%)",
-                    amount));
-        });
+        amounts.entrySet().stream()
+                .sorted(Comparator
+                        .comparingDouble((Map.Entry<String, Double> e) -> e.getValue())
+                        .reversed()
+                        .thenComparing(Map.Entry::getKey, String.CASE_INSENSITIVE_ORDER))
+                .forEach(entry -> {
+                    String label = entry.getKey();
+                    double amount = entry.getValue();
+                    int percentage = (int) Math.round((amount / totalAmount) * 100);
+
+                    pieData.add(new javafx.scene.chart.PieChart.Data(
+                            label + " $"
+                                    + String.format("%.0f", amount)
+                                    + " (" + percentage + "%)",
+                            amount));
+                });
 
         pieChart.setData(pieData);
 
         Platform.runLater(() -> {
-            for (javafx.scene.chart.PieChart.Data data
-                    : pieChart.getData()) {
-                String label = data.getName()
-                        .replaceAll(" \\$.*", "");
-                String colour = colourMap.getOrDefault(
-                        label, FIXED_COLOURS[0]);
-                data.getNode().setStyle(
-                        "-fx-pie-color: " + colour + ";");
+            for (javafx.scene.chart.PieChart.Data data : pieChart.getData()) {
+                String label = data.getName().replaceAll(" \\$.*", "");
+                String colour = colourMap.getOrDefault(label, FIXED_COLOURS[0]);
+                data.getNode().setStyle("-fx-pie-color: " + colour + ";");
             }
         });
 
@@ -228,5 +231,17 @@ public class PieChart {
         pieChart.setManaged(hasData);
         noDataLabel.setVisible(!hasData);
         noDataLabel.setManaged(!hasData);
+    }
+
+    private Map<String, String> buildColourMap(Map<String, Double> amounts) {
+        List<String> labels = amounts.keySet().stream()
+                .sorted(String.CASE_INSENSITIVE_ORDER)
+                .collect(Collectors.toList());
+
+        Map<String, String> colourMap = new HashMap<>();
+        for (int i = 0; i < labels.size(); i++) {
+            colourMap.put(labels.get(i), FIXED_COLOURS[i % FIXED_COLOURS.length]);
+        }
+        return colourMap;
     }
 }
