@@ -10,7 +10,7 @@
 <HBox xmlns:fx="http://javafx.com/fxml"
       alignment="CENTER"
       spacing="15"
-      style="-fx-background-color: #A8C4D2;
+      style="-fx-background-color: #FFFFFF;
              -fx-border-color: #E2E8F0;
              -fx-border-width: 0 0 1 0;">
     <padding>
@@ -28,31 +28,21 @@
     <VBox spacing="2"
           alignment="CENTER_LEFT">
         <Label text="FairShare"
-               style="-fx-font-size: 20;
+               style="-fx-font-size: 22;
                       -fx-font-weight: bold;
-                      -fx-text-fill: #334E6B;"/>
-        <Label text="Shared Expense Tracker"
+                      -fx-text-fill: #0F172A;"/>
+        <Label text="Shared expense tracker"
                style="-fx-font-size: 12;
-                      -fx-text-fill: rgba(15,42,68,0.7);
-                      -fx-font-style: italic;"/>
+                      -fx-text-fill: #64748B;"/>
     </VBox>
 
     <Region HBox.hgrow="ALWAYS"/>
 
     <Label text="Type 'help' for commands"
            style="-fx-font-size: 12;
-                  -fx-text-fill: rgba(15,42,68,0.7);
-                  -fx-font-style: italic;"/>
+                  -fx-text-fill: #64748B;"/>
 
     <Button fx:id="groupsButton"
-            text="Groups"
-            style="-fx-background-color: #4A8D89;
-                   -fx-text-fill: white;
-                   -fx-border-color: rgba(255,255,255,0.4);
-                   -fx-border-radius: 6;
-                   -fx-background-radius: 6;
-                   -fx-font-size: 13;
-                   -fx-font-weight: bold;
-                   -fx-cursor: hand;
-                   -fx-padding: 8 16 8 16;"/>
+            id="groupsButton"
+            text="Groups"/>
 </HBox>

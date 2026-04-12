@@ -9,6 +9,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextFlow;
 
 /**
  * A UI component that displays all debts of a single person.
@@ -45,13 +47,29 @@ public class BalanceCard {
         nameLabel.setText(personName);
 
         for (Balance balance : balances) {
-            Label debtLabel = new Label(
-                    String.format("owes $%.2f to %s",
-                            balance.getAmount(),
-                            balance.getCreditor().getName()));
-            debtLabel.setStyle(
-                    "-fx-font-size: 12; -fx-text-fill: #c62828;");
-            debtsContainer.getChildren().add(debtLabel);
+            Text owesText = new Text("owes ");
+            owesText.setStyle(
+                    "-fx-fill: #64748B;"
+                            + "-fx-font-size: 12;");
+
+            Text amountText = new Text(
+                    String.format("$%.2f", balance.getAmount()));
+            amountText.setStyle(
+                    "-fx-fill: #DC2626;"
+                            + "-fx-font-size: 12;"
+                            + "-fx-font-weight: bold;");
+
+            Text toText = new Text(
+                    " to " + balance.getCreditor().getName());
+            toText.setStyle(
+                    "-fx-fill: #475569;"
+                            + "-fx-font-size: 12;");
+
+            TextFlow debtFlow = new TextFlow(
+                    owesText, amountText, toText);
+            debtFlow.setLineSpacing(2);
+
+            debtsContainer.getChildren().add(debtFlow);
         }
     }
 

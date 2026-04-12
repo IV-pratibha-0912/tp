@@ -110,15 +110,13 @@ public class ExpenseListPanel {
                 HBox card = new ExpenseCard(
                         expense, getIndex() + 1).getRoot();
 
-                card.setOnMouseEntered(e ->
-                        card.setStyle(card.getStyle()
-                                + "-fx-effect: dropshadow(gaussian,"
-                                + "rgba(74,127,232,0.25), 12, 0, 0, 3);"));
+                String baseStyle = card.getStyle();
+                String hoverStyle = baseStyle
+                        + "-fx-effect: dropshadow(gaussian,"
+                        + "rgba(15,23,42,0.10), 22, 0, 0, 6);";
 
-                card.setOnMouseExited(e ->
-                        card.setStyle(card.getStyle()
-                                + "-fx-effect: dropshadow(gaussian,"
-                                + "rgba(74,127,232,0.12), 8, 0, 0, 2);"));
+                card.setOnMouseEntered(e -> card.setStyle(hoverStyle));
+                card.setOnMouseExited(e -> card.setStyle(baseStyle));
 
                 setGraphic(card);
                 setStyle("-fx-background-color: transparent;"

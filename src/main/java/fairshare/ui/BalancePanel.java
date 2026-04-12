@@ -72,8 +72,7 @@ public class BalancePanel {
         setBalances(groupBalances);
     }
 
-    private void setBalances(
-            Map<Group, List<Balance>> groupBalances) {
+    private void setBalances(Map<Group, List<Balance>> groupBalances) {
         balancesAccordion.getPanes().clear();
 
         if (groupBalances.isEmpty()) {
@@ -93,10 +92,7 @@ public class BalancePanel {
             balancesAccordion.getPanes().add(groupPane);
         }
 
-        if (!balancesAccordion.getPanes().isEmpty()) {
-            balancesAccordion.setExpandedPane(
-                    balancesAccordion.getPanes().get(0));
-        }
+        balancesAccordion.setExpandedPane(null);
     }
 
     /**
@@ -110,20 +106,20 @@ public class BalancePanel {
     private TitledPane createGroupPane(Group group,
                                        List<Balance> debts) {
         VBox cardContainer = new VBox(8);
-        cardContainer.setPadding(new Insets(10, 10, 10, 10));
+        cardContainer.setPadding(new Insets(8, 6, 10, 6));
         cardContainer.setStyle(
-                "-fx-background-color: #e8eef7;");
+                "-fx-background-color: transparent;");
 
         if (debts.isEmpty()) {
             Label settledLabel = new Label(
-                    "✓  All settled up!");
+                    "✓ All settled up");
             settledLabel.setStyle(
-                    "-fx-text-fill: #2e7d32;"
+                    "-fx-text-fill: #166534;"
                             + "-fx-font-size: 12;"
                             + "-fx-font-weight: bold;"
-                            + "-fx-background-color: #d0daf0;"
-                            + "-fx-background-radius: 6;"
-                            + "-fx-padding: 6 12 6 12;");
+                            + "-fx-background-color: #DCFCE7;"
+                            + "-fx-background-radius: 999;"
+                            + "-fx-padding: 8 12 8 12;");
             cardContainer.getChildren().add(settledLabel);
         } else {
             Map<String, List<Balance>> debtsByPerson =
@@ -151,9 +147,9 @@ public class BalancePanel {
 
         boolean isSettled = debts.isEmpty();
         String statusColour = isSettled
-                ? "#033500" : "#cc5500";
+                ? "#15803D" : "#D97706";
 
-        Label titleLabel = new Label(group.getGroupName().toUpperCase());
+        Label titleLabel = new Label(group.getGroupName());
         titleLabel.setStyle(
                 "-fx-font-size: 12;"
                         + "-fx-font-weight: bold;"
@@ -161,12 +157,7 @@ public class BalancePanel {
 
         groupPane.setGraphic(titleLabel);
         groupPane.setText("");
-        groupPane.setStyle(
-                "-fx-background-color: #d0daf0;"
-                        + "-fx-background-radius: 8;"
-                        + "-fx-border-color: #c5d0e8;"
-                        + "-fx-border-radius: 8;"
-                        + "-fx-border-width: 1;");
+        groupPane.setStyle("");
 
         return groupPane;
     }

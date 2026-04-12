@@ -5,44 +5,45 @@
 <?import javafx.scene.layout.VBox?>
 <HBox xmlns:fx="http://javafx.com/fxml"
       spacing="10"
-      style="-fx-background-color: #ffffff;
-             -fx-background-radius: 10;
-             -fx-border-radius: 10;
+      style="-fx-background-color: #FFFFFF;
+             -fx-background-radius: 14;
+             -fx-border-color: #E2E8F0;
+             -fx-border-radius: 14;
+             -fx-border-width: 1;
              -fx-effect: dropshadow(gaussian,
-                         rgba(74,127,232,0.12), 8, 0, 0, 2);">
+                         rgba(15,23,42,0.06), 18, 0, 0, 4);">
     <padding>
-        <Insets top="12" right="14" bottom="12" left="14"/>
+        <Insets top="14" right="16" bottom="14" left="16"/>
     </padding>
     <Label fx:id="indexLabel"
-           style="-fx-text-fill: #9aaac8;
+           style="-fx-text-fill: #94A3B8;
                   -fx-font-size: 12;"/>
-    <VBox spacing="5">
-        <HBox spacing="6" alignment="CENTER_LEFT">
+    <VBox spacing="6">
+        <HBox spacing="8" alignment="CENTER_LEFT">
             <Label fx:id="groupLabel"
-                   style="-fx-text-fill: #ffffff;
+                   style="-fx-text-fill: #0369A1;
                           -fx-font-size: 10;
                           -fx-font-weight: bold;
-                          -fx-background-color: #A8C4D2;
-                          -fx-background-radius: 20;
-                          -fx-padding: 2 10 2 10;"/>
+                          -fx-background-color: #E0F2FE;
+                          -fx-background-radius: 999;
+                          -fx-padding: 4 10 4 10;"/>
             <Label fx:id="expenseNameLabel"
-                   style="-fx-text-fill: #1a2a4a;
-                          -fx-font-size: 14;
+                   style="-fx-text-fill: #0F172A;
+                          -fx-font-size: 15;
                           -fx-font-weight: bold;"/>
         </HBox>
         <Label fx:id="amountLabel"
-               style="-fx-text-fill: #2e7d32;
-                      -fx-font-size: 13;
+               style="-fx-text-fill: #15803D;
+                      -fx-font-size: 14;
                       -fx-font-weight: bold;"/>
         <Label fx:id="payerLabel"
-               style="-fx-text-fill: #2c041d;
+               style="-fx-text-fill: #475569;
                       -fx-font-size: 12;
-                      -fx-font-style: italic;
                       -fx-font-weight: bold;"/>
         <VBox fx:id="participantsContainer" spacing="4"/>
         <Label fx:id="tagsLabel"
-               style="-fx-text-fill: #6b7fa8;
-                      -fx-font-size: 11;
-                      -fx-font-style: italic;"/>
+               style="-fx-text-fill: #64748B;
+                      -fx-font-size: 11;"
+               wrapText="true"/>
     </VBox>
 </HBox>

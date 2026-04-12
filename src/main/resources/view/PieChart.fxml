@@ -6,53 +6,38 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <VBox xmlns:fx="http://javafx.com/fxml"
-      style="-fx-background-color: #f0f4fc;">
+      style="-fx-background-color: transparent;">
 
     <HBox spacing="8" alignment="CENTER_LEFT">
         <padding>
-            <Insets top="12" right="12" bottom="0" left="15"/>
+            <Insets top="12" right="14" bottom="0" left="15"/>
         </padding>
         <Label text="Spending by"
                style="-fx-font-size: 15;
                       -fx-font-weight: bold;
-                      -fx-text-fill: #1a2a4a;"/>
+                      -fx-text-fill: #0F172A;"/>
         <ToggleButton fx:id="byTagButton"
                       text="Tag"
-                      selected="true"
-                      style="-fx-font-size: 11;
-                             -fx-background-color: #A8C4D2;
-                             -fx-text-fill: white;
-                             -fx-background-radius: 20;
-                             -fx-border-radius: 20;
-                             -fx-cursor: hand;
-                             -fx-padding: 2 10 2 10;"/>
+                      selected="true"/>
         <ToggleButton fx:id="byGroupButton"
-                      text="Group"
-                      style="-fx-font-size: 11;
-                             -fx-background-color: #e8eef7;
-                             -fx-text-fill: #A8C4D2;
-                             -fx-background-radius: 20;
-                             -fx-border-color: #c5d0e8;
-                             -fx-border-radius: 20;
-                             -fx-cursor: hand;
-                             -fx-padding: 2 10 2 10;"/>
+                      text="Group"/>
     </HBox>
 
     <PieChart fx:id="pieChart"
               labelsVisible="true"
               legendVisible="false"
-              prefHeight="200"
+              prefHeight="220"
               animated="true"
               style="-fx-background-color: transparent;
                      -fx-border-color: transparent;"/>
 
     <Label fx:id="noDataLabel"
            text="No expenses yet"
-           style="-fx-text-fill: #6b7fa8;
+           style="-fx-text-fill: #64748B;
                   -fx-font-size: 12;
                   -fx-font-style: italic;">
         <padding>
-            <Insets top="0" right="0" bottom="8" left="15"/>
+            <Insets top="0" right="0" bottom="10" left="15"/>
         </padding>
     </Label>
 

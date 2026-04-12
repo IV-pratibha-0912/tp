@@ -108,7 +108,11 @@ public class HelpWindow {
             helpStage = new Stage();
             helpStage.getIcons().add(helpIcon);
             helpStage.setTitle(TITLE);
-            helpStage.setScene(new Scene(root, WIDTH, HEIGHT));
+            Scene scene = new Scene(root, WIDTH, HEIGHT);
+            scene.getStylesheets().add(
+                    getClass().getResource("/view/styles.css")
+                            .toExternalForm());
+            helpStage.setScene(scene);
             helpStage.initModality(Modality.NONE);
         } catch (IOException e) {
             throw new UiException("Failed to load " + FXML, e);

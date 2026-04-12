@@ -4,35 +4,38 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.layout.VBox?>
+
 <VBox xmlns:fx="http://javafx.com/fxml"
-      style="-fx-background-color: #e8eef7;">
+      minHeight="0.0"
+      style="-fx-background-color: #F8FAFC;">
 
     <Label text="Balances"
-           style="-fx-font-size: 15;
+           style="-fx-font-size: 16;
                   -fx-font-weight: bold;
-                  -fx-text-fill: #1a2a4a;">
+                  -fx-text-fill: #0F172A;">
         <padding>
-            <Insets top="12" right="0" bottom="6" left="15"/>
+            <Insets top="14" right="0" bottom="8" left="15"/>
         </padding>
     </Label>
 
     <ScrollPane VBox.vgrow="ALWAYS"
+                minHeight="0.0"
+                prefHeight="0.0"
                 fitToWidth="true"
-                style="-fx-background-color: #e8eef7;
-                       -fx-background: #e8eef7;
+                style="-fx-background-color: transparent;
+                       -fx-background: transparent;
                        -fx-border-color: transparent;">
         <Accordion fx:id="balancesAccordion"
-                   style="-fx-background-color: #e8eef7;
+                   style="-fx-background-color: transparent;
                           -fx-border-color: transparent;
                           -fx-focus-color: transparent;
                           -fx-faint-focus-color: transparent;"/>
     </ScrollPane>
 
     <Label fx:id="emptyStateLabel"
-           text="All settled up! 🎉"
-           style="-fx-text-fill: #6b7fa8;
-                  -fx-font-size: 13;
-                  -fx-font-style: italic;"
+           text="Everything is settled."
+           style="-fx-text-fill: #64748B;
+                  -fx-font-size: 13;"
            wrapText="true">
         <padding>
             <Insets top="10" left="15"/>
