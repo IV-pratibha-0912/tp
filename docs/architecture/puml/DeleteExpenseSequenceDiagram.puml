@@ -3,21 +3,31 @@
 skinparam ArrowFontStyle plain
 
 Actor User as user
+
 box UI UI_COLOR_1
 participant ":MainWindow" as MainWindow UI_COLOR
+participant ":ResultDisplay" as ResultDisplay UI_COLOR
+participant ":BalancePanel" as BalancePanel UI_COLOR
+participant ":PieChart" as PieChart UI_COLOR
+participant ":StatusBar" as StatusBar UI_COLOR
+participant ":InsightsWindow" as InsightsWindow UI_COLOR
 end box
 
 box Logic LOGIC_COLOR_1
 participant ":LogicManager" as LogicManager LOGIC_COLOR
-participant ":ExpenseTrackerParser" as ExpenseTrackerParser LOGIC_COLOR
-participant ":DeleteExpenseCommandParser" as DeleteExpenseCommandParser LOGIC_COLOR
-participant "d:DeleteExpenseCommand" as DeleteExpenseCommand LOGIC_COLOR
+participant ":FairShareParser" as FairShareParser LOGIC_COLOR
+participant ":DeleteCommandParser" as DeleteCommandParser LOGIC_COLOR
+participant "d:DeleteCommand" as DeleteCommand LOGIC_COLOR
 participant "r:CommandResult" as CommandResult LOGIC_COLOR
 end box
 
 box Model MODEL_COLOR_1
 participant "m:Model" as Model MODEL_COLOR
-participant "<<utility>>\n:DebtCalculator" as DebtCalculator MODEL_COLOR
+participant "<<utility>>\n:BalanceCalculator" as BalanceCalculator MODEL_COLOR
+end box
+
+box Storage STORAGE_COLOR_1
+participant "s:Storage" as Storage STORAGE_COLOR
 end box
 
 user -> MainWindow : inputs "delete 1"
@@ -26,61 +36,117 @@ activate MainWindow
 MainWindow -> LogicManager : execute("delete 1")
 activate LogicManager
 
-LogicManager -> ExpenseTrackerParser : parseCommand("delete 1")
-activate ExpenseTrackerParser
+LogicManager -> FairShareParser : parseCommand("delete 1")
+activate FairShareParser
 
-create DeleteExpenseCommandParser
-ExpenseTrackerParser -> DeleteExpenseCommandParser
-activate DeleteExpenseCommandParser
+create DeleteCommandParser
+FairShareParser -> DeleteCommandParser : new
+activate DeleteCommandParser
 
-DeleteExpenseCommandParser --> ExpenseTrackerParser
-deactivate DeleteExpenseCommandParser
+FairShareParser -> DeleteCommandParser : parse("1")
 
-ExpenseTrackerParser -> DeleteExpenseCommandParser : parse("1")
-activate DeleteExpenseCommandParser
+create DeleteCommand
+DeleteCommandParser -> DeleteCommand : new(expenseIndex)
+activate DeleteCommand
 
-create DeleteExpenseCommand
-DeleteExpenseCommandParser -> DeleteExpenseCommand
-activate DeleteExpenseCommand
+DeleteCommand --> DeleteCommandParser : d
+deactivate DeleteCommand
 
-DeleteExpenseCommand --> DeleteExpenseCommandParser : d
-deactivate DeleteExpenseCommand
+DeleteCommandParser --> FairShareParser : d
+deactivate DeleteCommandParser
+destroy DeleteCommandParser
 
-DeleteExpenseCommandParser --> ExpenseTrackerParser : d
-deactivate DeleteExpenseCommandParser
-destroy DeleteExpenseCommandParser
+FairShareParser --> LogicManager : d
+deactivate FairShareParser
 
-ExpenseTrackerParser --> LogicManager : d
-deactivate ExpenseTrackerParser
+LogicManager -> DeleteCommand : execute(m)
+activate DeleteCommand
 
-LogicManager -> DeleteExpenseCommand : execute(m)
-activate DeleteExpenseCommand
-
-DeleteExpenseCommand -> Model : deleteExpense(targetIndex)
+DeleteCommand -> Model : getFilteredExpenseList()
 activate Model
+Model --> DeleteCommand : displayedExpenses
+deactivate Model
 
-Model -> DebtCalculator : calculate(remainingExpenses)
-activate DebtCalculator
-DebtCalculator --> Model : updatedBalances
-deactivate DebtCalculator
-
-Model --> DeleteExpenseCommand
+DeleteCommand -> Model : deleteExpense(expenseToDelete)
+activate Model
+Model --> DeleteCommand
 deactivate Model
 
 create CommandResult
-DeleteExpenseCommand -> CommandResult
+DeleteCommand -> CommandResult : new("Deleted expense...", false, false)
 activate CommandResult
-
-CommandResult --> DeleteExpenseCommand
+CommandResult --> DeleteCommand : r
 deactivate CommandResult
 
-DeleteExpenseCommand --> LogicManager : r
-deactivate DeleteExpenseCommand
+DeleteCommand --> LogicManager : r
+deactivate DeleteCommand
+
+LogicManager -> Model : getExpenseList()
+activate Model
+Model --> LogicManager : expenses
+deactivate Model
+
+LogicManager -> Storage : saveFairShare(expenses)
+activate Storage
+Storage --> LogicManager
+deactivate Storage
 
 LogicManager --> MainWindow : r
 deactivate LogicManager
 
-MainWindow --> user : displays "expense deleted"
-deactivate MainWindow
+MainWindow -> ResultDisplay : setFeedbackToUser(r.getResponse())
 
+MainWindow -> LogicManager : calculateBalances()
+activate LogicManager
+LogicManager -> Model : calculateBalances()
+activate Model
+Model -> BalanceCalculator : calculate(filteredExpenses)
+activate BalanceCalculator
+BalanceCalculator --> Model : groupBalances
+deactivate BalanceCalculator
+Model --> LogicManager : groupBalances
+deactivate Model
+LogicManager --> MainWindow : groupBalances
+deactivate LogicManager
+
+MainWindow -> BalancePanel : refresh(groupBalances)
+
+MainWindow -> LogicManager : getFilteredExpenseList()
+activate LogicManager
+LogicManager -> Model : getFilteredExpenseList()
+activate Model
+Model --> LogicManager : filteredExpenses
+deactivate Model
+LogicManager --> MainWindow : filteredExpenses
+deactivate LogicManager
+
+MainWindow -> PieChart : refresh(filteredExpenses)
+MainWindow -> StatusBar : refresh(filteredExpenses)
+
+MainWindow -> LogicManager : getExpenseList()
+activate LogicManager
+LogicManager -> Model : getExpenseList()
+activate Model
+Model --> LogicManager : allExpenses
+deactivate Model
+LogicManager --> MainWindow : allExpenses
+deactivate LogicManager
+
+MainWindow -> LogicManager : calculateAllBalances()
+activate LogicManager
+LogicManager -> Model : calculateAllBalances()
+activate Model
+Model -> BalanceCalculator : calculate(allExpenses)
+activate BalanceCalculator
+BalanceCalculator --> Model : allGroupBalances
+deactivate BalanceCalculator
+Model --> LogicManager : allGroupBalances
+deactivate Model
+LogicManager --> MainWindow : allGroupBalances
+deactivate LogicManager
+
+MainWindow -> InsightsWindow : refreshIfShowing(allExpenses, allGroupBalances)
+
+MainWindow --> user : shows updated expenses and balances
+deactivate MainWindow
 @enduml

@@ -3,8 +3,14 @@
 skinparam ArrowFontStyle plain
 
 Actor User as user
+
 box UI UI_COLOR_1
 participant ":MainWindow" as MainWindow UI_COLOR
+participant ":ResultDisplay" as ResultDisplay UI_COLOR
+participant ":BalancePanel" as BalancePanel UI_COLOR
+participant ":PieChart" as PieChart UI_COLOR
+participant ":StatusBar" as StatusBar UI_COLOR
+participant ":InsightsWindow" as InsightsWindow UI_COLOR
 end box
 
 box Logic LOGIC_COLOR_1
@@ -17,30 +23,30 @@ end box
 
 box Model MODEL_COLOR_1
 participant "m:Model" as Model MODEL_COLOR
-participant "<<utility>>\n:DebtCalculator" as DebtCalculator MODEL_COLOR
+participant "<<utility>>\n:BalanceCalculator" as BalanceCalculator MODEL_COLOR
 end box
 
-user -> MainWindow : inputs "add n/Lunch a/20"
+box Storage STORAGE_COLOR_1
+participant "s:Storage" as Storage STORAGE_COLOR
+end box
+
+user -> MainWindow : inputs "add n/Lunch a/20 g/JB p/alice s/alice s/bob"
 activate MainWindow
 
-MainWindow -> LogicManager : execute("add n/Lunch a/20")
+MainWindow -> LogicManager : execute("add ...")
 activate LogicManager
 
-LogicManager -> FairShareParser : parseCommand("add n/Lunch a/20")
+LogicManager -> FairShareParser : parseCommand("add ...")
 activate FairShareParser
 
 create AddCommandParser
-FairShareParser -> AddCommandParser
+FairShareParser -> AddCommandParser : new
 activate AddCommandParser
 
-AddCommandParser --> FairShareParser
-deactivate AddCommandParser
-
-FairShareParser -> AddCommandParser : parse("n/Lunch a/20")
-activate AddCommandParser
+FairShareParser -> AddCommandParser : parse("n/Lunch a/20 g/JB p/alice s/alice s/bob")
 
 create AddCommand
-AddCommandParser -> AddCommand
+AddCommandParser -> AddCommand : new(expense)
 activate AddCommand
 
 AddCommand --> AddCommandParser : a
@@ -58,29 +64,84 @@ activate AddCommand
 
 AddCommand -> Model : addExpense(expense)
 activate Model
-
-Model -> DebtCalculator : calculate(allExpenses)
-activate DebtCalculator
-DebtCalculator --> Model : balances
-deactivate DebtCalculator
-
 Model --> AddCommand
 deactivate Model
 
 create CommandResult
-AddCommand -> CommandResult
+AddCommand -> CommandResult : new("New expense added...", false, false)
 activate CommandResult
-
-CommandResult --> AddCommand
+CommandResult --> AddCommand : r
 deactivate CommandResult
 
 AddCommand --> LogicManager : r
 deactivate AddCommand
 
+LogicManager -> Model : getExpenseList()
+activate Model
+Model --> LogicManager : expenses
+deactivate Model
+
+LogicManager -> Storage : saveFairShare(expenses)
+activate Storage
+Storage --> LogicManager
+deactivate Storage
+
 LogicManager --> MainWindow : r
 deactivate LogicManager
 
-MainWindow --> user : displays "expense added"
-deactivate MainWindow
+MainWindow -> ResultDisplay : setFeedbackToUser(r.getResponse())
 
+MainWindow -> LogicManager : calculateBalances()
+activate LogicManager
+LogicManager -> Model : calculateBalances()
+activate Model
+Model -> BalanceCalculator : calculate(filteredExpenses)
+activate BalanceCalculator
+BalanceCalculator --> Model : groupBalances
+deactivate BalanceCalculator
+Model --> LogicManager : groupBalances
+deactivate Model
+LogicManager --> MainWindow : groupBalances
+deactivate LogicManager
+
+MainWindow -> BalancePanel : refresh(groupBalances)
+
+MainWindow -> LogicManager : getFilteredExpenseList()
+activate LogicManager
+LogicManager -> Model : getFilteredExpenseList()
+activate Model
+Model --> LogicManager : filteredExpenses
+deactivate Model
+LogicManager --> MainWindow : filteredExpenses
+deactivate LogicManager
+
+MainWindow -> PieChart : refresh(filteredExpenses)
+MainWindow -> StatusBar : refresh(filteredExpenses)
+
+MainWindow -> LogicManager : getExpenseList()
+activate LogicManager
+LogicManager -> Model : getExpenseList()
+activate Model
+Model --> LogicManager : allExpenses
+deactivate Model
+LogicManager --> MainWindow : allExpenses
+deactivate LogicManager
+
+MainWindow -> LogicManager : calculateAllBalances()
+activate LogicManager
+LogicManager -> Model : calculateAllBalances()
+activate Model
+Model -> BalanceCalculator : calculate(allExpenses)
+activate BalanceCalculator
+BalanceCalculator --> Model : allGroupBalances
+deactivate BalanceCalculator
+Model --> LogicManager : allGroupBalances
+deactivate Model
+LogicManager --> MainWindow : allGroupBalances
+deactivate LogicManager
+
+MainWindow -> InsightsWindow : refreshIfShowing(allExpenses, allGroupBalances)
+
+MainWindow --> user : shows updated expenses and balances
+deactivate MainWindow
 @enduml
