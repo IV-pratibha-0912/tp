@@ -3,6 +3,7 @@
 skinparam ArrowFontStyle plain
 
 Actor User as user
+
 box UI UI_COLOR_1
 participant ":MainWindow" as MainWindow UI_COLOR
 end box
@@ -17,30 +18,26 @@ end box
 
 box Model MODEL_COLOR_1
 participant "m:Model" as Model MODEL_COLOR
-participant "<<utility>>\n:DebtCalculator" as DebtCalculator MODEL_COLOR
 end box
 
-user -> MainWindow : inputs "add n/Lunch a/20"
+user -> MainWindow : inputs "add n/Lunch a/20 ..."
 activate MainWindow
 
-MainWindow -> LogicManager : execute("add n/Lunch a/20")
+MainWindow -> LogicManager : execute("add ...")
 activate LogicManager
 
-LogicManager -> FairShareParser : parseCommand("add n/Lunch a/20")
+LogicManager -> FairShareParser : parseCommand("add ...")
 activate FairShareParser
 
 create AddCommandParser
-FairShareParser -> AddCommandParser
+FairShareParser -> AddCommandParser : new
 activate AddCommandParser
 
-AddCommandParser --> FairShareParser
-deactivate AddCommandParser
-
-FairShareParser -> AddCommandParser : parse("n/Lunch a/20")
-activate AddCommandParser
+FairShareParser -> AddCommandParser : parse(args)
+AddCommandParser -> AddCommandParser : tokenize and parse fields
 
 create AddCommand
-AddCommandParser -> AddCommand
+AddCommandParser -> AddCommand : new(expense)
 activate AddCommand
 
 AddCommand --> AddCommandParser : a
@@ -58,20 +55,13 @@ activate AddCommand
 
 AddCommand -> Model : addExpense(expense)
 activate Model
-
-Model -> DebtCalculator : calculate(allExpenses)
-activate DebtCalculator
-DebtCalculator --> Model : balances
-deactivate DebtCalculator
-
 Model --> AddCommand
 deactivate Model
 
 create CommandResult
-AddCommand -> CommandResult
+AddCommand -> CommandResult : new("New expense added...", false, false)
 activate CommandResult
-
-CommandResult --> AddCommand
+CommandResult --> AddCommand : r
 deactivate CommandResult
 
 AddCommand --> LogicManager : r
@@ -80,7 +70,6 @@ deactivate AddCommand
 LogicManager --> MainWindow : r
 deactivate LogicManager
 
-MainWindow --> user : displays "expense added"
+MainWindow --> user : displays "New expense added..."
 deactivate MainWindow
-
 @enduml

@@ -1,42 +1,45 @@
 @startuml
 !include style.puml
+skinparam linetype ortho
 skinparam arrowThickness 1.1
-skinparam arrowColor STORAGE_COLOR
+skinparam arrowColor STORAGE_COLOR_4
 skinparam classBackgroundColor STORAGE_COLOR
-skinparam nodesep 60
-skinparam ranksep 60
-
-package Storage as StoragePackage {
-
-    Class "<<interface>>\nStorage" as Storage
-    Class StorageManager
-
-    package "FairShare Storage" #F4F6F6 {
-        Class "<<interface>>\nFairShareStorage" as FairShareStorage
-        Class TxtFairShareStorage
-        Class TxtSerializableFairShare
-        Class TxtAdaptedExpense
-        Class TxtAdaptedPerson
-        Class TxtAdaptedTag
-        Class TxtAdaptedParticipant
-    }
-}
+skinparam nodesep 50
+skinparam ranksep 50
 
 Class HiddenOutside #FFFFFF
-HiddenOutside -down..> Storage
 
-StorageManager .up.|> Storage
-Storage -right-|> FairShareStorage
+package Storage as StoragePackage <<Rectangle>> {
+    interface "<<interface>>\nFairShareStorage" as FairShareStorage
+    interface "<<interface>>\nStorage" as Storage
 
-StorageManager -down-> "1" FairShareStorage
+    class StorageManager
+    class TxtFairShareStorage
+    class TxtSerializableFairShare
+    class TxtAdaptedExpense
+    class TxtAdaptedGroup
+    class TxtAdaptedPerson
+    class TxtAdaptedParticipant
+    class TxtAdaptedTag
 
-TxtFairShareStorage .up.|> FairShareStorage
+    HiddenOutside .down.> Storage
 
-TxtFairShareStorage ..> TxtSerializableFairShare
-TxtSerializableFairShare *-down-> "*" TxtAdaptedExpense
-TxtAdaptedExpense *-down-> "1" TxtAdaptedPerson : payer >
-TxtAdaptedExpense *-down-> "*" TxtAdaptedParticipant : participants >
-TxtAdaptedExpense *-down-> "*" TxtAdaptedTag : tags >
-TxtAdaptedParticipant *-down-> "1" TxtAdaptedPerson : person >
+    Storage -up-|> FairShareStorage
+
+    StorageManager .up.|> Storage
+    StorageManager -right-> "1" FairShareStorage
+
+    TxtFairShareStorage .up.|> FairShareStorage
+    TxtFairShareStorage .down.> TxtSerializableFairShare : load/save >
+
+    TxtSerializableFairShare *-down-> "*" TxtAdaptedExpense
+
+    TxtAdaptedExpense *-left-> "1" TxtAdaptedGroup : group
+    TxtAdaptedExpense *-right-> "*" TxtAdaptedTag : tags
+    TxtAdaptedExpense *-down-> "*" TxtAdaptedParticipant : participants
+    TxtAdaptedExpense *-down-> "1" TxtAdaptedPerson : payer
+
+    TxtAdaptedParticipant *-right-> "1" TxtAdaptedPerson : person
+}
 
 @enduml

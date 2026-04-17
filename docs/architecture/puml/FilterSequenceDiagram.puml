@@ -1,0 +1,83 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+Actor User as user
+
+box UI UI_COLOR_1
+participant ":MainWindow" as MainWindow UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":FairShareParser" as FairShareParser LOGIC_COLOR
+participant ":FilterCommandParser" as FilterCommandParser LOGIC_COLOR
+participant "f:FilterCommand" as FilterCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+user -> MainWindow : inputs "filter g/JB p/alice"
+activate MainWindow
+
+MainWindow -> LogicManager : execute("filter ...")
+activate LogicManager
+
+LogicManager -> FairShareParser : parseCommand("filter ...")
+activate FairShareParser
+
+create FilterCommandParser
+FairShareParser -> FilterCommandParser : new
+activate FilterCommandParser
+
+FairShareParser -> FilterCommandParser : parse(args)
+FilterCommandParser -> FilterCommandParser : tokenize optional filter fields
+FilterCommandParser -> FilterCommandParser : compose predicate from supplied prefixes
+
+create FilterCommand
+FilterCommandParser -> FilterCommand : new(predicate)
+activate FilterCommand
+
+FilterCommand --> FilterCommandParser : f
+deactivate FilterCommand
+
+FilterCommandParser --> FairShareParser : f
+deactivate FilterCommandParser
+destroy FilterCommandParser
+
+FairShareParser --> LogicManager : f
+deactivate FairShareParser
+
+LogicManager -> FilterCommand : execute(m)
+activate FilterCommand
+
+FilterCommand -> Model : filterExpenses(predicate)
+activate Model
+Model --> FilterCommand
+deactivate Model
+
+FilterCommand -> Model : getFilteredExpenseList()
+activate Model
+Model --> FilterCommand : filteredExpenses
+deactivate Model
+
+FilterCommand -> FilterCommand : build response message
+
+create CommandResult
+FilterCommand -> CommandResult : new(response, false, false)
+activate CommandResult
+CommandResult --> FilterCommand : r
+deactivate CommandResult
+
+FilterCommand --> LogicManager : r
+deactivate FilterCommand
+
+LogicManager --> MainWindow : r
+deactivate LogicManager
+
+MainWindow --> user : displays filter result
+deactivate MainWindow
+@enduml

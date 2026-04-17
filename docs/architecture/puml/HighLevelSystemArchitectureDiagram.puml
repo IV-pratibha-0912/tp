@@ -6,7 +6,7 @@ skinparam componentStyle rectangle
 skinparam nodesep 80
 skinparam ranksep 80
 
-Package "Shared Expense Tracker" <<Rectangle>> {
+Package "FairShare" <<Rectangle>> {
     Component UI UI_COLOR
     Component Logic LOGIC_COLOR
     Component Storage STORAGE_COLOR

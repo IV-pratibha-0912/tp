@@ -3,6 +3,7 @@
 skinparam ArrowFontStyle plain
 
 Actor User as user
+
 box UI UI_COLOR_1
 participant ":MainWindow" as MainWindow UI_COLOR
 end box
@@ -17,7 +18,6 @@ end box
 
 box Model MODEL_COLOR_1
 participant "m:Model" as Model MODEL_COLOR
-participant "<<utility>>\n:DebtCalculator" as DebtCalculator MODEL_COLOR
 end box
 
 user -> MainWindow : inputs "update 1 a/50.0"
@@ -30,17 +30,15 @@ LogicManager -> FairShareParser : parseCommand("update 1 a/50.0")
 activate FairShareParser
 
 create UpdateCommandParser
-FairShareParser -> UpdateCommandParser
+FairShareParser -> UpdateCommandParser : new
 activate UpdateCommandParser
 
-UpdateCommandParser --> FairShareParser
-deactivate UpdateCommandParser
-
-FairShareParser -> UpdateCommandParser : parse("1 a/50.0")
-activate UpdateCommandParser
+FairShareParser -> UpdateCommandParser : parse(args)
+UpdateCommandParser -> UpdateCommandParser : split expense id from update fields
+UpdateCommandParser -> UpdateCommandParser : parse valid prefixes into UpdateFields
 
 create UpdateCommand
-UpdateCommandParser -> UpdateCommand
+UpdateCommandParser -> UpdateCommand : new(expenseIndex, updateFields)
 activate UpdateCommand
 
 UpdateCommand --> UpdateCommandParser : u
@@ -58,27 +56,27 @@ activate UpdateCommand
 
 UpdateCommand -> Model : getFilteredExpenseList()
 activate Model
-Model --> UpdateCommand : expenseList
+Model --> UpdateCommand : filteredExpenses
 deactivate Model
 
-UpdateCommand -> UpdateCommand : createUpdatedExpense()
+UpdateCommand -> UpdateCommand : retrieve target expense
+alt targetExpense is a settlement
+    UpdateCommand -> UpdateCommand : validate settlement fields
+    UpdateCommand -> UpdateCommand : create updated settlement
+else targetExpense is a regular expense
+    UpdateCommand -> UpdateCommand : validate expense fields
+    UpdateCommand -> UpdateCommand : create updated expense
+end
 
-UpdateCommand -> Model : updateExpense(target, updated)
+UpdateCommand -> Model : updateExpense(targetExpense,\nupdatedExpense)
 activate Model
-
-Model -> DebtCalculator : calculate(allExpenses)
-activate DebtCalculator
-DebtCalculator --> Model : balances
-deactivate DebtCalculator
-
 Model --> UpdateCommand
 deactivate Model
 
 create CommandResult
-UpdateCommand -> CommandResult
+UpdateCommand -> CommandResult : new("Update success", false, false)
 activate CommandResult
-
-CommandResult --> UpdateCommand
+CommandResult --> UpdateCommand : r
 deactivate CommandResult
 
 UpdateCommand --> LogicManager : r
@@ -89,5 +87,4 @@ deactivate LogicManager
 
 MainWindow --> user : displays "Update success"
 deactivate MainWindow
-
 @enduml

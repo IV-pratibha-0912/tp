@@ -1,0 +1,63 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+Actor User as user
+
+box UI UI_COLOR_1
+participant ":MainWindow" as MainWindow UI_COLOR
+end box
+
+box Logic LOGIC_COLOR_1
+participant ":LogicManager" as LogicManager LOGIC_COLOR
+participant ":FairShareParser" as FairShareParser LOGIC_COLOR
+participant "c:ClearCommand" as ClearCommand LOGIC_COLOR
+participant "r:CommandResult" as CommandResult LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_1
+participant "m:Model" as Model MODEL_COLOR
+end box
+
+user -> MainWindow : inputs "clear"
+activate MainWindow
+
+MainWindow -> LogicManager : execute("clear")
+activate LogicManager
+
+LogicManager -> FairShareParser : parseCommand("clear")
+activate FairShareParser
+
+create ClearCommand
+FairShareParser -> ClearCommand : new
+activate ClearCommand
+
+ClearCommand --> FairShareParser : c
+deactivate ClearCommand
+
+FairShareParser --> LogicManager : c
+deactivate FairShareParser
+
+LogicManager -> ClearCommand : execute(m)
+activate ClearCommand
+
+ClearCommand -> Model : clearExpenseList()
+activate Model
+Model --> ClearCommand
+deactivate Model
+
+create CommandResult
+ClearCommand -> CommandResult : new("Expense list cleared successfully.", false, false)
+activate CommandResult
+CommandResult --> ClearCommand : r
+deactivate CommandResult
+
+ClearCommand --> LogicManager : r
+deactivate ClearCommand
+
+LogicManager --> MainWindow : r
+deactivate LogicManager
+
+MainWindow --> user : displays "Expense list cleared successfully."
+deactivate MainWindow
+@enduml

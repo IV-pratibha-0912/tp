@@ -14,7 +14,7 @@ skinparam Component {
     FontColor #000000
 }
 
-Package "Shared Expense Tracker" <<Rectangle>> {
+Package "FairShare" <<Rectangle>> {
     Component UI #83E769
     Component Logic #C8C8FA
     Component Storage #FFE374

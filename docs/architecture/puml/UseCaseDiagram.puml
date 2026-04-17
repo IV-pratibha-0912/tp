@@ -25,7 +25,7 @@ skinparam rectangle {
 actor User as U
 actor System as S
 
-rectangle "Shared Expense Tracker" {
+rectangle "FairShare" {
     usecase "Add Expense" as UC1
     usecase "Delete Expense" as UC2
     usecase "List All Expenses" as UC3
