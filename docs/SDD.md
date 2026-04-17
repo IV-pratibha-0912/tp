@@ -35,9 +35,9 @@ It targets friend groups, housemates and small teams who need to split costs wit
 - Update existing expenses without deleting and recreating them
 - Automatically calculate how much each member owes using a debt simplification algorithm
 - View a simplified balance summary showing who owes whom and how much
-- Filter expenses by name, payer, participant or tag
+- Filter expenses by name, payer, participant, tag or group
 - Settle debts between two members using the settle command
-- View a spending breakdown by tag as a pie chart
+- View a spending breakdown by tag or group as a pie chart
 - View all groups categorised as Active or Settled in a popup window
 - Persist all expense data locally between sessions
 - Access a help window listing all available commands
@@ -79,14 +79,14 @@ against the `Model`.
 Built with JavaFX and FXML. Each component loads its own `.fxml` file using `FXMLLoader` with `setController(this)` — no `fx:controller`attribute is used in any FXML file.
 
 - `MainWindow` — root window, implements `Ui`, holds all sub-panels and wires them together. Refreshes all panels after every command.
-- `Header` — displays the app logo, name, subtitle and a Groups button that opens the `GroupWindow`
+- `Header` — displays the app logo, name, subtitle and a Insights button that opens the `InsightsWindow`
 - `ExpenseListPanel` — displays the filtered expense list as cards. Shows an empty state message when no expenses exist.
 - `ExpenseCard` — renders a single expense's details including group badge, expense name, amount, payer, participant chips showing percentage and dollar amount, and tags. Colour coded by expense type and amount.
-- `BalancePanel` — displays the simplified debt summary as cards with a "Who Owes What" section header
-- `BalanceCard` — renders a single balance entry showing all debts for one person
-- `TagPieChart` — displays a pie chart showing spending breakdown by tag, excluding settlements. Shows a "No expenses yet" label when empty.
+- `BalancePanel` — displays the simplified debt summary as group cards with a "Who Owes What" section header
+- `BalanceCard` — renders a single balance entry showing all debts for one group
+- `PieChart` — displays a pie chart showing spending breakdown by tag or group, excluding settlements. Shows a "No expenses yet" label when empty.
 - `StatusBar` — displays total expense count and total amount, excluding settlements, at the bottom of the expense list
-- `GroupWindow` — a separate popup window showing all groups categorised as Active (outstanding balances) or Settled (all balances cleared). Refreshes automatically if open when a command is executed.
+- `InsightsWindow` — a separate popup window showing all groups categorised as Active (outstanding balances) or Settled (all balances cleared). Refreshes automatically if open when a command is executed.
 - `ResultDisplay` — shows command feedback messages in a monospace font with a blue left border
 - `CommandBox` — accepts user text input, executes on Enter key or Send button click
 - `HelpWindow` — separate popup window listing all available commands
@@ -142,8 +142,7 @@ The sequence diagram above illustrates the flow when a user types
 7. `Model` calls `BalanceCalculator.calculate()` to recompute balances
 8. `LogicManager` calls `saveFairShare()` on `Storage`
 9. `MainWindow` refreshes `ExpenseListPanel`, `BalancePanel`
-   (grouped by group), `PieChart`, `StatusBar` and `GroupWindow`
-   (if open)
+   (grouped by group), `PieChart`, `StatusBar` and `InsightsWindow`(if open)
 
 **Delete Expense:**
 ![Delete Expense Sequence Diagram](architecture/DeleteExpenseSequenceDiagram.png)
@@ -190,7 +189,7 @@ the system in the current implementation.
 - List all expenses
 - Filter expenses by group, name, payer, participant or tag
 - View the balance summary showing who owes whom
-- View spending breakdown by tag in the pie chart
+- View spending breakdown by tag or group in the pie chart
 - View all groups categorised as Active or Settled
 - Open the help window to view all available commands
 
@@ -311,7 +310,7 @@ The following UI components were tested manually:
 - Pie chart toggles correctly between tag and group views
   and updates after every command
 - Status bar shows correct expense count and total
-- Groups window shows correct active and settled groups
+- Insights window shows correct active and settled groups
 
 **Functionality:**
 - Adding an expense updates the expense list, balance panel,
@@ -323,12 +322,12 @@ The following UI components were tested manually:
   correctly
 - Running `list` after a filter restores all expenses
 - Empty state message appears when expense list is empty
-- Balance panel empty state appears when all debts are settled
-- Groups window active and settled categorisation is correct
+- Balance panel empty state appears when all debts are settled 
+- Insights window 'active' and 'settled' categorisation is correct
 - Help window displays all available commands correctly
 - Startup message displays on first launch
 - Escape key clears the command box
-- Groups window refreshes automatically when open
+- Insights window refreshes automatically when open
 
 **Edge Cases Tested:**
 - Corrupted data file on startup shows warning message and
