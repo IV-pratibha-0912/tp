@@ -28,8 +28,8 @@ interfaces and their interactions.
 - `getFilteredExpenseList()` — Returns `ObservableList<Expense>`.
   Provides the current filtered expense list for the UI.
 - `getExpenseList()` — Returns `List<Expense>`. Provides the full
-  unfiltered expense list used by `TagPieChart`, `StatusBar` and
-  `GroupWindow`.
+  unfiltered expense list used by `PieChart`, `StatusBar` and
+  `InsightsWindow`.
 - `calculateBalances()` — Returns `Map<Group, List<Balance>>`.
   Returns the simplified debt settlement list grouped by group,
   used by BalancePanel and GroupWindow.
@@ -93,19 +93,20 @@ interfaces and their interactions.
   tag view and group view. Uses fixed colours per label so
   colours do not change on refresh. Excludes settlements.
   Shows a no-data label when empty.
+
 **`StatusBar`**
 - `refresh(List<Expense> expenses)` — Updates the expense count and
   total amount. Excludes settlements.
 
-**`GroupWindow`**
+**`InsightsWindow`**
 - `show(List<Expense> expenses, List<Balance> balances)` — Opens
-  the group window and refreshes its content.
+  the insights window and refreshes its content.
 - `refreshIfShowing(List<Expense> expenses, List<Balance> balances)`
-  — Refreshes the group window only if it is currently open.
+  — Refreshes the insights window only if it is currently open.
 
 **`Header`**
 - `setOnGroupsClicked(Runnable handler)` — Sets the handler called
-  when the Groups button is clicked.
+  when the Insights button is clicked.
 
 ## 5. Custom Exceptions
 - `ParseException` — thrown when user input cannot be parsed into a
