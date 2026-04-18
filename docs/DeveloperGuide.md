@@ -12,7 +12,7 @@
     - [Storage](#storage)
 - [Key Implementation Details](#key-implementation-details)
     - [Command Flow](#command-flow)
-    - [Splits, Filters, and Validation](#splits-filters-and-validation)
+    - [Expense Splits and Filter Logic](#expense-splits-and-filter-logic)
     - [Balance Calculation](#balance-calculation)
     - [Settlements as Expenses](#settlements-as-expenses)
     - [Corrupted File Handling](#corrupted-file-handling)
@@ -48,14 +48,14 @@ The following diagram shows a high-level design of the application.
 
 ### Core Components
 The `Main` component consists of [Launcher](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/Launcher.java) and [FairShare](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/FairShare.java). These classes are responsible for starting up and shutting down the application.
-- At startup, `Launcher` launches `FairShare` which then initializes the other components of the app.
-- At shutdown, `FairShare` saves the application state before exiting.
+- On startup, `Launcher` launches `FairShare` which then initializes the other components of the app.
+- On shutdown, `FairShare` saves the application state before exiting.
 
-Once started (after boot), the application is mostly handled by the other four components:
-- [UI](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/ui/Ui.java): user interface of the app.
+Once the application has started, its main functionality is handled by the following four components:
+- [UI](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/ui/Ui.java): handles the user interface
 - [Logic](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/logic/Logic.java): parses and executes commands
-- [Model](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/model/Model.java): stores and manages the app data
-- [Storage](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/storage/Storage.java): reads and writes application data to the hard disk.
+- [Model](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/model/Model.java): stores and manages the app data in memory
+- [Storage](https://github.com/nus-cs2103de-ay2526s2-grp6/tp/blob/master/src/main/java/fairshare/storage/Storage.java): reads and writes application data to the hard disk
 
 --------------------------------------------------------------------------------------------------------------------
 
@@ -157,24 +157,24 @@ The following sequence diagram illustrates the typical command flow, using `dele
 
 ![Delete command sequence](architecture/DeleteSequenceDiagram.png)
 
-### Splits, Filters, and Validation
+### Expense Splits and Filter Logic
 
 #### Expense Splits
 Two split modes are supported:
-- equal split: `s/alice s/bob s/carol`
-- proportional split: `s/alice:2 s/bob:1`
+- Equal split: `s/alice s/bob s/carol`
+- Proportional split: `s/alice:2 s/bob:1`
 
-Rules enforced by `ParserUtil.parseParticipants(...)`:
-- amount must be `> 0`
+The following expense rules apply:
+- amount must be greater than 0
 - shares must be positive integers
-- duplicate participant names are rejected
-- mixed equal/proportional syntax in the same command is rejected
+- duplicate participant names are not allowed
+- equal-split and proportional-split syntax cannot be mixed in the same command
 
 #### Filter Logic
 `filter` combines fields with logical AND.
 
 Within a single field:
-- `g/`, `n/`, `p/`, `s/` uses logic OR
+- `g/`, `n/`, `p/`, `s/` uses logical OR
 - `t/` uses logical AND, i.e. all specified tags must be present
 
 Examples:
@@ -185,19 +185,19 @@ Examples:
 
 ### Balance Calculation
 
-#### Stage 1: compute net amounts per person
+#### Stage 1: Compute Net Amounts Per Person
 For each expense in a group:
 - add the full amount to the payer
 - subtract each participant's proportional share
 
-#### Stage 2: simplify debts
-- people below `-0.01` become debtors
-- people above `0.01` become creditors
+#### Stage 2: Simplify Debts
+- people below `-0.01` are treated as debtors
+- people above `0.01` are treated as creditors
 - a greedy matcher creates `Balance` objects until both sides are settled
 
 ### Settlements as Expenses
 
-A settlement is not a separate model type. It is implemented as:
+A settlement is not represented as a separate model type. It is implemented as:
 - `ExpenseType.SETTLEMENT`
 - fixed expense name `"Settlement"`
 - the receiver stored as a single participant
@@ -275,8 +275,8 @@ Detailed step-by-step manual test cases are provided in the appendix below.
 **3. Adding an expense with duplicate participants**
 - **Test case:** `add n/Lunch a/20 g/JB p/Alice s/Alice s/Alice`
 - **Expected:**
-    * No expense is added.
-    * An error message is shown indicating that duplicate participant names are not allowed.
+    - No expense is added.
+    - An error message is shown indicating that duplicate participant names are not allowed.
 
 **4. Adding an expense with mixed split syntax**
 - **Test case:** `add n/Lunch a/20 g/JB p/Alice s/Alice s/Bob:2`
