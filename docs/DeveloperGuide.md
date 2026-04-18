@@ -1,5 +1,7 @@
 # FairShare Developer Guide
 
+This guide is intended for developers who wish to understand, maintain, or contribute to FairShare. It provides an overview of the system architecture, key design decisions, and implementation details.
+
 --------------------------------------------------------------------------------------------------------------------
 
 ## Table of Contents
